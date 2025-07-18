@@ -6,7 +6,7 @@
 #    By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/25 18:16:41 by yoshin            #+#    #+#              #
-#    Updated: 2025/07/14 11:30:03 by yoshin           ###   ########.fr        #
+#    Updated: 2025/07/18 16:06:11 by yoshin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,7 +85,7 @@ $(BUILD_DIR)/%.c.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	@echo "$(CYAN_BLUE)[$(NAME)] $(RED)compile $< ...$(RESET)"
 	@$(PREFIX) $(CC) $(CFLAGS) -o $@ -c $< -I./$(HEADER_DIR) \
-		$(foreach lib, $(LIB_NAMES), -I./lib$(lib))
+		$(foreach lib, $(LIB_NAMES), -I./lib$(lib)/$(HEADER_DIR))
 	@echo "$(CYAN_BLUE)[$(NAME)] $(GREEN)$< compiled!$(RESET)"
 
 $(LIB_ACHIEVES): %.a:
