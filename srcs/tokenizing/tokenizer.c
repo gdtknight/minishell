@@ -6,14 +6,13 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:27:10 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/17 18:18:02 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/17 18:47:31 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 #include "tokenizer.h"
-#include "debug.h"
 
 t_token	*tokenize_input(char *line)
 {

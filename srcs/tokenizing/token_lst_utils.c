@@ -6,13 +6,12 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 21:22:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/17 18:19:09 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/18 15:59:51 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-#include "debug.h"
 #include "def.h"
 #include "tokenizer.h"
 
