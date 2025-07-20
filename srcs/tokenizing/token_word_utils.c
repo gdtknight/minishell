@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 20:03:37 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/17 16:17:12 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/19 17:26:29 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,25 +67,33 @@ static char	*find_next_delim(char *cur, char delim)
 static char *find_next_token_delim(char *cur)
 {
 	static char	tk_delims[] = {
-		' ', '\t',
-		'|', '&', ';',
-		'<', '>', '(', ')',
-		'\0'
+		' ', '\t', '|', '&', ';',
+		'<', '>', '(', ')', '\0'
 	};
 	char	*delim;
+	char	m_flag;
 
+	m_flag = 0;
 	while (*cur)
 	{
-		delim = tk_delims;
-		while (*delim)
+		if (!(m_flag & C_BACKSLASH))
 		{
-			if (*cur == *delim)
-				break ;
+			if (*cur == '\\')
+				m_flag ^= C_BACKSLASH;
 			else
-				delim++;
+			{
+				delim = tk_delims;
+				while (*delim)
+				{
+					if (*cur == *delim)
+						return (cur);
+					else
+						delim++;
+				}
+			}
 		}
-		if (*cur == *delim)
-			break ;
+		else
+			m_flag ^= C_BACKSLASH;
 		cur++;
 	}
 	return (cur);
