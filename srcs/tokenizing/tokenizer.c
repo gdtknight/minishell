@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:27:10 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/17 18:47:31 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/24 14:34:52 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,13 @@ t_token	*tokenize_input(char *line)
 			append_token_to_lst(&token_lst, new_token);
 			if (new_token->type == TK_WORD_WITH_SQUOTE
 				|| new_token->type == TK_WORD_WITH_DQUOTE)
-				cursor += (ft_strlen((char *) (new_token->value) + 2));
+				cursor += (ft_strlen((char *) (new_token->value)) + 2);
 			else
 				cursor += (ft_strlen((char *) (new_token->value)));
 		}
 	}
-	return (token_lst);
+	new_token = create_token(NULL);
+	new_token->type = TK_EOF;
+	new_token->value = NULL;
+	return (append_token_to_lst(&token_lst, new_token), token_lst);
 }

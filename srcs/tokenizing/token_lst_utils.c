@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 21:22:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/18 15:59:51 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/24 14:48:26 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,10 @@
 
 t_status	clear_token_lst(t_token **lst)
 {
-	t_token	**head;
 	t_token	*cur;
 
 	if (!lst || !*lst)
 		return (FAIL);
-	head = lst;
 	while (*lst)
 	{
 		cur = *lst;
@@ -31,7 +29,6 @@ t_status	clear_token_lst(t_token **lst)
 			free(cur->value);
 		free(cur);
 	}
-	free(head);
 	return (SUCCESS);
 }
 
@@ -51,13 +48,6 @@ t_status	append_token_to_lst(t_token **lst, t_token *token)
 		last = last->next;
 	last->next = token;
 	token->prev = last;
-	return (SUCCESS);
-}
-
-t_status	insert_token_to_lst(t_token *lst, t_token *token)
-{
-	(void)lst;
-	(void)token;
 	return (SUCCESS);
 }
 

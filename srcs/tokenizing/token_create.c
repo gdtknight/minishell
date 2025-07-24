@@ -6,18 +6,33 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 21:44:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/16 19:54:22 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/24 14:41:02 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <errno.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
 
 #include "tokenizer.h"
 
-static t_token *create_empty_token(void);
+t_token *create_empty_token(void)
+{
+	t_token	*token;
+
+	token = (t_token *) malloc(sizeof(t_token));
+	if (errno == ENOMEM)
+	{
+		perror(strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+	token->type = TK_EOF;
+	token->value = NULL;
+	token->prev = NULL;
+	token->next = NULL;
+	return (token);
+}
 
 t_token	*create_token(char *str)
 {
@@ -25,7 +40,7 @@ t_token	*create_token(char *str)
 
 	new_token = create_empty_token();
 	new_token->type = get_token_type(str);
-	if (new_token->type == TK_EMPTY)
+	if (new_token->type == TK_BLANK)
 	{
 		free(new_token);
 		return (NULL);
@@ -37,21 +52,4 @@ t_token	*create_token(char *str)
 	else
 		set_token_value_from_type(new_token);
 	return (new_token);
-}
-
-static t_token *create_empty_token(void)
-{
-	t_token	*token;
-
-	token = (t_token *) malloc(sizeof(t_token));
-	if (errno == ENOMEM)
-	{
-		perror(strerror(errno));
-		exit(EXIT_FAILURE);
-	}
-	token->type = TK_EMPTY;
-	token->value = NULL;
-	token->prev = NULL;
-	token->next = NULL;
-	return (token);
 }
