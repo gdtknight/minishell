@@ -6,7 +6,7 @@
 #    By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/25 18:16:41 by yoshin            #+#    #+#              #
-#    Updated: 2025/07/24 14:04:08 by yoshin           ###   ########.fr        #
+#    Updated: 2025/07/28 14:16:19 by yoshin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,7 +82,8 @@ all: $(NAME)
 $(NAME): $(OBJS) | $(BIN_DIR) $(LIB_ACHIEVES)
 	@echo "$(CYAN_BLUE)[$(NAME)] $(RED)compile $(BIN_DIR)/$@ ...$(RESET)"
 	@$(PREFIX) $(CC) $(CFLAGS) -o ./$(BIN_DIR)/$@ $^ \
-		$(foreach lib, $(LIB_NAMES), -L./lib$(lib) -l$(lib))
+		$(foreach lib, $(LIB_NAMES), -L./lib$(lib) -l$(lib)) \
+		-lreadline
 	@echo "$(CYAN_BLUE)[$(NAME)] $(ORANGE)$(BIN_DIR)/$@ compiled!$(RESET)"
 	@cp $(BIN_DIR)/$@ $@
 	@echo "$(CYAN_BLUE)[$(NAME)] $(ORANGE)$(BIN_DIR)/$@ copied!$(RESET)"
@@ -100,7 +101,8 @@ $(BUILD_DIR)/%.c.o: $(SRC_DIR)/%.c
 $(LIB_ACHIEVES): %.a:
 	@for lib in $(LIBS); do \
 		if [ ! -f ./$$lib/$$lib.a ]; then \
-			echo "$(LIGHT_YELLOW)[$$lib]$(RED)not exists. execute make for $(LIGHT_YELLOW)$$lib$(RESET)"; \
+			echo "$(LIGHT_YELLOW)[$$lib]$(RED) not exists."; \
+			echo "$(LIGHT_YELLOW)[$$lib]$(RED) execute make$(RESET)"; \
 			$(MAKE) $(LIB_DEBUG) -C ./$$lib; \
 		else \
 			echo "$(LIGHT_YELLOW)[$$lib]$(GREEN)exists, skipping make.$(RESET)"; \
@@ -114,13 +116,13 @@ clean:
 fclean: clean
 	@echo "$(CYAN_BLUE)[$(NAME)]$(RESET) fclean"
 	@rm -rf $(NAME) $(BIN_DIR) $(TEST_BIN_DIR)
-	@for lib in $(LIBS); do															\
-		if [ -f ./$$lib/$$lib.a ]; then												\
-			echo "$(LIGHT_YELLOW)[$$lib]$(RESET) exists. execute fclean.";			\
-			make -C ./$$lib fclean;													\
-		else																		\
-			echo "$(LIGHT_YELLOW)[$$lib]$(RESET) not exists, skipping fclean.";		\
-		fi																			\
+	@for lib in $(LIBS); do \
+		if [ -f ./$$lib/$$lib.a ]; then \
+			echo "$(LIGHT_YELLOW)[$$lib]$(RESET) exists. execute fclean."; \
+			make -C ./$$lib fclean; \
+		else \
+			echo "$(LIGHT_YELLOW)[$$lib]$(RESET) not exists, skipping fclean."; \
+		fi \
 	done
 	@echo "$(ORANGE)All binaries and libraries has been deleted.$(RESET)"
 
@@ -128,7 +130,8 @@ re: fclean all
 
 bonus:
 
-dev: fclean
+dev:
+	@make fclean
 	@make debug=1 all
 	@make debug=1 bonus
 
@@ -136,22 +139,22 @@ test: dev
 	@make debug=1 do_test
 
 do_test: $(TEST_BINS)
-	@for bin in $(TEST_BINS); do													\
-		echo "\n\n$(CYAN_BLUE)[$(NAME)] $(PURPLE)[Test] $$bin ...$(RESET)";				\
-		./$$bin;																	\
+	@for bin in $(TEST_BINS); do \
+		echo "\n\n$(CYAN_BLUE)[$(NAME)] $(PURPLE)[Test] $$bin ...$(RESET)"; \
+		./$$bin; \
 	done
 
 $(TEST_BIN_DIR)/% : $(TEST_BUILD_DIR)/%.c.o
 	@mkdir -p $(dir $@)
 	@$(PREFIX) $(CC) $(CFLAGS) -o $@ $< \
 		$(filter-out ./$(BUILD_DIR)/main.c.o, $(wildcard ./$(BUILD_DIR)/**/*.c.o)) \
-		$(foreach lib, $(LIB_NAMES), -L./lib$(lib) -l$(lib))
+		$(foreach lib, $(LIB_NAMES), -L./lib$(lib) -l$(lib)) \
+		-lreadline
 	@echo "$(CYAN_BLUE)[$(NAME)] $(ORANGE)$(BIN_DIR)/$@ compiled!$(RESET)"
 
 $(TEST_BUILD_DIR)/%.c.o: $(TEST_DIR)/%.c
 	@mkdir -p $(dir $@)
 	@echo "$(CYAN_BLUE)[$(NAME)] $(RED)compile $< ...$(RESET)"
-	@$(PREFIX) $(CC) $(CFLAGS) -o $@ -c $< \
-		-I./$(HEADER_DIR) \
+	@$(PREFIX) $(CC) $(CFLAGS) -o $@ -c $< -I./$(HEADER_DIR) \
 		$(foreach lib, $(LIB_NAMES), -I./lib$(lib)/$(HEADER_DIR))
 	@echo "$(CYAN_BLUE)[$(NAME)] $(GREEN)$< compiled!$(RESET)"
