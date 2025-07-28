@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:25:28 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/24 00:41:50 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/24 21:36:06 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # define C_DQUOTE			(1 << 1)
 # define C_BACKSLASH		(1 << 2)
 
+# define STR_EOF			("EOF")
+# define STR_BLANK			("BLANK")
 # define STR_NEWLINE		("\n")
 # define STR_SEMICOLON		(";")
 # define STR_AMPERSAND		("&")
@@ -48,6 +50,7 @@ typedef enum e_token_type
 	TK_ASSIGN_WORD,			// "=" 을 포함하는 문자열
 	TK_SEMICOLON,			// ";"
 	TK_PIPE,				// "|"
+	TK_PIPE_ERR,				// "|"
 	TK_AMPERSAND,			// "&"
 	TK_REDIR_IN,			// "<"
 	TK_REDIR_OUT,			// ">"
@@ -69,6 +72,7 @@ typedef struct s_token
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
+
 
 /* --- tokenizer.c --- */
 
@@ -100,5 +104,10 @@ t_status		remove_token_from_lst(t_token *lst, t_token *target);
 char			*extract_squote_word(char *str);
 char			*extract_dquote_word(char *str);
 char			*extract_normal_word(char *str);
+
+
+/* --- token_utils.c --- */
+
+void			print_token(t_token *token);
 
 #endif
