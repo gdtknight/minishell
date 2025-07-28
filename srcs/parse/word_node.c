@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:47:58 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/24 22:21:05 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/28 14:50:30 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ t_syntax_node	*assignment_word(t_token **tk_lst)
 	assignment_word->type = NODE_ASSIGN_WORD;
 	assignment_word->value.word = ft_strdup((*tk_lst)->value);
 	(*tk_lst) = (*tk_lst)->next;
-	print_node_type(assignment_word);
 	return (assignment_word);
 }
 
@@ -51,21 +50,17 @@ t_syntax_node	*word(t_token **tk_lst)
 	word_node = create_empty_node();
 	if ((*tk_lst) == NULL
 		|| ((*tk_lst)->type != TK_WORD
-		&& (*tk_lst)->type != TK_WORD_WITH_SQUOTE
-		&& (*tk_lst)->type != TK_WORD_WITH_DQUOTE))
+			&& (*tk_lst)->type != TK_WORD_WITH_SQUOTE
+			&& (*tk_lst)->type != TK_WORD_WITH_DQUOTE))
 	{
 		debug("tk is not word");
-		print_token((*tk_lst));
 		free (word_node);
 		return (NULL);
 	}
 	word_node->type = NODE_WORD;
 	word_node->value.word = ft_strdup((*tk_lst)->value);
-	print_node_type(word_node);
-	print_token((*tk_lst));
-	debug("word node created - %s", (char *) ((*tk_lst)->value));
+	debug("word node created - %s", (char *)((*tk_lst)->value));
 	(*tk_lst) = (*tk_lst)->next;
 	debug("next word - %s", (char *)(*tk_lst)->value);
-	print_token((*tk_lst));
 	return (word_node);
 }

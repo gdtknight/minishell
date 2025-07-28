@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 21:44:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/24 14:41:02 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/28 14:44:54 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 #include "tokenizer.h"
 
-t_token *create_empty_token(void)
+t_token	*create_empty_token(void)
 {
 	t_token	*token;
 

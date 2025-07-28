@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:29:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/24 20:37:19 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/28 14:50:43 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_syntax_node	*shell_input(t_token **tk_lst)
 	input_node = list(tk_lst);
 	while ((*tk_lst)->type == TK_NEWLINE)
 		(*tk_lst) = (*tk_lst)->next;
-	if((*tk_lst)->type != TK_EOF)
+	if ((*tk_lst)->type != TK_EOF)
 	{
 		printf("invalid input");
 		return (NULL);

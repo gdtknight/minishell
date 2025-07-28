@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 21:22:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/24 14:48:26 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/28 14:46:42 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_status	remove_token_from_lst(t_token *lst, t_token *target)
 		else
 			break ;
 	}
-	if(cur) 
+	if (cur)
 	{
 		cur->prev->next = cur->next;
 		cur->next->prev = cur->prev;

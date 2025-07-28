@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:19:50 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/27 00:34:38 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/28 14:59:22 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@
  * 
  * <quoted_word>       ::= "'" <unquoted_word> "'" | '"' <unquoted_word> '"'
  * <unquoted_word>     ::= { <char> }
- * <char>              ::= (any printable character except whitespace and reserved chars)
+ * <char>              ::= (any printable character
+ *                          except whitespace and reserved chars)
  * 
  * <number>            ::= <digit> | <number> <digit>
  * <digit>             ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
@@ -104,9 +105,9 @@ typedef enum e_node_type
 
 typedef struct s_command
 {
-	struct	s_syntax_node	*prefix;
-	struct	s_syntax_node	*word;
-	struct	s_syntax_node	*suffix;
+	struct s_syntax_node	*prefix;
+	struct s_syntax_node	*word;
+	struct s_syntax_node	*suffix;
 }	t_command;
 
 /*
@@ -123,7 +124,7 @@ typedef struct s_command
 typedef struct s_unary_operator
 {
 	char					*operator;
-	struct	s_syntax_node	*target;
+	struct s_syntax_node	*target;
 }	t_unary_operator;
 
 /*
@@ -133,17 +134,17 @@ typedef struct s_unary_operator
 typedef struct s_binary_operator
 {
 	char					*operator;
-	struct	s_syntax_node	*left;
-	struct	s_syntax_node	*right;
+	struct s_syntax_node	*left;
+	struct s_syntax_node	*right;
 }	t_binary_operator;
 
 typedef struct s_binary_node
 {
-	struct	s_syntax_node	*left;
-	struct	s_syntax_node	*right;
+	struct s_syntax_node	*left;
+	struct s_syntax_node	*right;
 }	t_binary_node;
 
-typedef union	u_node_value
+typedef union u_node_value
 {
 	char					*name;
 	char					*word;
@@ -160,11 +161,9 @@ typedef struct s_syntax_node
 	t_node_value	value;
 }	t_syntax_node;
 
-
 /* --- parse.c --- */
 
 t_syntax_node		*shell_input(t_token **tk_lst);
-
 
 /* --- construct_node.c --- */
 
@@ -172,26 +171,22 @@ t_syntax_node		*list(t_token **tk_lst);
 t_syntax_node		*and_or(t_token **tk_lst);
 t_syntax_node		*pipeline(t_token **tk_lst);
 
-
 /* --- cmd_node.c --- */
 
 t_syntax_node		*command(t_token **tk_lst);
-t_syntax_node		*simple_command(t_token ** tk_lst);
+t_syntax_node		*simple_command(t_token **tk_lst);
 t_syntax_node		*cmd_prefix(t_token **tk_lst);
 t_syntax_node		*cmd_word(t_token **tk_lst);
 t_syntax_node		*cmd_suffix(t_token **tk_lst);
-
 
 /* --- io_redir_node --- */
 
 t_syntax_node		*io_redir(t_token **tk_lst);
 
-
 /* --- word_node.c --- */
 
 t_syntax_node		*word(t_token **tk_lst);
 t_syntax_node		*assignment_word(t_token **tk_lst);
-
 
 /* --- node_utils.c --- */
 

@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:15:05 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/27 00:27:31 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/28 14:54:35 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ t_syntax_node	*simple_command(t_token **tk_lst)
 t_syntax_node	*cmd_prefix(t_token **tk_lst)
 {
 	t_syntax_node	*cmd_prefix_node;
+	t_syntax_node	*temp;
 
 	debug("cmd_prefix called - %s", (char *)((*tk_lst)->value));
 	if ((*tk_lst)->type == TK_EOF)
@@ -78,13 +79,11 @@ t_syntax_node	*cmd_prefix(t_token **tk_lst)
 		cmd_prefix_node = assignment_word(tk_lst);
 	if (cmd_prefix_node == NULL)
 		return (NULL);
-	while ((*tk_lst)->type == TK_REDIR_IN
-		|| (*tk_lst)->type == TK_REDIR_OUT
-		|| (*tk_lst)->type == TK_REDIR_HEREDOC
-		|| (*tk_lst)->type == TK_REDIR_APPEND
+	while ((*tk_lst)->type == TK_REDIR_IN || (*tk_lst)->type == TK_REDIR_OUT
+		|| (*tk_lst)->type == TK_REDIR_HEREDOC || (*tk_lst)->type == TK_REDIR_APPEND
 		|| (*tk_lst)->type == TK_ASSIGN_WORD)
 	{
-		t_syntax_node	*temp = cmd_prefix_node;
+		temp = cmd_prefix_node;
 		cmd_prefix_node = create_empty_node();
 		cmd_prefix_node->type = NODE_CMD_PREFIX;
 		cmd_prefix_node->value.b_node.left = temp;
@@ -94,7 +93,6 @@ t_syntax_node	*cmd_prefix(t_token **tk_lst)
 	}
 	return (cmd_prefix_node);
 }
-
 
 /* --- <cmd_word> ::= <word> --- */
 
@@ -114,7 +112,6 @@ t_syntax_node	*cmd_word(t_token **tk_lst)
 	return (cmd_word);
 }
 
-
 /*
  * <cmd_suffix>     ::= <io_redirect>
  *                    | <cmd_suffix> <io_redirect>
@@ -124,6 +121,7 @@ t_syntax_node	*cmd_word(t_token **tk_lst)
 t_syntax_node	*cmd_suffix(t_token **tk_lst)
 {
 	t_syntax_node	*cmd_suffix_node;
+	t_syntax_node	*temp;
 
 	debug("cmd_suffix called - %s", (char *)((*tk_lst)->value));
 	cmd_suffix_node = io_redir(tk_lst);
@@ -139,7 +137,7 @@ t_syntax_node	*cmd_suffix(t_token **tk_lst)
 		|| (*tk_lst)->type == TK_WORD_WITH_DQUOTE
 		|| (*tk_lst)->type == TK_WORD_WITH_SQUOTE)
 	{
-		t_syntax_node	*temp = cmd_suffix_node;
+		temp = cmd_suffix_node;
 		cmd_suffix_node = create_empty_node();
 		cmd_suffix_node->type = NODE_CMD_SUFFIX;
 		cmd_suffix_node->value.b_node.left = temp;
