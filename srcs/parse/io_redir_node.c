@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "debug.h"
-
 #include "libft.h"
 
 #include "syntax_tree.h"
@@ -36,7 +34,6 @@ t_syntax_node	*io_redir(t_token **tk_lst)
 	t_syntax_node	*io_redir;
 	t_token_type	type;
 
-	debug("io_redir called - %s", (char *)((*tk_lst)->value));
 	if (!*tk_lst)
 		return (NULL);
 	io_redir = NULL;
@@ -56,7 +53,6 @@ static t_syntax_node	*io_redir_out(t_token **tk_lst)
 {
 	t_syntax_node	*io_redir_out_node;
 
-	debug("io_redir_out called");
 	io_redir_out_node = create_empty_node();
 	io_redir_out_node->type = NODE_IO_REDIR_OUT;
 	io_redir_out_node->value.u_operator.operator = ft_strdup(STR_REDIR_OUT);
@@ -69,7 +65,6 @@ static t_syntax_node	*io_redir_append(t_token **tk_lst)
 {
 	t_syntax_node	*io_redir_append_node;
 
-	debug("io_redir_append called");
 	io_redir_append_node = create_empty_node();
 	io_redir_append_node->type = NODE_IO_REDIR_APPEND;
 	io_redir_append_node->value.u_operator.operator = \
@@ -83,7 +78,6 @@ static t_syntax_node	*io_redir_in(t_token **tk_lst)
 {
 	t_syntax_node	*io_redir_in_node;
 
-	debug("io_redir_in called");
 	io_redir_in_node = create_empty_node();
 	io_redir_in_node->type = NODE_IO_REDIR_IN;
 	io_redir_in_node->value.u_operator.operator = ft_strdup(STR_REDIR_IN);
@@ -96,7 +90,6 @@ static t_syntax_node	*io_redir_heredoc(t_token **tk_lst)
 {
 	t_syntax_node	*io_redir_heredoc_node;
 
-	debug("io_redir_heredoc called");
 	io_redir_heredoc_node = create_empty_node();
 	io_redir_heredoc_node->type = NODE_IO_REDIR_HEREDOC;
 	io_redir_heredoc_node->value.u_operator.operator = \

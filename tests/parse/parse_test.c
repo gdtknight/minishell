@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "debug.h"
 #include "syntax_tree.h"
 #include "tokenizer.h"
 
@@ -50,10 +49,10 @@ static t_token	*create_test_tk_lst(void)
 
 static	void	print_node(t_syntax_node *node, int depth)
 {
-	debug("print_node called - depth : %02d", depth);
+	printf("print_node called - depth : %02d\n", depth);
 	if (!node || depth > 10)
 		return ;
-	debug("check_node type");
+	printf("check_node type\n");
 	if (node->type == NODE_LIST)
 	{
 		printf("[%02d] list_node - %s\n", depth, node->value.b_operator.operator);

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "debug.h"
+#include <stdlib.h>
 
 #include "syntax_tree.h"
 #include "tokenizer.h"
@@ -30,12 +30,8 @@
  */
 t_syntax_node	*command(t_token **tk_lst)
 {
-	debug("command called - %s", (char *)((*tk_lst)->value));
 	if ((*tk_lst)->type == TK_EOF)
-	{
-		debug("TK_EOF");
 		return (NULL);
-	}
 	return (simple_command(tk_lst));
 }
 
@@ -43,12 +39,8 @@ t_syntax_node	*simple_command(t_token **tk_lst)
 {
 	t_syntax_node	*simple_command_node;
 
-	debug("simple_command called - %s", (char *)((*tk_lst)->value));
 	if ((*tk_lst)->type == TK_EOF)
-	{
-		debug("TK_EOF");
 		return (NULL);
-	}
 	simple_command_node = create_empty_node();
 	simple_command_node->type = NODE_SIMPLE_COMMAND;
 	simple_command_node->value.command.prefix = cmd_prefix(tk_lst);
@@ -68,12 +60,8 @@ t_syntax_node	*cmd_prefix(t_token **tk_lst)
 	t_syntax_node	*cmd_prefix_node;
 	t_syntax_node	*temp;
 
-	debug("cmd_prefix called - %s", (char *)((*tk_lst)->value));
 	if ((*tk_lst)->type == TK_EOF)
-	{
-		debug("TK_EOF");
 		return (NULL);
-	}
 	cmd_prefix_node = io_redir(tk_lst);
 	if (cmd_prefix_node == NULL)
 		cmd_prefix_node = assignment_word(tk_lst);
@@ -101,11 +89,7 @@ t_syntax_node	*cmd_word(t_token **tk_lst)
 	t_syntax_node	*cmd_word;
 
 	if ((*tk_lst)->type == TK_EOF)
-	{
-		debug("TK_EOF");
 		return (NULL);
-	}
-	debug("cmd_word called - %s", (char *)((*tk_lst)->value));
 	cmd_word = create_empty_node();
 	cmd_word->type = NODE_CMD_WORD;
 	cmd_word->value.child = word(tk_lst);
@@ -123,7 +107,6 @@ t_syntax_node	*cmd_suffix(t_token **tk_lst)
 	t_syntax_node	*cmd_suffix_node;
 	t_syntax_node	*temp;
 
-	debug("cmd_suffix called - %s", (char *)((*tk_lst)->value));
 	cmd_suffix_node = io_redir(tk_lst);
 	if (cmd_suffix_node == NULL)
 		cmd_suffix_node = word(tk_lst);

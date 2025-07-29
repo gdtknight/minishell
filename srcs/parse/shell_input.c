@@ -12,7 +12,6 @@
 
 #include <stdio.h>
 
-#include "debug.h"
 #include "syntax_tree.h"
 
 /*
@@ -25,7 +24,6 @@ t_syntax_node	*shell_input(t_token **tk_lst)
 {
 	t_syntax_node	*input_node;
 
-	debug("shell_input called");
 	input_node = list(tk_lst);
 	while ((*tk_lst)->type == TK_NEWLINE)
 		(*tk_lst) = (*tk_lst)->next;
@@ -34,7 +32,6 @@ t_syntax_node	*shell_input(t_token **tk_lst)
 		printf("invalid input");
 		return (NULL);
 	}
-	debug("shell_input success");
 	print_node_type(input_node);
 	return (input_node);
 }
