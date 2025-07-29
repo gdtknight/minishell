@@ -33,8 +33,8 @@ t_hash_entry	*create_new_entry(char *key, char *value)
 	new_entry = (t_hash_entry *) malloc(sizeof(t_hash_entry));
 	if (!new_entry)
 		return (NULL);
-	new_entry->key = key;
-	new_entry->value = value;
+	new_entry->key = ft_strdup(key);
+	new_entry->value = ft_strdup(value);
 	new_entry->next = NULL;
 	new_entry->prev = NULL;
 	return (new_entry);
