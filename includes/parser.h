@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_tree.h                                      :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:19:50 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/28 14:59:22 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/29 20:08:54 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,12 @@
  *                    | [<number>] "<>" <word>
  * 
  * <assignment_word>::= <name> "=" <word>
- * 
- * 
+ *
  * <word_list>         ::= <word>
  *                      | <word_list> <word>
- * 
+ *
  * <name>              ::= <letter> { <letter> | <digit> | "_" }
- * 
+ *
  * <pattern>           ::= <word>
  * 
  * <word>              ::= <quoted_word> | <unquoted_word>
@@ -77,66 +76,44 @@
  * <newline>           ::= "\n"
  * <newline_list>      ::= <newline>
  *                      | <newline_list> <newline>
- *
- * */
+ */
 
-#ifndef SYNTAX_TREE_H
-# define SYNTAX_TREE_H
+#ifndef PARSER_H
+# define PARSER_H
 
 # include "tokenizer.h"
 
 typedef enum e_node_type
 {
 	NODE_LIST,
-	NODE_AND_OR,
+	NODE_SEMICOLON,
+	NODE_AMPERSAND,
+	NODE_AND_IF,
+	NODE_OR_IF,
 	NODE_PIPELINE,
 	NODE_PIPELINE_ERR,
 	NODE_SIMPLE_COMMAND,
+	NODE_COMPOUND_COMMAND,
 	NODE_CMD_PREFIX,
-	NODE_CMD_WORD,
 	NODE_CMD_SUFFIX,
-	NODE_ASSIGN_WORD,
 	NODE_IO_REDIR_OUT,
 	NODE_IO_REDIR_APPEND,
 	NODE_IO_REDIR_IN,
 	NODE_IO_REDIR_HEREDOC,
+	NODE_ASSIGN_WORD,
 	NODE_WORD
 }	t_node_type;
 
 typedef struct s_command
 {
 	struct s_syntax_node	*prefix;
-	struct s_syntax_node	*word;
+	char					*word;
 	struct s_syntax_node	*suffix;
 }	t_command;
 
-/*
- * IO_REDIR_TYPE
- *
- * 예를 들어,
- *
- * - IO_REDIR_OUT ('>') 이 오는 경우 : target은 outfile (create)
- * - IO_REDIR_APPEND ('>>') 이 오는 경우 : target은 outfile (append)
- * - IO_REDIR_IN ('<') 이 오는 경우 :  target은 infile
- * - IO_REDIR_HEREDOC ('<<') 이 오는 경우 :  target은 limiter
- */
-
-typedef struct s_unary_operator
+typedef struct s_unary_node
 {
-	char					*operator;
-	struct s_syntax_node	*target;
-}	t_unary_operator;
-
-/*
- * ';', '&', '&&', '||', '|', '|&', '='
- */
-
-typedef struct s_binary_operator
-{
-	char					*operator;
-	struct s_syntax_node	*left;
-	struct s_syntax_node	*right;
-}	t_binary_operator;
+}	t_unary_node;
 
 typedef struct s_binary_node
 {
@@ -146,19 +123,18 @@ typedef struct s_binary_node
 
 typedef union u_node_value
 {
-	char					*name;
+	char					*assign_word;
 	char					*word;
+	char					*io_target;
 	t_command				command;
-	t_unary_operator		u_operator;
-	t_binary_operator		b_operator;
-	t_binary_node			b_node;
 	struct s_syntax_node	*child;
+	t_binary_node			b_node;
 }	t_node_value;
 
 typedef struct s_syntax_node
 {
-	t_node_type		type;
-	t_node_value	value;
+	t_node_type				type;
+	t_node_value			value;
 }	t_syntax_node;
 
 /* --- parse.c --- */
@@ -176,7 +152,6 @@ t_syntax_node		*pipeline(t_token **tk_lst);
 t_syntax_node		*command(t_token **tk_lst);
 t_syntax_node		*simple_command(t_token **tk_lst);
 t_syntax_node		*cmd_prefix(t_token **tk_lst);
-t_syntax_node		*cmd_word(t_token **tk_lst);
 t_syntax_node		*cmd_suffix(t_token **tk_lst);
 
 /* --- io_redir_node --- */
@@ -192,6 +167,6 @@ t_syntax_node		*assignment_word(t_token **tk_lst);
 
 t_syntax_node		*create_empty_node(void);
 void				remove_syntax_node(t_syntax_node *target);
-void				print_node_type(t_syntax_node *node);
+void				print_node(t_syntax_node *node, int depth);
 
 #endif

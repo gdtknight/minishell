@@ -6,14 +6,14 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:15:05 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/28 14:54:35 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/29 20:09:26 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-#include "syntax_tree.h"
 #include "tokenizer.h"
+#include "parser.h"
 
 /*
  * <command>        ::= <simple_command>
@@ -30,9 +30,26 @@
  */
 t_syntax_node	*command(t_token **tk_lst)
 {
+	t_syntax_node	*command_node;
+
 	if ((*tk_lst)->type == TK_EOF)
 		return (NULL);
-	return (simple_command(tk_lst));
+	if ((*tk_lst)->type == TK_LPAREN)
+	{
+		command_node = create_empty_node();
+		command_node->type = NODE_COMPOUND_COMMAND;
+		(*tk_lst) = (*tk_lst)->next;
+		command_node->value.child = list(tk_lst);
+		if ((*tk_lst)->type != TK_RPAREN)
+		{
+			/* Error !!! */
+			return (NULL);
+		}
+		(*tk_lst) = (*tk_lst)->next;
+	}
+	else
+		command_node = simple_command(tk_lst);
+	return (command_node);
 }
 
 t_syntax_node	*simple_command(t_token **tk_lst)
@@ -44,10 +61,12 @@ t_syntax_node	*simple_command(t_token **tk_lst)
 	simple_command_node = create_empty_node();
 	simple_command_node->type = NODE_SIMPLE_COMMAND;
 	simple_command_node->value.command.prefix = cmd_prefix(tk_lst);
-	simple_command_node->value.command.word = cmd_word(tk_lst);
+	simple_command_node->value.command.word = ft_strdup((*tk_lst)->value);
+	(*tk_lst) = (*tk_lst)->next;
 	simple_command_node->value.command.suffix = cmd_suffix(tk_lst);
 	return (simple_command_node);
 }
+
 /*
  * <cmd_prefix>     ::= <io_redirect>
  *                    | <cmd_prefix> <io_redirect>
@@ -80,20 +99,6 @@ t_syntax_node	*cmd_prefix(t_token **tk_lst)
 			cmd_prefix_node->value.b_node.right = assignment_word(tk_lst);
 	}
 	return (cmd_prefix_node);
-}
-
-/* --- <cmd_word> ::= <word> --- */
-
-t_syntax_node	*cmd_word(t_token **tk_lst)
-{
-	t_syntax_node	*cmd_word;
-
-	if ((*tk_lst)->type == TK_EOF)
-		return (NULL);
-	cmd_word = create_empty_node();
-	cmd_word->type = NODE_CMD_WORD;
-	cmd_word->value.child = word(tk_lst);
-	return (cmd_word);
 }
 
 /*

@@ -6,13 +6,13 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:29:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/28 14:50:43 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/29 20:10:07 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 
-#include "syntax_tree.h"
+#include "parser.h"
 
 /*
  * <shell_input>  ::= <list> <newline_list>
@@ -32,6 +32,5 @@ t_syntax_node	*shell_input(t_token **tk_lst)
 		printf("invalid input");
 		return (NULL);
 	}
-	print_node_type(input_node);
 	return (input_node);
 }
