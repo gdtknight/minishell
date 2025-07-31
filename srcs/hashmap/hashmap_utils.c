@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 23:05:33 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/29 23:05:33 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/31 02:03:03 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,35 @@ t_hash_entry	*create_new_entry(char *key, char *value)
 	new_entry->next = NULL;
 	new_entry->prev = NULL;
 	return (new_entry);
+}
+
+/**
+ * @brief 해시맵에 저장된 전체 엔트리 개수를 계산합니다.
+ *
+ * 해시 테이블의 모든 버킷(bucket)을 순회하면서 연결 리스트로 체이닝된
+ * 모든 엔트리를 탐색하여 개수를 계산합니다.
+ *
+ * @param map 엔트리 개수를 계산할 대상 해시맵의 포인터
+ * @return int 해시맵에 저장된 엔트리 총 개수
+ */
+int	count_entry(t_hash_map *map)
+{
+	int				cnt;
+	int				idx;
+	t_hash_entry	*cur;
+
+	cnt = 0;
+	idx = -1;
+	while (++idx < HASHTABLE_SIZE)
+	{
+		cur = (map->table)[idx];
+		while (cur)
+		{
+			cnt++;
+			cur = cur->next;
+		}
+	}
+	return (cnt);
 }
 
 /**
@@ -98,6 +127,6 @@ int	hash(const char *key)
 
 	hash = 0;
 	while (*key)
-		hash = ((hash + (*key) * 31) % HASHTABLE_SIZE);
+		hash = ((hash + (*key++) * 31) % HASHTABLE_SIZE);
 	return (hash);
 }
