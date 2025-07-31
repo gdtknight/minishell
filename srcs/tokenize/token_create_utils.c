@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 23:40:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/28 14:44:39 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/31 02:09:25 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,6 @@ t_token_type	get_token_type(char *str)
 		return (TK_OR_IF);
 	if (*str == ' ' || *str == '\t')
 		return (TK_BLANK);
-	if (*str == '\'')
-		return (TK_WORD_WITH_SQUOTE);
-	if (*str == '\"')
-		return (TK_WORD_WITH_DQUOTE);
 	if (*str == ';' || *str == '|' || *str == '&' || *str == '\n'
 		|| *str == '<' || *str == '>' || *str == '(' || *str == ')')
 		return (get_single_char_token_type(str));
@@ -49,10 +45,10 @@ static t_token_type	get_single_char_token_type(char *str)
 {
 	if (*str == ';')
 		return (TK_SEMICOLON);
-	if (*str == '|')
-		return (TK_PIPE);
 	if (*str == '&')
 		return (TK_AMPERSAND);
+	if (*str == '|')
+		return (TK_PIPE);
 	if (*str == '<')
 		return (TK_REDIR_IN);
 	if (*str == '>')
@@ -65,12 +61,7 @@ static t_token_type	get_single_char_token_type(char *str)
 
 void	set_token_value_from_str(t_token *target, char *str)
 {
-	if (target->type == TK_WORD_WITH_SQUOTE)
-		target->value = extract_squote_word(str);
-	else if (target->type == TK_WORD_WITH_DQUOTE)
-		target->value = extract_dquote_word(str);
-	else
-		target->value = extract_normal_word(str);
+	target->value = extract_normal_word(str);
 }
 
 void	set_token_value_from_type(t_token *target)

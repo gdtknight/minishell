@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:25:28 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/28 14:58:45 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/31 17:36:45 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,12 @@ t_status		remove_token_from_lst(t_token *lst, t_token *target);
 
 /* --- token_word_utils.c --- */
 
-char			*extract_squote_word(char *str);
-char			*extract_dquote_word(char *str);
 char			*extract_normal_word(char *str);
+char			*find_next_token_delim(char *cur);
 
 /* --- token_utils.c --- */
 
+t_boolean		match(t_token	*token, t_token_type tk_type);
 void			print_token(t_token *token);
 
 #endif

@@ -6,70 +6,25 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 20:03:37 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/28 14:43:30 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/31 02:10:29 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stdlib.h>
 
 #include "libft.h"
 
 #include "tokenizer.h"
 
-static char	*find_next_delim(char *cur, char delim);
-static char	*find_next_token_delim(char *cur);
-
-/*
- * char *str = "'cmd1 -option1 -option2'" 
- * 작은 따옴표로 둘러쌓인 문자열 추출
- */
-char	*extract_squote_word(char *str)
-{
-	return (ft_substr(str, 1, \
-			find_next_delim(str + 1, '\'') - (str + 1)));
-}
-
-/*
- * char *str = "\"cmd1 -option1 -option2\""
- * 큰 따옴표로 둘러쌓인 문자열 추출
- */
-char	*extract_dquote_word(char *str)
-{
-	return (ft_substr(str, 1, \
-			find_next_delim(str + 1, '\"') - (str + 1)));
-}
+static t_boolean	is_delim(char c);
 
 char	*extract_normal_word(char *str)
 {
-	return (ft_substr(str, 0, find_next_token_delim(str + 1) - str));
+	return (ft_substr(str, 0, find_next_token_delim(str) - str));
 }
 
-static char	*find_next_delim(char *cur, char delim)
+char	*find_next_token_delim(char *cur)
 {
-	char	m_flag;
-
-	m_flag = 0;
-	while (*cur)
-	{
-		if (!(m_flag & C_BACKSLASH))
-		{
-			if (*cur == '\\')
-				m_flag ^= C_BACKSLASH;
-			else if (*cur == delim)
-				return (cur);
-		}
-		else
-			m_flag ^= C_BACKSLASH;
-		cur++;
-	}
-	return (cur);
-}
-
-static char	*find_next_token_delim(char *cur)
-{
-	static char	tk_delims[] = {
-		' ', '\t', '|', '&', ';',
-		'<', '>', '(', ')', '\0'
-	};
-	char		*delim;
 	char		m_flag;
 
 	m_flag = 0;
@@ -79,21 +34,34 @@ static char	*find_next_token_delim(char *cur)
 		{
 			if (*cur == '\\')
 				m_flag ^= C_BACKSLASH;
-			else
-			{
-				delim = tk_delims;
-				while (*delim)
-				{
-					if (*cur == *delim)
-						return (cur);
-					else
-						delim++;
-				}
-			}
+			else if (*cur == '\'')
+				m_flag ^= C_SQUOTE;
+			else if (*cur == '\"')
+				m_flag ^= C_DQUOTE;
+			else if (!(m_flag & C_SQUOTE) && !(m_flag & C_DQUOTE)
+				&& !(m_flag & C_BACKSLASH) && is_delim(*cur))
+				return (cur);
 		}
 		else
 			m_flag ^= C_BACKSLASH;
 		cur++;
 	}
 	return (cur);
+}
+
+static t_boolean	is_delim(char c)
+{
+	static char	tk_delims[] = {
+		' ', '\t', '|', '&', ';',
+		'<', '>', '(', ')', '\0'
+	};
+	int			idx;
+
+	idx = 0;
+	while (tk_delims[idx] != '\0')
+	{
+		if (c == tk_delims[idx++])
+			return (TRUE);
+	}
+	return (FALSE);
 }

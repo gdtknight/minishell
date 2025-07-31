@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 20:26:35 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/16 21:46:09 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/28 18:47:59 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 
 void	test_extract_squote_word(void)
 {
-	char	*test = "'cmd1 -option1'";
-	char	*result = "cmd1 -option1";
+	static char	*test = "'cmd1 -option1'";
+	static char	*result = "cmd1 -option1";
 
 	if (ft_strncmp(extract_squote_word(test), result, ft_strlen(result)) == 0)
 		printf("extract_squote_word() - SUCCESS\n");
@@ -31,8 +31,8 @@ void	test_extract_squote_word(void)
 
 void	test_extract_dquote_word(void)
 {
-	char	*test = "\"cmd1 -option1\"";
-	char	*result = "cmd1 -option1";
+	static char	*test = "\"cmd1 -option1\"";
+	static char	*result = "cmd1 -option1";
 
 	if (ft_strncmp(extract_dquote_word(test), result, ft_strlen(result)) == 0)
 		printf("extract_dquote_word() - SUCCESS\n");
@@ -43,8 +43,8 @@ void	test_extract_dquote_word(void)
 
 void	test_extract_normal_word(void)
 {
-	char	*test = "cmd1;-option1";
-	char	*result = "cmd1";
+	static char	*test = "cmd1;-option1";
+	static char	*result = "cmd1";
 
 	if (ft_strncmp(extract_normal_word(test), result, ft_strlen(result)) == 0)
 		printf("extract_normal_word() - SUCCESS\n");
@@ -53,12 +53,10 @@ void	test_extract_normal_word(void)
 	printf("extract_normal_word() result : %s\n", result);
 }
 
-
 int	main(void)
 {
 	test_extract_squote_word();
 	test_extract_dquote_word();
 	test_extract_normal_word();
-
 	exit(EXIT_SUCCESS);
 }
