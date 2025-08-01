@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/31 02:07:05 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/01 17:37:44 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 
 #include "shell_data.h"
 #include "tokenizer.h"
-#include "eval.h"
 #include "parser.h"
 
 static int	interactive_mode(void);
