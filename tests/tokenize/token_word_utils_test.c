@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 20:26:35 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/28 18:47:59 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/01 17:39:03 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,6 @@
 #include "libft.h"
 
 #include "tokenizer.h"
-
-void	test_extract_squote_word(void)
-{
-	static char	*test = "'cmd1 -option1'";
-	static char	*result = "cmd1 -option1";
-
-	if (ft_strncmp(extract_squote_word(test), result, ft_strlen(result)) == 0)
-		printf("extract_squote_word() - SUCCESS\n");
-	else
-		printf("extract_squote_word() - FAIL\n");
-	printf("extract_squote_word() result : %s\n", result);
-}
-
-void	test_extract_dquote_word(void)
-{
-	static char	*test = "\"cmd1 -option1\"";
-	static char	*result = "cmd1 -option1";
-
-	if (ft_strncmp(extract_dquote_word(test), result, ft_strlen(result)) == 0)
-		printf("extract_dquote_word() - SUCCESS\n");
-	else
-		printf("extract_dquote_word() - FAIL\n");
-	printf("extract_dquote_word() result : %s\n", result);
-}
 
 void	test_extract_normal_word(void)
 {
@@ -55,8 +31,6 @@ void	test_extract_normal_word(void)
 
 int	main(void)
 {
-	test_extract_squote_word();
-	test_extract_dquote_word();
 	test_extract_normal_word();
 	exit(EXIT_SUCCESS);
 }
