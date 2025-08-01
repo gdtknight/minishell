@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.h                                            :+:      :+:    :+:   */
+/*   ft_multiplejoin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/26 20:56:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/01 19:20:21 by yoshin           ###   ########.fr       */
+/*   Created: 2025/08/01 19:19:46 by yoshin            #+#    #+#             */
+/*   Updated: 2025/08/01 19:20:04 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_H
-# define UTILS_H
+#include <stdlib.h>
 
-/* --- heredoc.c --- */
+#include "libft.h"
+#include "utils.h"
 
-char	*heredoc(const char *limiter);
+char	*ft_multiplejoin(const char *s1, const char *s2, const char *s3)
+{
+	char	*new_str;
+	char	*temp;
 
-/* --- ft_multiplejoin.c --- */
-
-char	*ft_multiplejoin(const char *s1, const char *s2, const char *s3);
-
-#endif
+	new_str = ft_strjoin(s1, s2);
+	temp = new_str;
+	new_str = ft_strjoin(temp, s3);
+	free(temp);
+	return (new_str);
+}

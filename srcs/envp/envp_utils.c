@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 00:49:34 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/31 16:46:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/01 19:23:47 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@
 
 #include "hashmap.h"
 #include "envp.h"
-
-static char	*ft_multiplejoin(const char *s1, const char *s2, const char *s3);
+#include "utils.h"
 
 char **lst_from_hashmap(t_hash_map	*map)
 {
@@ -65,16 +64,4 @@ char	*extract_value(char *envp)
 		return (ft_strdup(""));
 	result = ft_substr(pos, 1, ft_strlen(pos) - 1);
 	return (result);
-}
-
-static char	*ft_multiplejoin(const char *s1, const char *s2, const char *s3)
-{
-	char	*new_str;
-	char	*temp;
-
-	new_str = ft_strjoin(s1, s2);
-	temp = new_str;
-	new_str = ft_strjoin(temp, s3);
-	free(temp);
-	return (new_str);
 }
