@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 16:01:20 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/29 20:09:34 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/30 17:07:30 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,17 @@
 #include "tokenizer.h"
 #include "parser.h"
 
-/*
+/**
+ * @brief <list> 구문 규칙에 따라 구문 트리를 구성한다.
+ *
  * <list> ::= <and_or>
  *          | <list> ";" <and_or>
  *          | <list> "&" <and_or>
+ *
+ * @param tk_lst 현재 토큰 리스트 포인터의 주소.  
+ *               함수 실행 중 토큰 리스트 포인터가 진행된다.
+ * @return 구문 트리의 루트 노드 포인터.  
+ *         메모리 할당 실패 시 NULL을 반환할 수 있다.
  */
 t_syntax_node	*list(t_token **tk_lst)
 {
@@ -42,10 +49,17 @@ t_syntax_node	*list(t_token **tk_lst)
 	return (list_node);
 }
 
-/*
+/**
+ * @brief <and_or> 구문 규칙에 따라 구문 트리를 구성한다.
+ *
  * <and_or> ::= <pipeline>
  *            | <and_or> "&&" <pipeline>
  *            | <and_or> "||" <pipeline>
+ *
+ * @param tk_lst 현재 토큰 리스트 포인터의 주소.  
+ *               함수 실행 중 토큰 리스트 포인터가 진행된다.
+ * @return 구문 트리의 루트 노드 포인터.  
+ *         메모리 할당 실패 시 NULL을 반환할 수 있다.
  */
 t_syntax_node	*and_or(t_token **tk_lst)
 {
@@ -69,10 +83,17 @@ t_syntax_node	*and_or(t_token **tk_lst)
 	return (and_or_node);
 }
 
-/*
+/**
+ * @brief <pipeline> 구문 규칙에 따라 구문 트리를 구성한다.
+ *
  * <pipeline> ::= <command>
  *              | <pipeline> "|" <command>
  *              | <pipeline> "|&" <command>
+ *
+ * @param tk_lst 현재 토큰 리스트 포인터의 주소.  
+ *               함수 실행 중 토큰 리스트 포인터가 진행된다.
+ * @return 구문 트리의 루트 노드 포인터.  
+ *         메모리 할당 실패 시 NULL을 반환할 수 있다.
  */
 t_syntax_node	*pipeline(t_token **tk_lst)
 {

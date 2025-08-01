@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:41:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/30 16:47:49 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/30 21:39:30 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(void)
 	tk_lst = create_test_tk_lst();
 	/* --- start test --- */
 	cur = tk_lst;
-	root = shell_input(&cur);
+	root = parse_input(&cur);
 	printf("\n\n");
 	print_node(root, 0);
 	remove_syntax_node(root);

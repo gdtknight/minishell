@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:19:50 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/29 20:08:54 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/07/30 21:40:09 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,9 +137,9 @@ typedef struct s_syntax_node
 	t_node_value			value;
 }	t_syntax_node;
 
-/* --- parse.c --- */
+/* --- parse_input.c --- */
 
-t_syntax_node		*shell_input(t_token **tk_lst);
+t_syntax_node		*parse_input(t_token **tk_lst);
 
 /* --- construct_node.c --- */
 
