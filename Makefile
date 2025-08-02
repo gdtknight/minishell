@@ -6,7 +6,7 @@
 #    By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/25 18:16:41 by yoshin            #+#    #+#              #
-#    Updated: 2025/07/28 14:16:19 by yoshin           ###   ########.fr        #
+#    Updated: 2025/08/02 18:09:11 by yoshin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -135,14 +135,24 @@ dev:
 	@make debug=1 all
 	@make debug=1 bonus
 
-test: dev
-	@make debug=1 do_test
+test:
+ifeq ($(TEST),)
+	@$(MAKE) debug=1 dev
+	@$(MAKE) debug=1 do_test
+else
+	@$(MAKE) debug=1 dev
+	@$(MAKE) debug=1 do_single_test TEST=$(TEST)
+endif
 
 do_test: $(TEST_BINS)
 	@for bin in $(TEST_BINS); do \
 		echo "\n\n$(CYAN_BLUE)[$(NAME)] $(PURPLE)[Test] $$bin ...$(RESET)"; \
 		./$$bin; \
 	done
+
+do_single_test: $(TEST_BIN_DIR)/$(TEST)
+	@echo "\n\n$(CYAN_BLUE)[$(NAME)] $(PURPLE)[Test] $@ ...$(RESET)"
+	@./$<
 
 $(TEST_BIN_DIR)/% : $(TEST_BUILD_DIR)/%.c.o
 	@mkdir -p $(dir $@)
