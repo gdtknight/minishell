@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander_tilde.c                                   :+:      :+:    :+:   */
+/*   expand_tilde.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:59:37 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/02 16:37:22 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/02 21:02:14 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "def.h"
 #include "utils.h"
 
-#include "expander.h"
+#include "expand.h"
 
 static void			replace_tilde(char **value, const char *cur, const char *delim_pos);
 static t_boolean	is_tilde(char c);
@@ -48,14 +48,14 @@ t_token	*expand_tilde(t_token *token)
 static void	replace_tilde(char **value, const char *cur, const char *delim_pos)
 {
 	const char	*home_dir = getenv("HOME");
-	char		*prefix_str;
+	char		*prefix;
 	char		*temp;
 
 	temp = (*value);
-	prefix_str = ft_substr(cur, 0, (delim_pos - cur));
-	*value = ft_multiplejoin(temp, prefix_str, home_dir);
+	prefix = ft_substr(cur, 0, (delim_pos - cur));
+	*value = ft_multiplejoin(temp, prefix, home_dir);
 	free(temp);
-	free(prefix_str);
+	free(prefix);
 }
 
 static t_boolean	is_tilde(char c)
