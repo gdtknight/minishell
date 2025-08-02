@@ -6,12 +6,18 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 20:56:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/01 19:20:21 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/02 14:22:59 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
+
+# include "def.h"
+
+/* --- find_next_delim.c --- */
+
+char	*find_next_delim(char *str, t_boolean (*predicate)(char), char mask);
 
 /* --- heredoc.c --- */
 
