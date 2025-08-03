@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:06:19 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/31 02:04:13 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/03 16:07:10 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ t_status	init_shell_data(char *envp[])
 		key = extract_key(*envp);
 		value = extract_value(*envp);
 		put_key_value(map, key, value);
+		free(key);
+		free(value);
 		envp++;
 	}
 	tcgetattr(STDIN_FILENO, &(get_shell_data()->term));
