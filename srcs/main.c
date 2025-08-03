@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/01 17:37:44 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/04 01:38:35 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static int	interactive_mode(void)
 	while (input != NULL)
 	{
 		debug("call tokenize_input");
+		add_history(input);
 		tk_lst = tokenize_input(input);
 		tk = tk_lst;
 		debug("call parse_input");
