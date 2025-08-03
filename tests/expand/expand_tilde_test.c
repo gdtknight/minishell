@@ -6,14 +6,14 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 14:23:20 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/02 15:05:45 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/02 21:34:06 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "expander.h"
+#include "expand.h"
 #include "libft.h"
 #include "tokenizer.h"
 
