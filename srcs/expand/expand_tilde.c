@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:59:37 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/02 21:02:14 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/02 23:19:47 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@
 
 #include "expand.h"
 
-static void			replace_tilde(char **value, const char *cur, const char *delim_pos);
+static void			replace_tilde(
+						char **value,
+						const char *cur,
+						const char *delim_pos);
 static t_boolean	is_tilde(char c);
 
 t_token	*expand_tilde(t_token *token)
