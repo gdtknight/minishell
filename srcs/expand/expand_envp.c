@@ -6,13 +6,12 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 01:00:10 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/03 17:45:13 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/03 19:01:51 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-#include "debug.h"
 #include "libft.h"
 
 #include "def.h"
@@ -43,7 +42,6 @@ t_token	*expand_envp(t_token *token)
 	while (*cur && *delim_pos)
 	{
 		envp = extract_envp(delim_pos);
-		debug("envp: %s", envp);
 		replace_envp(&new_value, cur, delim_pos);
 		cur = delim_pos + ft_strlen(envp) + 1;
 		delim_pos = find_next_delim(cur, is_expansion, C_SQUOTE | C_BACKSLASH);
@@ -67,7 +65,6 @@ static void	replace_envp(char **value, const char *cur, const char *delim_pos)
 	temp = (*value);
 	prefix = ft_substr(cur, 0, (delim_pos - cur));
 	envp = extract_envp(delim_pos);
-	debug("envp: %s", envp);
 	if (ft_strncmp(envp, "0", ft_strlen(envp)) == 0)
 		envp_value = ft_strdup("minishell");
 	else
@@ -76,7 +73,6 @@ static void	replace_envp(char **value, const char *cur, const char *delim_pos)
 		if (!envp_value)
 			envp_value = ft_strdup("");
 	}
-	debug("envp_value: %s", envp_value);
 	*value = ft_multiplejoin(temp, prefix, envp_value);
 	free(envp);
 	free(temp);

@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 21:24:49 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/03 17:42:27 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/03 19:03:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,11 @@ void	expand_envp_fail1(void)
 {
 	const char	*path_var = ft_strjoin("SHLVL:",getenv("SHLVL"));
 	t_token		*token;
-	char		*c;
 
 	token = create_empty_token();
 	token->type = TK_WORD;
 	token->value = ft_strdup("SHLVL:\\$SHLVL");
-	c = token->value;
-	while (*c)
-		printf("%c", *c++);
-	printf("\n");
 	token = expand_envp(token);
-	c = token->value;
-	while (*c)
-		printf("%c", *c++);
 	printf("\n");
 	if (ft_strncmp(token->value, path_var, ft_strlen(token->value)) != 0)
 		printf("[SUCCESS] before value : \"%s\", after value : \"%s\"\n",
