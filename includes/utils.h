@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 20:56:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/03 17:55:51 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/03 20:14:46 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 char	*find_next_delim(
 			char *str,
 			t_boolean (*predicate)(char),
-			unsigned char mask);
+			char mask);
 
 /* --- heredoc.c --- */
 

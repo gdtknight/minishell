@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 02:00:47 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/03 18:59:49 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/04 19:17:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static t_boolean	update_flag(char c, char *flag, char mask);
  * @param mask 무시할 인용 상태를 지정하는 플래그 마스크
  * @return 조건을 만족하는 구분자 문자의 위치를 가리키는 포인터
  */
-char	*find_next_delim(char *str, t_boolean (*predicate)(char), unsigned char mask)
+char	*find_next_delim(char *str, t_boolean (*predicate)(char), char mask)
 {
 	char	flag;
 
@@ -35,7 +35,10 @@ char	*find_next_delim(char *str, t_boolean (*predicate)(char), unsigned char mas
 	while (*str)
 	{
 		if (update_flag(*str, &flag, mask))
+		{
 			str++;
+			continue ;
+		}
 		if ((flag & mask) == 0 && predicate(*str))
 			return (str);
 		str++;
