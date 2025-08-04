@@ -96,9 +96,7 @@ t_syntax_node	*cmd_prefix(t_token **tk_lst)
 		cmd_prefix_node = create_empty_node();
 		cmd_prefix_node->type = NODE_CMD_PREFIX;
 		cmd_prefix_node->value.b_node.left = temp;
-		cmd_prefix_node->value.b_node.right = io_redir(tk_lst);
-		if (cmd_prefix_node->value.b_node.right == NULL)
-			cmd_prefix_node->value.b_node.right = assignment_word(tk_lst);
+		cmd_prefix_node->value.b_node.right = cmd_prefix(tk_lst);
 	}
 	return (cmd_prefix_node);
 }
@@ -129,9 +127,7 @@ t_syntax_node	*cmd_suffix(t_token **tk_lst)
 		cmd_suffix_node = create_empty_node();
 		cmd_suffix_node->type = NODE_CMD_SUFFIX;
 		cmd_suffix_node->value.b_node.left = temp;
-		cmd_suffix_node->value.b_node.right = io_redir(tk_lst);
-		if (cmd_suffix_node->value.b_node.right == NULL)
-			cmd_suffix_node->value.b_node.right = word(tk_lst);
+		cmd_suffix_node->value.b_node.right = cmd_suffix(tk_lst);
 	}
 	return (cmd_suffix_node);
 }
