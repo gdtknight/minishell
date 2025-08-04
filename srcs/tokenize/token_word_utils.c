@@ -6,13 +6,13 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 20:03:37 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/31 02:10:29 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/03 20:14:01 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-
 #include "libft.h"
+
+#include "flag.h"
 
 #include "tokenizer.h"
 

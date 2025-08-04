@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:15:05 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/30 17:35:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/04 17:58:23 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,9 +123,7 @@ t_syntax_node	*cmd_suffix(t_token **tk_lst)
 		|| (*tk_lst)->type == TK_REDIR_OUT
 		|| (*tk_lst)->type == TK_REDIR_HEREDOC
 		|| (*tk_lst)->type == TK_REDIR_APPEND
-		|| (*tk_lst)->type == TK_WORD
-		|| (*tk_lst)->type == TK_WORD_WITH_DQUOTE
-		|| (*tk_lst)->type == TK_WORD_WITH_SQUOTE)
+		|| (*tk_lst)->type == TK_WORD)
 	{
 		temp = cmd_suffix_node;
 		cmd_suffix_node = create_empty_node();

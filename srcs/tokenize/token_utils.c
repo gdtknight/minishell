@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 21:24:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/28 14:48:33 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/04 18:03:31 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@ t_boolean	match(t_token	*token, t_token_type tk_type)
 
 void	print_token(t_token *token)
 {
-	if (match(token, TK_WORD) || match(token, TK_ASSIGN_WORD)
-		|| match(token, TK_WORD_WITH_SQUOTE)
-		|| match(token, TK_WORD_WITH_DQUOTE))
+	if (match(token, TK_WORD) || match(token, TK_ASSIGN_WORD))
 		print_str_token(token);
 	if (match(token, TK_PIPE_ERR))
 		printf("type - %s, value - %s\n", STR_PIPE_ERR, (char *)(token->value));
@@ -40,8 +38,10 @@ void	print_token(t_token *token)
 		|| match(token, TK_SEMICOLON) || match(token, TK_PIPE)
 		|| match(token, TK_LPAREN) || match(token, TK_RPAREN))
 		print_single_char_token(token);
-	if (match(token, TK_REDIR_IN) || match(token, TK_REDIR_OUT)
-		|| match(token, TK_REDIR_HEREDOC) || match(token, TK_REDIR_APPEND))
+	if (match(token, TK_REDIR_IN)
+		|| match(token, TK_REDIR_OUT)
+		|| match(token, TK_REDIR_HEREDOC)
+		|| match(token, TK_REDIR_APPEND))
 		print_redir_token(token);
 }
 
@@ -94,12 +94,6 @@ static void	print_str_token(t_token *token)
 	if (match(token, TK_WORD))
 		printf("type - %s, value - %s\n", \
 			"TK_WORD", (char *)(token->value));
-	if (match(token, TK_WORD_WITH_SQUOTE))
-		printf("type - %s, value - %s\n", \
-			"TK_WORD_WITH_SQUOTE", (char *)(token->value));
-	if (match(token, TK_WORD_WITH_DQUOTE))
-		printf("type - %s, value - %s\n", \
-			"TK_WORD_WITH_DQUOTE", (char *)(token->value));
 	if (match(token, TK_ASSIGN_WORD))
 		printf("type - %s, value - %s\n", \
 			"TK_ASSIGN_WORD", (char *)(token->value));

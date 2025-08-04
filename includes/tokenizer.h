@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:25:28 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/31 17:36:45 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/04 17:44:08 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 # define TOKENIZER_H
 
 # include "def.h"
-
-# define C_SQUOTE			(1 << 0)
-# define C_DQUOTE			(1 << 1)
-# define C_BACKSLASH		(1 << 2)
 
 # define STR_EOF			("EOF")
 # define STR_BLANK			("BLANK")
@@ -45,8 +41,6 @@ typedef enum e_token_type
 	TK_NEWLINE,				// "\n"
 	TK_BLANK,				// " ", "\t"
 	TK_WORD,				// 공백, 탭으로 구별되는 일반 문자열
-	TK_WORD_WITH_SQUOTE,	// 작은 따옴표로 묶여있는 문자열
-	TK_WORD_WITH_DQUOTE,	// 큰 따옴표로 묶여있는 문자열
 	TK_ASSIGN_WORD,			// "=" 을 포함하는 문자열
 	TK_SEMICOLON,			// ";"
 	TK_PIPE,				// "|"

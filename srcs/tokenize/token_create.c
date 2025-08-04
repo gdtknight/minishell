@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 21:44:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/28 14:44:54 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/04 17:41:07 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,7 @@ t_token	*create_token(char *str)
 		free(new_token);
 		return (NULL);
 	}
-	if (new_token->type == TK_WORD
-		|| new_token->type == TK_WORD_WITH_SQUOTE
-		|| new_token->type == TK_WORD_WITH_DQUOTE)
+	if (new_token->type == TK_WORD)
 		set_token_value_from_str(new_token, str);
 	else
 		set_token_value_from_type(new_token);

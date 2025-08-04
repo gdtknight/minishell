@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:47:58 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/29 20:10:31 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/04 17:58:47 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ t_syntax_node	*assignment_word(t_token **tk_lst)
 {
 	t_syntax_node	*assignment_word;
 
-	if ((*tk_lst)->type != TK_WORD
-		&& (*tk_lst)->type != TK_WORD_WITH_SQUOTE
-		&& (*tk_lst)->type != TK_WORD_WITH_DQUOTE)
+	if ((*tk_lst)->type != TK_WORD)
 		return (NULL);
 	if (ft_strchr((*tk_lst)->value, '=') == NULL)
 		return (NULL);
@@ -40,10 +38,7 @@ t_syntax_node	*word(t_token **tk_lst)
 	t_syntax_node	*word_node;
 
 	word_node = create_empty_node();
-	if ((*tk_lst) == NULL
-		|| ((*tk_lst)->type != TK_WORD
-			&& (*tk_lst)->type != TK_WORD_WITH_SQUOTE
-			&& (*tk_lst)->type != TK_WORD_WITH_DQUOTE))
+	if ((*tk_lst) == NULL || ((*tk_lst)->type != TK_WORD))
 	{
 		free (word_node);
 		return (NULL);

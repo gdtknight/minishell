@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 20:25:33 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/28 19:01:40 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/04 02:59:50 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,29 @@
 #include <stdlib.h>
 
 #include "tokenizer.h"
+
+void	fixing_test(void)
+{
+	static char	*test_input = \
+		"< infile.txt cmd1 -n option1 | cmd2 < infile2-1.txt < infile2-2.txt -option2-1 arg2-1 arg2-2"
+		"&& cmd3 -option3 | cmd4 -option4-1 -option4-2 arg4-1 arg4-2 | (cmd5 -option5 arg5 && cmd6 -option6 >> append6.txt)";
+
+	t_token		*tk_lst;
+	t_token		*cur;
+	int			cnt;
+
+	tk_lst = tokenize_input(test_input);
+	cur = tk_lst;
+	cnt = 0;
+	while (cur)
+	{
+		printf("[%02d] Token : %s\n", cnt++, (char *)(cur->value));
+		print_token(cur);
+		cur = cur->next;
+	}
+	clear_token_lst(&tk_lst);
+
+}
 
 void	simple_test1(void)
 {
@@ -30,6 +53,7 @@ void	simple_test1(void)
 	while (cur)
 	{
 		printf("[%02d] Token : %s\n", cnt++, (char *)(cur->value));
+		print_token(cur);
 		cur = cur->next;
 	}
 	clear_token_lst(&tk_lst);
@@ -50,6 +74,7 @@ void	comple_test1(void)
 	while (cur)
 	{
 		printf("[%02d] Token : %s\n", cnt++, (char *)(cur->value));
+		print_token(cur);
 		cur = cur->next;
 	}
 	clear_token_lst(&tk_lst);
@@ -71,6 +96,7 @@ void	comple_test2(void)
 	while (cur)
 	{
 		printf("[%02d] Token : %s\n", cnt++, (char *)(cur->value));
+		print_token(cur);
 		cur = cur->next;
 	}
 	clear_token_lst(&tk_lst);
@@ -92,6 +118,7 @@ void	comple_test3(void)
 	while (cur)
 	{
 		printf("[%02d] Token : %s\n", cnt++, (char *)(cur->value));
+		print_token(cur);
 		cur = cur->next;
 	}
 	clear_token_lst(&tk_lst);
@@ -107,5 +134,7 @@ int	main(void)
 	comple_test2();
 	printf("\n\n[comple_test3]\n");
 	comple_test3();
+	printf("\n\n[fixing_test]\n");
+	fixing_test();
 	exit(EXIT_SUCCESS);
 }
