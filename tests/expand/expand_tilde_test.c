@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 14:23:20 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/02 21:34:06 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/05 16:32:11 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 void	expand_tilde_success_test(void)
 {
 	const char	*home_dir = getenv("HOME");
-	char	*before_value = "test root : ~";
-	char	*after_value = ft_strjoin("test root : ", home_dir);
-	t_token	*token;
+	const char	*before_value = "test root : ~";
+	const char	*after_value = ft_strjoin("test root : ", home_dir);
+	t_token		*token;
 
 	token = create_empty_token();
 	token->type = TK_WORD;
@@ -33,7 +33,7 @@ void	expand_tilde_success_test(void)
 		printf("[SUCCESS] before_value : \"%s\", after_value : \"%s\"\n",
 			before_value, (char *)(token->value));
 	}
-	free(after_value);
+	free((void *)after_value);
 	free(token->value);
 	free(token);
 }

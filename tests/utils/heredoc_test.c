@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 20:59:13 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/27 00:37:25 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/05 16:33:10 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 int	main(void)
 {
 	static char	*limiter = "here";
-	char	*input;
+	char		*input;
 
 	input = heredoc(limiter);
 	printf("---- result ----\n");
