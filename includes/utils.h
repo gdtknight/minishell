@@ -30,4 +30,8 @@ char	*heredoc(const char *limiter);
 
 char	*ft_multiplejoin(const char *s1, const char *s2, const char *s3);
 
+/* --- wildcard_match.c --- */
+
+t_boolean	wildcard_match(const char *s, const char *p);
+
 #endif
