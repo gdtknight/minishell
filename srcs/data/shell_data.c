@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:06:19 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/03 16:07:10 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/05 16:03:05 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,6 @@ t_status	init_shell_data(char *envp[])
 	char		*key;
 	char		*value;
 
-	/*
-	 * TODO : need to deep copy shell environment variable
-	 */
 	map = &((get_shell_data())->envp_map);
 	while (*envp != NULL)
 	{

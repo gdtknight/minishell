@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:15:05 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/04 17:58:23 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/05 16:04:24 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,7 @@ t_syntax_node	*command(t_token **tk_lst)
 		(*tk_lst) = (*tk_lst)->next;
 		command_node->value.child = list(tk_lst);
 		if ((*tk_lst)->type != TK_RPAREN)
-		{
-			/* Error !!! */
 			return (NULL);
-		}
 		(*tk_lst) = (*tk_lst)->next;
 	}
 	else
@@ -88,8 +85,10 @@ t_syntax_node	*cmd_prefix(t_token **tk_lst)
 		cmd_prefix_node = assignment_word(tk_lst);
 	if (cmd_prefix_node == NULL)
 		return (NULL);
-	while ((*tk_lst)->type == TK_REDIR_IN || (*tk_lst)->type == TK_REDIR_OUT
-		|| (*tk_lst)->type == TK_REDIR_HEREDOC || (*tk_lst)->type == TK_REDIR_APPEND
+	while ((*tk_lst)->type == TK_REDIR_IN
+		|| (*tk_lst)->type == TK_REDIR_OUT
+		|| (*tk_lst)->type == TK_REDIR_HEREDOC
+		|| (*tk_lst)->type == TK_REDIR_APPEND
 		|| (*tk_lst)->type == TK_ASSIGN_WORD)
 	{
 		temp = cmd_prefix_node;

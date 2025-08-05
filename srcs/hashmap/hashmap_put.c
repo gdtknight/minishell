@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 01:23:22 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/31 02:03:43 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/05 16:02:56 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,11 @@ void	put_key_value(t_hash_map *map, char *key, char *value)
 	entry = get_entry(map, key);
 	if (entry)
 	{
-		/* 기존 값 교체 (기존 value free 여부는 정책에 따라 다르게 처리 가능) */
 		if (entry->value != NULL)
 			free(entry->value);
 		entry->value = ft_strdup(value);
 		return ;
 	}
-	/* 새 엔트리 생성 및 삽입 */
 	entry = create_new_entry(key, value);
 	put_entry(map, entry);
 }
