@@ -6,11 +6,12 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/04 01:38:35 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/05 21:34:37 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <readline/readline.h>
+#include <readline/history.h>
 #include <stdlib.h>
 #include <errno.h>
 
