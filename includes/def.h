@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   def.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:52:20 by yoshin            #+#    #+#             */
-/*   Updated: 2025/05/12 14:31:10 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/04 21:24:37 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@ typedef enum e_status
 	SUCCESS = 1,
 	FAIL = 0
 }	t_status;
+
+typedef enum e_builtin_status
+{
+	BUILTIN_SUCCESS = 0,
+	BUILTIN_FAIL = 1
+}	t_builtin_status;
 
 typedef enum e_boolean
 {
