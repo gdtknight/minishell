@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:59:37 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/02 23:19:47 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/05 21:28:18 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 #include "def.h"
 #include "utils.h"
+#include "flag.h"
 
 #include "expand.h"
 

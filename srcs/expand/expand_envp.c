@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 01:00:10 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/03 19:01:51 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/05 21:28:04 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include "utils.h"
 #include "hashmap.h"
 #include "shell_data.h"
+
+#include "flag.h"
 
 #include "tokenizer.h"
 #include "expand.h"
