@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 17:35:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/05 15:47:10 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/06 18:14:41 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <limits.h>
+#include <wait.h>
 
 #include "eval.h"
 #include "parser.h"
