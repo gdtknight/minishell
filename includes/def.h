@@ -6,12 +6,18 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:52:20 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/04 21:24:37 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/06 18:25:23 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DEF_H
 # define DEF_H
+
+typedef enum e_result
+{
+	COMPLETED = 1,
+	INCOMPLETED = 0
+}	t_result;
 
 typedef enum e_status
 {

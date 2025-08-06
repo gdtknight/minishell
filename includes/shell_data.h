@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:03:33 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/31 01:29:27 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/06 18:13:55 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef struct s_shell_data
 }	t_shell_data;
 
 t_shell_data	*get_shell_data(void);
-t_status		init_shell_data(char *envp[]);
+t_result		init_shell_data(char *envp[]);
 
 /*
  *    [EACCES]           Search permission is denied for a component of the path prefix.

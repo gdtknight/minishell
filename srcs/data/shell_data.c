@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:06:19 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/05 16:03:05 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/06 18:14:18 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_shell_data	*get_shell_data(void)
 	return (&shell_data);
 }
 
-t_status	init_shell_data(char *envp[])
+t_result	init_shell_data(char *envp[])
 {
 	t_hash_map	*map;
 	char		*key;
@@ -41,5 +41,5 @@ t_status	init_shell_data(char *envp[])
 		envp++;
 	}
 	tcgetattr(STDIN_FILENO, &(get_shell_data()->term));
-	return (SUCCESS);
+	return (COMPLETED);
 }

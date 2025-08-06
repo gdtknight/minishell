@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/04 21:26:25 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/06 18:28:58 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,13 @@ t_boolean	name_checker(char *name)
 	return (TRUE);
 }
 
-int	check_and_set_enp(char *envp, t_hash_map *map)
+t_result	check_and_set_enp(char *envp, t_hash_map *map)
 {
-	char	*key;
-	char	*value;
-	int		status;
+	char		*key;
+	char		*value;
+	t_result	result;
 
-	status = SUCCESS;
+	result = COMPLETED;
 	key = extract_key(envp);
 	value = extract_value(envp);
 	if (name_checker(key))
@@ -63,11 +63,11 @@ int	check_and_set_enp(char *envp, t_hash_map *map)
 	else
 	{
 		printf("bash: export: `%s': not a valid identifier\n", key);
-		status = FAIL;
+		result = INCOMPLETED;
 	}
 	free (key);
 	free (value);
-	return (status);
+	return (result);
 }
 
 /**
@@ -96,7 +96,7 @@ int	builtin_export(char *line, t_hash_map *map)
 	status = BUILTIN_SUCCESS;
 	while (envps[i])
 	{
-		if (check_and_set_enp(envps[i], map) == FAIL)
+		if (check_and_set_enp(envps[i], map) == INCOMPLETED)
 			status = BUILTIN_FAIL;
 		i++;
 	}
