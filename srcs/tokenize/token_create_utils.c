@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 23:40:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/31 02:09:25 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/06 18:33:12 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_token_type	get_token_type(char *str)
 		return (TK_OR_IF);
 	if (*str == ' ' || *str == '\t')
 		return (TK_BLANK);
-	if (*str == ';' || *str == '|' || *str == '&' || *str == '\n'
+	if (*str == ';' || *str == '&' || *str == '|' || *str == '\n'
 		|| *str == '<' || *str == '>' || *str == '(' || *str == ')')
 		return (get_single_char_token_type(str));
 	return (TK_WORD);
@@ -49,6 +49,8 @@ static t_token_type	get_single_char_token_type(char *str)
 		return (TK_AMPERSAND);
 	if (*str == '|')
 		return (TK_PIPE);
+	if (*str == '\n')
+		return (TK_NEWLINE);
 	if (*str == '<')
 		return (TK_REDIR_IN);
 	if (*str == '>')
@@ -88,10 +90,12 @@ static void	set_token_value_from_single_char(t_token *target)
 {
 	if (target->type == TK_SEMICOLON)
 		target->value = ft_strdup(STR_SEMICOLON);
-	if (target->type == TK_PIPE)
-		target->value = ft_strdup(STR_PIPE);
 	if (target->type == TK_AMPERSAND)
 		target->value = ft_strdup(STR_AMPERSAND);
+	if (target->type == TK_PIPE)
+		target->value = ft_strdup(STR_PIPE);
+	if (target->type == TK_NEWLINE)
+		target->value = ft_strdup(STR_NEWLINE);
 	if (target->type == TK_REDIR_IN)
 		target->value = ft_strdup(STR_REDIR_IN);
 	if (target->type == TK_REDIR_OUT)
