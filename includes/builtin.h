@@ -13,15 +13,16 @@
 #ifndef BUILTIN_H
 # define BUILTIN_H
 
+# include "def.h"
 # include "hashmap.h"
 # include "tokenizer.h"
 
-int		builtin_cd(char *path, t_hash_map *map);
-int		builtin_export(char *line, t_hash_map *map);
-int		builtin_pwd(void);
-int		builtin_unset(char *line, t_hash_map *map);
-void	builtin_echo(char *line, int flag);
-void	builtin_env(t_hash_map map);
-int		builtin_exit(t_token **tk_lst, t_hash_map *map);
+t_status	builtin_cd(char *path, t_hash_map *map);
+t_status	builtin_export(char *line, t_hash_map *map);
+t_status	builtin_pwd(void);
+t_status	builtin_unset(char *line, t_hash_map *map);
+t_status	builtin_echo(char *line, t_toggle flag);
+t_status	builtin_env(t_hash_map map);
+t_status	builtin_exit(t_token **tk_lst, t_hash_map *map);
 
 #endif

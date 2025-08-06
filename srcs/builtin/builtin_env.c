@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include "def.h"
 #include "hashmap.h"
 #include "builtin.h"
 
@@ -22,7 +23,7 @@
  *
  * @param map  환경 변수가 저장된 해시맵
  */
-void	builtin_env(t_hash_map map)
+t_status	builtin_env(t_hash_map map)
 {
 	t_hash_entry	*current;
 	int				i;
@@ -38,4 +39,5 @@ void	builtin_env(t_hash_map map)
 		}
 		i++;
 	}
+	return (SUCCESS);
 }

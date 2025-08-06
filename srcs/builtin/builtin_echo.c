@@ -10,15 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "def.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
-
-#include "libft.h"
-#include "hashmap.h"
-#include "builtin.h"
 
 /**
  * @brief 전달받은 문자열을 출력한다.
@@ -29,11 +26,12 @@
  * @param line  출력할 문자열
  * @param flag  OFF일 경우 개행 추가, ON일 경우 개행 생략
  */
-void	builtin_echo(char *line, int flag)
+t_status	builtin_echo(char *line, t_toggle toggle)
 {
 	if (line)
 		printf("%s", line);
-	if (flag == OFF)
+	if (toggle == OFF)
 		printf("\n");
+	return (SUCCESS);
 }
 

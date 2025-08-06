@@ -80,7 +80,7 @@ t_result	check_and_set_enp(char *envp, t_hash_map *map)
  * @param map   환경 변수가 저장될 해시맵
  * @return SUCCESS(추가/갱신 성공), FAIL(잘못된 key 입력 시)
  */
-int	builtin_export(char *line, t_hash_map *map)
+t_status	builtin_export(char *line, t_hash_map *map)
 {
 	char	**envps;
 	int		status;
@@ -93,11 +93,11 @@ int	builtin_export(char *line, t_hash_map *map)
 		exit(EXIT_FAILURE);
 	}
 	i = 0;
-	status = BUILTIN_SUCCESS;
+	status = SUCCESS;
 	while (envps[i])
 	{
 		if (check_and_set_enp(envps[i], map) == INCOMPLETED)
-			status = BUILTIN_FAIL;
+			status = FAILURE;
 		i++;
 	}
 	free_ex(envps);

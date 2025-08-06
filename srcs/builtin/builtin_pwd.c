@@ -14,7 +14,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "hashmap.h"
 #include "def.h"
 #include "builtin.h"
 
@@ -26,14 +25,14 @@
  *
  * @return SUCCESS(출력 성공), FAIL(경로를 가져오지 못한 경우)
  */
-int	builtin_pwd(void)
+t_status	builtin_pwd(void)
 {
 	char	*cwd;
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		return (BUILTIN_FAIL);
+		return (FAILURE);
 	printf("%s\n", cwd);
 	free(cwd);
-	return (BUILTIN_SUCCESS);
+	return (SUCCESS);
 }

@@ -14,9 +14,7 @@
 
 #include <stdio.h>
 
-#include "debug.h"
 #include "hashmap.h"
-#include "def.h"
 #include "libft.h"
 #include "builtin.h"
 
@@ -44,13 +42,13 @@ void	free_un(char **keys)
 	free (keys);
 }
 
-int	builtin_unset(char *line, t_hash_map *map)
+t_status	builtin_unset(char *line, t_hash_map *map)
 {
 	char			**envp_keys;
 	int				i;
 
 	if (!line || line[0] == 0 || !map)
-		return (BUILTIN_FAIL);
+		return (FAILURE);
 	envp_keys = ft_split(line, ' ');
 	i = 0;
 	while (envp_keys[i])
@@ -59,7 +57,7 @@ int	builtin_unset(char *line, t_hash_map *map)
 		i++;
 	}
 	free_un(envp_keys);
-	return (BUILTIN_SUCCESS);
+	return (SUCCESS);
 }
 
 

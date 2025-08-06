@@ -21,15 +21,10 @@ typedef enum e_result
 
 typedef enum e_status
 {
-	SUCCESS = 1,
-	FAIL = 0
+	SUCCESS = 0,
+	FAILURE = 1,
+	ERROR = (-1)
 }	t_status;
-
-typedef enum e_builtin_status
-{
-	BUILTIN_SUCCESS = 0,
-	BUILTIN_FAIL = 1
-}	t_builtin_status;
 
 typedef enum e_boolean
 {
@@ -37,10 +32,10 @@ typedef enum e_boolean
 	FALSE = 0
 }	t_boolean;
 
-typedef enum e_flag
+typedef enum e_toggle
 {
 	ON = 1,
 	OFF = 0
-}	t_flag;
+}	t_toggle;
 
 #endif

@@ -16,31 +16,30 @@
 #include <string.h>
 #include <errno.h>
 
-#include "hashmap.h"
-#include "tokenizer.h"
-#include "libft.h"
 #include "def.h"
+#include "hashmap.h"
+
 #include "builtin.h"
 
 
 t_boolean	check_args(char *path)
 {
-	int	i;
-	int	num;
-	int	flag;
+	int			i;
+	int			num;
+	t_toggle	toggle;
 
 	if (!path)
 		return (TRUE);
 	num = 0;
 	i = 0;
-	flag = OFF;
+	toggle = OFF;
 	while (path[i])
 	{
-		if ((path[i] == '\'' || path[i] == '"') && flag == OFF)
-			flag = ON;
-		if ((path[i] == '\'' || path[i] == '"') && flag == ON)
-			flag = OFF;
-		if (path[i] == ' ' && flag == OFF)
+		if ((path[i] == '\'' || path[i] == '"') && toggle == OFF)
+			toggle = ON;
+		if ((path[i] == '\'' || path[i] == '"') && toggle == ON)
+			toggle = OFF;
+		if (path[i] == ' ' && toggle == OFF)
 			num++;
 		i++;
 	}
@@ -50,7 +49,7 @@ t_boolean	check_args(char *path)
 }
 
 
-int	error_print(char *path, char *old_pwd)
+t_status	error_print(char *path, char *old_pwd)
 {
 	if (!old_pwd)
 		printf("bash: cd: too many arguments\n");
@@ -66,7 +65,7 @@ int	error_print(char *path, char *old_pwd)
 		printf("bash: cd: not a directory: %s\n", path);
 	if (old_pwd)
 		free(old_pwd);
-	return (BUILTIN_FAIL);
+	return (FAILURE);
 }
 
 char	*route_set(char *path, char *old_pwd, t_hash_map *map)
@@ -97,7 +96,7 @@ char	*route_set(char *path, char *old_pwd, t_hash_map *map)
  * @param map   환경 변수가 저장된 해시맵
  * @return SUCCESS(변경 성공), FAIL(잘못된 인자 또는 접근 불가한 경로)
  */
-int	builtin_cd(char *path, t_hash_map *map)
+t_status	builtin_cd(char *path, t_hash_map *map)
 {
 	char	*old_pwd;
 	char	*new_pwd;
@@ -120,5 +119,5 @@ int	builtin_cd(char *path, t_hash_map *map)
 		free (cwd);
 	if (old_pwd)
 		free (old_pwd);
-	return (BUILTIN_SUCCESS);
+	return (SUCCESS);
 }

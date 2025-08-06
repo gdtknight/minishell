@@ -15,9 +15,8 @@
 #include "hashmap.h"
 #include "tokenizer.h"
 #include "shell_data.h"
-#include "libft.h"
 
-int	builtin_exit(t_token **tk_lst, t_hash_map *map)
+t_status	builtin_exit(t_token **tk_lst, t_hash_map *map)
 {
 	t_token	*cur;
 
