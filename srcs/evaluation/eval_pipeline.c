@@ -6,14 +6,14 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 15:45:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/06 18:16:07 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/06 19:33:25 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <limits.h>
 #include <stdlib.h>
-#include <wait.h>
+#include <sys/wait.h>
 
 #include "eval.h"
 
