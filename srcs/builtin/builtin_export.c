@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/06 18:28:58 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/07 20:11:46 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,4 +103,3 @@ t_status	builtin_export(char *line, t_hash_map *map)
 	free_ex(envps);
 	return (status);
 }
-

@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 22:18:39 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/04 20:42:21 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/07 20:11:09 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,3 @@ t_status	builtin_echo(char *line, t_toggle toggle)
 		printf("\n");
 	return (SUCCESS);
 }
-

@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:09 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/05 21:45:54 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/07 20:12:08 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 #include "hashmap.h"
 
 #include "builtin.h"
-
 
 t_boolean	check_args(char *path)
 {
@@ -47,7 +46,6 @@ t_boolean	check_args(char *path)
 		return (FALSE);
 	return (TRUE);
 }
-
 
 t_status	error_print(char *path, char *old_pwd)
 {

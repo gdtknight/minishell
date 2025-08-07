@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/04 21:52:21 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/07 20:12:30 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
  * @param map   entry가 삭제될 대상 해시맵
  * @return SUCCESS(삭제 성공), FAIL(입력값 오류)
  */
-
 void	free_un(char **keys)
 {
 	int	i;
@@ -59,5 +58,3 @@ t_status	builtin_unset(char *line, t_hash_map *map)
 	free_un(envp_keys);
 	return (SUCCESS);
 }
-
-
