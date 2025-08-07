@@ -43,9 +43,9 @@ typedef enum e_token_type
 	TK_WORD,				// 공백, 탭으로 구별되는 일반 문자열
 	TK_ASSIGN_WORD,			// "=" 을 포함하는 문자열
 	TK_SEMICOLON,			// ";"
-	TK_PIPE,				// "|"
-	TK_PIPE_ERR,				// "|"
 	TK_AMPERSAND,			// "&"
+	TK_PIPE,				// "|"
+	TK_PIPE_ERR,			// "|&"
 	TK_REDIR_IN,			// "<"
 	TK_REDIR_OUT,			// ">"
 	TK_REDIR_HEREDOC,		// "<<"
