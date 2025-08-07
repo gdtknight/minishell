@@ -6,19 +6,20 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:03:33 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/06 18:13:55 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/07 21:20:42 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SHELL_DATA_H
 # define SHELL_DATA_H
 
-# define PROMPT		("minishell >")
-
 # include 			<termios.h>
 
 # include 			"def.h"
 # include 			"hashmap.h"
+# include			"color.h"
+
+# define PROMPT		(AQUA"minishell >"RESET)
 
 typedef struct s_shell_data
 {
