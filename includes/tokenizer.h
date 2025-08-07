@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:25:28 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/06 18:14:01 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/07 21:08:18 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,10 @@ void			set_token_value_from_type(t_token *target);
 t_result		clear_token_lst(t_token **lst);
 t_result		append_token_to_lst(t_token **lst, t_token *token);
 t_result		remove_token_from_lst(t_token *lst, t_token *target);
+
+/* --- token_validate_utils.c --- */
+
+t_boolean		is_valid_sequence(t_token *token_lst);
 
 /* --- token_word_utils.c --- */
 
