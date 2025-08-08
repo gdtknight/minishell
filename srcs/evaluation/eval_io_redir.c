@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 20:39:35 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/08 20:15:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/08 21:32:38 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,6 @@ static t_status	set_stdout(t_syntax_node *io_redir_node)
 	}
 	close(STDOUT_FILENO);
 	dup2(outfile_fd, STDOUT_FILENO);
+	close(outfile_fd);
 	return (SUCCESS);
 }
