@@ -28,6 +28,7 @@ typedef struct s_shell_data
 	int				last_status;
 	int				stdin_fd;
 	int				stdout_fd;
+	t_boolean		in_pipe;
 }	t_shell_data;
 
 t_shell_data	*get_shell_data(void);

@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:06:19 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/06 18:14:18 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/08 02:24:56 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,9 @@ t_result	init_shell_data(char *envp[])
 		envp++;
 	}
 	tcgetattr(STDIN_FILENO, &(get_shell_data()->term));
+	(get_shell_data())->last_status = EXIT_SUCCESS;
+	(get_shell_data())->in_pipe = FALSE;
+	dup2(STDIN_FILENO, (get_shell_data())->stdin_fd);
+	dup2(STDOUT_FILENO, (get_shell_data())->stdout_fd);
 	return (COMPLETED);
 }
