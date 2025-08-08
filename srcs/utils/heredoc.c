@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 20:13:41 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/26 21:26:19 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/08 19:43:03 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ char	*heredoc(const char *limiter)
 	char	*temp;
 
 	input = NULL;
-	line = readline("> ");
-	while (ft_strncmp(line, limiter, ft_strlen(line)) != 0)
+	line = readline("heredoc> ");
+	while (ft_strncmp(line, limiter, ft_strlen(line) + 1) != 0)
 	{
 		temp = input;
 		if (temp)
@@ -37,7 +37,7 @@ char	*heredoc(const char *limiter)
 		temp = input;
 		input = ft_strjoin(temp, "\n");
 		free(temp);
-		line = readline("> ");
+		line = readline("heredoc> ");
 	}
 	return (input);
 }
