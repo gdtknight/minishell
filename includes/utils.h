@@ -6,14 +6,20 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 20:56:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/05 20:55:11 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/08 06:49:53 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
 
+# define INIT_CAPACITY 16
+
 # include "def.h"
+
+/* --- file_utils.c --- */
+
+char **match_files_in_dir(const char *pattern);
 
 /* --- find_next_delim.c --- */
 
