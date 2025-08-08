@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 15:45:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/06 19:33:25 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/08 19:05:32 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,19 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 #include "eval.h"
+#include "shell_data.h"
 
 static void	setup_pipe(pid_t child_pids[2], int pipe_fds[2]);
 static int	wait_pipe(pid_t child_pids[2], int *status);
 
-int	eval_pipeline(t_syntax_node	*pipeline_node)
+t_status	eval_pipeline(t_syntax_node	*pipeline_node)
 {
-	int		status;
-	int		pipe_fds[2];
-	pid_t	child_pids[2];
+	t_status	status;
+	int			pipe_fds[2];
+	pid_t		child_pids[2];
 
 	child_pids[CHILD_LEFT] = INT_MAX;
 	child_pids[CHILD_RIGHT] = INT_MAX;
@@ -48,33 +50,34 @@ int	eval_pipeline(t_syntax_node	*pipeline_node)
 
 static int	wait_pipe(pid_t child_pids[2], int *status)
 {
-	pid_t	exited_child;
-
-	exited_child = waitpid(-1, status, 0);
-	if (exited_child == child_pids[CHILD_LEFT])
-		waitpid(child_pids[CHILD_RIGHT], status, 0);
-	else
-		waitpid(child_pids[CHILD_LEFT], status, 0);
+	waitpid(child_pids[0], status, 0);
+	waitpid(child_pids[1], status, 0);
+	if (WIFEXITED(*status))
+		(get_shell_data())->last_status = WEXITSTATUS(*status);
+	if (WIFSIGNALED(*status))
+		(get_shell_data())->last_status = WTERMSIG(*status);
 	return (*status);
 }
 
 static void	setup_pipe(pid_t child_pids[2], int pipe_fds[2])
 {
-	if (child_pids[CHILD_LEFT] != 0 && child_pids[CHILD_RIGHT] != 0)
-	{
-		close(pipe_fds[PIPE_READ]);
-		close(pipe_fds[PIPE_WRITE]);
-	}
-	else if (child_pids[CHILD_LEFT] == 0 && child_pids[CHILD_RIGHT] != 0)
+	if (child_pids[CHILD_LEFT] == 0)
 	{
 		close(STDOUT_FILENO);
 		close(pipe_fds[PIPE_READ]);
 		dup2(pipe_fds[PIPE_WRITE], STDOUT_FILENO);
+		close(pipe_fds[PIPE_WRITE]);
 	}
-	else if (child_pids[CHILD_LEFT] != 0 && child_pids[CHILD_RIGHT] == 0)
+	else if (child_pids[CHILD_RIGHT] == 0)
 	{
 		close(STDIN_FILENO);
 		close(pipe_fds[PIPE_WRITE]);
 		dup2(pipe_fds[PIPE_READ], STDIN_FILENO);
+		close(pipe_fds[PIPE_READ]);
+	}
+	else
+	{
+		close(pipe_fds[PIPE_READ]);
+		close(pipe_fds[PIPE_WRITE]);
 	}
 }

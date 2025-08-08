@@ -31,33 +31,32 @@ typedef struct s_cmd_form
 
 /* --- eval.c --- */
 
-int			eval(t_syntax_node *node);
+t_status	eval(t_syntax_node *node);
 
 /* --- eval_list.c --- */
 
-int			eval_list(t_syntax_node *node);
+t_status	eval_list(t_syntax_node *list_node);
 
 /* --- eval_and_or.c --- */
 
-int			eval_and_or(t_syntax_node * node);
+t_status	eval_and_or(t_syntax_node *and_or_node);
 
 /* --- eval_command.c --- */
 
-int			eval_command(t_syntax_node *cmd_node);
+t_status	eval_command(t_syntax_node *cmd_node);
 
 /* --- eval_command_utils.c --- */
 
 char		**get_args_from_suffix(t_syntax_node *cmd_suffix);
-int			count_args(t_syntax_node *cmd_suffix);
 char		*find_path(char *cmd, char *envp[]);
 
 /* --- eval_io_redir.c --- */
 
-int			eval_io_redir(t_syntax_node *io_redir_node);
+t_status	eval_io_redir(t_syntax_node *io_redir_node);
 
 /* --- eval_pipeline.c --- */
 
-int			eval_pipeline(t_syntax_node	*pipeline_node);
+t_status	eval_pipeline(t_syntax_node	*pipeline_node);
 
 /* --- eval_utils.c --- */
 

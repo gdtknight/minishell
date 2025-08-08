@@ -16,6 +16,7 @@
 
 #include "eval.h"
 
+static int	count_args(t_syntax_node *cmd_suffix);
 static void	release_dirs(char ***p_dirs);
 
 char	**get_args_from_suffix(t_syntax_node *cmd_suffix)
@@ -37,26 +38,6 @@ char	**get_args_from_suffix(t_syntax_node *cmd_suffix)
 		args[idx++] = ft_strdup(cur_node->value.word);
 	args[idx++] = (NULL);
 	return (args);
-}
-
-int	count_args(t_syntax_node *cmd_suffix)
-{
-	int				count;
-	t_syntax_node	*cur_node;
-
-	if (!cmd_suffix)
-		return (0);
-	cur_node = cmd_suffix;
-	count = 0;
-	while (cur_node->type == NODE_CMD_SUFFIX)
-	{
-		if (cur_node->value.b_node.left->type == NODE_WORD)
-			count++;
-		cur_node = cur_node->value.b_node.right;
-	}
-	if (cur_node->type == NODE_WORD)
-		count++;
-	return (count);
 }
 
 /**
@@ -94,6 +75,26 @@ char	*find_path(char *cmd, char *envp[])
 	}
 	release_dirs(&dirs);
 	return (path_full);
+}
+
+static int	count_args(t_syntax_node *cmd_suffix)
+{
+	int				count;
+	t_syntax_node	*cur_node;
+
+	if (!cmd_suffix)
+		return (0);
+	cur_node = cmd_suffix;
+	count = 0;
+	while (cur_node->type == NODE_CMD_SUFFIX)
+	{
+		if (cur_node->value.b_node.left->type == NODE_WORD)
+			count++;
+		cur_node = cur_node->value.b_node.right;
+	}
+	if (cur_node->type == NODE_WORD)
+		count++;
+	return (count);
 }
 
 /**

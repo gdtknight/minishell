@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:34:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/06 18:15:33 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/08 20:11:26 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <errno.h>
 
+#include "def.h"
 #include "libft.h"
 
 #include "eval.h"
@@ -25,32 +26,42 @@
 #include "parser.h"
 #include "shell_data.h"
 
-static int		execute(t_command *cmd);
+static int		execute_simple_cmd(t_command *cmd);
 static t_status	execute_cmd(t_cmd_form cmd_form);
-static int		eval_prefix_io(t_syntax_node *prefix);
-static int		eval_suffix_io(t_syntax_node *suffix);
+static t_status	eval_prefix_io(t_syntax_node *prefix);
+static t_status	eval_suffix_io(t_syntax_node *suffix);
 
-int	eval_command(t_syntax_node *cmd_node)
+t_status	eval_command(t_syntax_node *cmd_node)
 {
 	int		status;
-	int		child_pid;
+	pid_t	pid;
 
-	if (cmd_node->type == NODE_COMPOUND_COMMAND)
+	if ((get_shell_data())->in_pipe)
 	{
-		child_pid = fork();
-		if (child_pid == 0)
+		if (cmd_node->type == NODE_COMPOUND_COMMAND)
 			exit(eval(cmd_node->value.child));
-		waitpid(child_pid, &status, 0);
+		else if (cmd_node->type == NODE_SIMPLE_COMMAND)
+			exit(execute_simple_cmd(&(cmd_node->value.command)));
+		else
+			exit(EXIT_FAILURE);
 	}
-	else
-		status = execute(&(cmd_node->value.command));
+	pid = fork();
+	if (pid == 0)
+	{
+		if (cmd_node->type == NODE_COMPOUND_COMMAND)
+			exit(eval(cmd_node->value.child));
+		else if (cmd_node->type == NODE_SIMPLE_COMMAND)
+			exit(execute_simple_cmd(&(cmd_node->value.command)));
+		else
+			exit(EXIT_FAILURE);
+	}
+	waitpid(pid, &status, 0);
 	return (status);
 }
 
-int	execute(t_command *cmd)
+static int	execute_simple_cmd(t_command *cmd)
 {
-	int			status;
-	pid_t		child;
+	t_status	status;
 	t_cmd_form	cmd_form;
 
 	cmd_form.args = get_args_from_suffix(cmd->suffix);
@@ -58,19 +69,14 @@ int	execute(t_command *cmd)
 	(cmd_form.args)[0] = ft_strdup(cmd->word);
 	cmd_form.envp = lst_from_hashmap(&(get_shell_data()->envp_map));
 	status = 0;
-	child = fork();
-	if (child == 0)
+	if (eval_prefix_io(cmd->prefix) == ERROR
+		|| eval_suffix_io(cmd->suffix) == ERROR)
+		return (ERROR);
+	if (execute_cmd(cmd_form))
 	{
-		if (eval_prefix_io(cmd->prefix) > 0 || eval_suffix_io(cmd->suffix) > 0)
-			return (1);
-		if (execute_cmd(cmd_form))
-		{
-			perror(strerror(errno));
-			return (errno);
-		}
+		perror(strerror(errno));
+		return (errno);
 	}
-	else
-		waitpid(child, &status, 0);
 	return (status);
 }
 
@@ -84,7 +90,7 @@ int	execute(t_command *cmd)
  * @param envp 환경 변수
  * @return 실행 실패 시 FALSE 반환
  */
-t_status	execute_cmd(t_cmd_form cmd_form)
+static t_status	execute_cmd(t_cmd_form cmd_form)
 {
 	const char	*__path;
 
@@ -104,13 +110,15 @@ t_status	execute_cmd(t_cmd_form cmd_form)
 	}
 	ft_putstr_fd("command not found: ", 2);
 	ft_putendl_fd(cmd_form.cmd, 2);
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
 	exit(EXIT_FAILURE);
 }
 
-int	eval_prefix_io(t_syntax_node *prefix)
+static t_status	eval_prefix_io(t_syntax_node *prefix)
 {
 	t_syntax_node	*cur_node;
-	int				status;
+	t_status		status;
 
 	cur_node = prefix;
 	while (cur_node && cur_node->type == NODE_CMD_PREFIX)
@@ -124,10 +132,10 @@ int	eval_prefix_io(t_syntax_node *prefix)
 	return (status);
 }
 
-int	eval_suffix_io(t_syntax_node *suffix)
+static t_status	eval_suffix_io(t_syntax_node *suffix)
 {
 	t_syntax_node	*cur_node;
-	int				status;
+	t_status		status;
 
 	cur_node = suffix;
 	while (cur_node && cur_node->type == NODE_CMD_SUFFIX)
