@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:03:33 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/07 23:36:46 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/08 18:34:36 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include 			"hashmap.h"
 # include			"color.h"
 
-# define PROMPT		(AQUA"minishell > "RESET)
+# define PROMPT		(AQUA"minishell> "RESET)
 
 typedef struct s_shell_data
 {
