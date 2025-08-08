@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 22:10:43 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/29 20:09:48 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/08 19:35:22 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,6 @@ static t_syntax_node	*io_redir_heredoc(t_token **tk_lst)
 	(*tk_lst) = (*tk_lst)->next;
 	io_redir_heredoc_node = create_empty_node();
 	io_redir_heredoc_node->type = NODE_IO_REDIR_HEREDOC;
-	io_redir_heredoc_node->value.io_target = (NULL);
+	io_redir_heredoc_node->value.io_target = ft_strdup((*tk_lst)->value);
 	return (io_redir_heredoc_node);
 }
