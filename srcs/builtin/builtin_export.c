@@ -18,7 +18,7 @@
 #include "def.h"
 #include "libft.h"
 #include "builtin.h"
-#include "envp.h"
+#include "utils.h"
 
 void	free_ex(char **envps)
 {

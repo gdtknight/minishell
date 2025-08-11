@@ -29,6 +29,14 @@ typedef struct s_cmd_form
 	char	**envp;
 }	t_cmd_form;
 
+typedef t_status	(*t_builtin)(char **);
+
+typedef struct s_builtin_entry
+{
+	char			*cmd_str;
+	t_builtin		cmd;
+}	t_builtin_entry;
+
 /* --- eval.c --- */
 
 t_status	eval(t_syntax_node *node);
@@ -59,5 +67,8 @@ t_status	eval_io_redir(t_syntax_node *io_redir_node);
 t_status	eval_pipeline(t_syntax_node	*pipeline_node);
 
 /* --- eval_utils.c --- */
+
+
+t_status	execute_builtin(t_cmd_form cmd_form);
 
 #endif
