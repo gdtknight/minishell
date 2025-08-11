@@ -76,6 +76,20 @@ ifeq ($(debug), 1)
 	LIB_DEBUG = debug=1
 endif
 
+# ********************** #
+#    OS Specific Flag    #
+# ********************** #
+
+OS := $(shell uname)
+
+ifeq ($(OS), Linux)
+	READLINE_HEADER =
+	READLINE_LINK =
+else ifeq ($(OS), Darwin)
+	READLINE_HEADER = -I/opt/homebrew/opt/readline/include -I/usr/local/opt/readline/include
+	READLINE_LINK = -L/opt/homebrew/opt/readline/lib -L/usr/local/opt/readline/lib
+endif
+
 .PHONY: all clean fclean re bonus debug
 all: $(NAME)
 
@@ -83,6 +97,7 @@ $(NAME): $(OBJS) | $(BIN_DIR) $(LIB_ACHIEVES)
 	@echo "$(CYAN_BLUE)[$(NAME)] $(RED)compile $(BIN_DIR)/$@ ...$(RESET)"
 	@$(PREFIX) $(CC) $(CFLAGS) -o ./$(BIN_DIR)/$@ $^ \
 		$(foreach lib, $(LIB_NAMES), -L./lib$(lib) -l$(lib)) \
+		$(READLINE_LINK) \
 		-lreadline
 	@echo "$(CYAN_BLUE)[$(NAME)] $(ORANGE)$(BIN_DIR)/$@ compiled!$(RESET)"
 	@cp $(BIN_DIR)/$@ $@
@@ -95,7 +110,8 @@ $(BUILD_DIR)/%.c.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
 	@echo "$(CYAN_BLUE)[$(NAME)] $(RED)compile $< ...$(RESET)"
 	@$(PREFIX) $(CC) $(CFLAGS) -o $@ -c $< -I./$(HEADER_DIR) \
-		$(foreach lib, $(LIB_NAMES), -I./lib$(lib)/$(HEADER_DIR))
+		$(foreach lib, $(LIB_NAMES), -I./lib$(lib)/$(HEADER_DIR)) \
+		$(READLINE_HEADER)
 	@echo "$(CYAN_BLUE)[$(NAME)] $(GREEN)$< compiled!$(RESET)"
 
 $(LIB_ACHIEVES): %.a:
@@ -159,6 +175,7 @@ $(TEST_BIN_DIR)/% : $(TEST_BUILD_DIR)/%.c.o
 	@$(PREFIX) $(CC) $(CFLAGS) -o $@ $< \
 		$(filter-out ./$(BUILD_DIR)/main.c.o, $(wildcard ./$(BUILD_DIR)/**/*.c.o)) \
 		$(foreach lib, $(LIB_NAMES), -L./lib$(lib) -l$(lib)) \
+		$(READLINE_LINK) \
 		-lreadline
 	@echo "$(CYAN_BLUE)[$(NAME)] $(ORANGE)$(BIN_DIR)/$@ compiled!$(RESET)"
 
@@ -166,5 +183,6 @@ $(TEST_BUILD_DIR)/%.c.o: $(TEST_DIR)/%.c
 	@mkdir -p $(dir $@)
 	@echo "$(CYAN_BLUE)[$(NAME)] $(RED)compile $< ...$(RESET)"
 	@$(PREFIX) $(CC) $(CFLAGS) -o $@ -c $< -I./$(HEADER_DIR) \
-		$(foreach lib, $(LIB_NAMES), -I./lib$(lib)/$(HEADER_DIR))
+		$(foreach lib, $(LIB_NAMES), -I./lib$(lib)/$(HEADER_DIR)) \
+		$(READLINE_HEADER)
 	@echo "$(CYAN_BLUE)[$(NAME)] $(GREEN)$< compiled!$(RESET)"
