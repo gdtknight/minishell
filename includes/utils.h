@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 20:56:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/08 06:49:53 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/09 03:52:20 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,17 @@
 
 # include "def.h"
 
+# include "hashmap.h"
+
+/* --- envp_utils.c --- */
+
+char		**lst_from_hashmap(t_hash_map *map);
+char		*extract_key(char *envp);
+char		*extract_value(char *envp);
+
 /* --- file_utils.c --- */
 
-char **match_files_in_dir(const char *pattern);
+char		**match_files_in_dir(const char *pattern);
 
 /* --- find_next_delim.c --- */
 
@@ -28,13 +36,13 @@ char		*find_next_delim(
 				t_boolean (*predicate)(char),
 				char mask);
 
-/* --- heredoc.c --- */
-
-char		*heredoc(const char *limiter);
-
 /* --- ft_multiplejoin.c --- */
 
 char		*ft_multiplejoin(const char *s1, const char *s2, const char *s3);
+
+/* --- heredoc.c --- */
+
+char		*heredoc(const char *limiter);
 
 /* --- wildcard_match.c --- */
 

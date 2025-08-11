@@ -18,6 +18,7 @@
 
 #include "eval.h"
 #include "shell_data.h"
+#include "sig.h"
 
 static void	setup_pipe(pid_t child_pids[2], int pipe_fds[2]);
 static int	wait_pipe(pid_t child_pids[2], int *status);
@@ -35,12 +36,14 @@ t_status	eval_pipeline(t_syntax_node	*pipeline_node)
 	child_pids[CHILD_LEFT] = fork();
 	if (child_pids[CHILD_LEFT] == 0)
 	{
+		restore_terminal_settings();
 		setup_pipe(child_pids, pipe_fds);
 		exit(eval(pipeline_node->value.b_node.left));
 	}
 	child_pids[CHILD_RIGHT] = fork();
 	if (child_pids[CHILD_RIGHT] == 0)
 	{
+		restore_terminal_settings();
 		setup_pipe(child_pids, pipe_fds);
 		exit(eval(pipeline_node->value.b_node.right));
 	}

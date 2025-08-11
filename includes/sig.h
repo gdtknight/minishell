@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   envp.h                                             :+:      :+:    :+:   */
+/*   sig.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/31 16:47:24 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/01 17:38:07 by yoshin           ###   ########.fr       */
+/*   Created: 2025/08/09 04:34:16 by yoshin            #+#    #+#             */
+/*   Updated: 2025/08/09 04:34:16 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENVP_H
-# define ENVP_H
+#ifndef SIG_H
+# define SIG_H
 
-# include "hashmap.h"
-
-/* --- envp_utils.c --- */
-
-char 	**lst_from_hashmap(t_hash_map *map);
-char	*extract_key(char *envp);
-char	*extract_value(char *envp);
+void	init_signals(void);
+void	save_terminal_settings(void);
+void	restore_terminal_settings(void);
 
 #endif

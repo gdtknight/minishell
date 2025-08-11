@@ -23,7 +23,7 @@
 
 typedef struct s_shell_data
 {
-	struct termios	term;
+	struct termios	termios_backup;
 	t_hash_map		envp_map;
 	int				last_status;
 	int				stdin_fd;

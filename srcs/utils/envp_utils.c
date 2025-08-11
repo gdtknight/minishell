@@ -15,7 +15,6 @@
 #include "libft.h"
 
 #include "hashmap.h"
-#include "envp.h"
 #include "utils.h"
 
 char	**lst_from_hashmap(t_hash_map *map)

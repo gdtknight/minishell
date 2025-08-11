@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:34:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/08 20:11:26 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/11 21:19:23 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@
 #include "libft.h"
 
 #include "eval.h"
-#include "envp.h"
 #include "parser.h"
 #include "shell_data.h"
+#include "utils.h"
+#include "sig.h"
 
-static int		execute_simple_cmd(t_command *cmd);
+static t_status	execute_simple_cmd(t_command *cmd);
 static t_status	execute_cmd(t_cmd_form cmd_form);
 static t_status	eval_prefix_io(t_syntax_node *prefix);
 static t_status	eval_suffix_io(t_syntax_node *suffix);
@@ -48,6 +49,7 @@ t_status	eval_command(t_syntax_node *cmd_node)
 	pid = fork();
 	if (pid == 0)
 	{
+		restore_terminal_settings();
 		if (cmd_node->type == NODE_COMPOUND_COMMAND)
 			exit(eval(cmd_node->value.child));
 		else if (cmd_node->type == NODE_SIMPLE_COMMAND)
@@ -59,25 +61,26 @@ t_status	eval_command(t_syntax_node *cmd_node)
 	return (status);
 }
 
-static int	execute_simple_cmd(t_command *cmd)
+static t_status	execute_simple_cmd(t_command *cmd)
 {
-	t_status	status;
 	t_cmd_form	cmd_form;
 
 	cmd_form.args = get_args_from_suffix(cmd->suffix);
 	cmd_form.cmd = ft_strdup(cmd->word);
 	(cmd_form.args)[0] = ft_strdup(cmd->word);
 	cmd_form.envp = lst_from_hashmap(&(get_shell_data()->envp_map));
-	status = 0;
 	if (eval_prefix_io(cmd->prefix) == ERROR
 		|| eval_suffix_io(cmd->suffix) == ERROR)
 		return (ERROR);
-	if (execute_cmd(cmd_form))
+	if (execute_builtin(cmd_form) == FAILURE)
 	{
-		perror(strerror(errno));
-		return (errno);
+		if (execute_cmd(cmd_form))
+		{
+			perror(strerror(errno));
+			return (ERROR);
+		}
 	}
-	return (status);
+	return (SUCCESS);
 }
 
 /**

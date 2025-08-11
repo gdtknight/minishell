@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:06:19 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/08 02:24:56 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/09 03:52:50 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <unistd.h>
 
 #include "def.h"
-#include "envp.h"
+#include "utils.h"
 #include "shell_data.h"
 
 t_shell_data	*get_shell_data(void)
@@ -40,7 +40,7 @@ t_result	init_shell_data(char *envp[])
 		free(value);
 		envp++;
 	}
-	tcgetattr(STDIN_FILENO, &(get_shell_data()->term));
+	tcgetattr(STDIN_FILENO, &(get_shell_data()->termios_backup));
 	(get_shell_data())->last_status = EXIT_SUCCESS;
 	(get_shell_data())->in_pipe = FALSE;
 	dup2(STDIN_FILENO, (get_shell_data())->stdin_fd);
