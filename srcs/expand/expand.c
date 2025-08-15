@@ -12,13 +12,10 @@
 
 #include <stdlib.h>
 
-#include "def.h"
-#include "expand.h"
 #include "flag.h"
 #include "tokenizer.h"
 #include "utils.h"
-
-static t_boolean	is_delim(char c);
+#include "expand.h"
 
 t_token	*expand_token(t_token *token)
 {
@@ -34,7 +31,7 @@ t_token	*expand_token(t_token *token)
 		free(token->value);
 		token->value = value;
 	}
-	if (find_next_delim(value, is_delim, C_BACKSLASH | C_SQUOTE))
+	if (find_next_delim(value, is_dollar_sign, C_BACKSLASH | C_SQUOTE))
 	{
 		value = expand_envp(token->value);
 		free(token->value);
@@ -42,9 +39,4 @@ t_token	*expand_token(t_token *token)
 	}
 	new_token = token;
 	return (new_token);
-}
-
-static t_boolean	is_delim(char c)
-{
-	return (c == '$');
 }
