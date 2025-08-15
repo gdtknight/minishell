@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:25:28 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/07 21:08:18 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/15 21:11:23 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,26 +37,23 @@
 
 typedef enum e_token_type
 {
-	TK_EOF,					// 토큰 리스트 끝을 나타냄
-	TK_NEWLINE,				// "\n"
-	TK_BLANK,				// " ", "\t"
-	TK_WORD,				// 공백, 탭으로 구별되는 일반 문자열
-	TK_ASSIGN_WORD,			// "=" 을 포함하는 문자열
-	TK_SEMICOLON,			// ";"
-	TK_AMPERSAND,			// "&"
-	TK_PIPE,				// "|"
-	TK_PIPE_ERR,			// "|&"
-	TK_REDIR_IN,			// "<"
-	TK_REDIR_OUT,			// ">"
-	TK_REDIR_HEREDOC,		// "<<"
-	TK_REDIR_APPEND,		// ">>"
-	
-	/* ----- Bonus Part ----- */
-
-	TK_LPAREN,				// "("
-	TK_RPAREN,				// ")"
-	TK_AND_IF,				// "&&"
-	TK_OR_IF,				// "||"
+	TK_EOF,
+	TK_NEWLINE,
+	TK_BLANK,
+	TK_WORD,
+	TK_ASSIGN_WORD,
+	TK_SEMICOLON,
+	TK_AMPERSAND,
+	TK_PIPE,
+	TK_PIPE_ERR,
+	TK_REDIR_IN,
+	TK_REDIR_OUT,
+	TK_REDIR_HEREDOC,
+	TK_REDIR_APPEND,
+	TK_LPAREN,
+	TK_RPAREN,
+	TK_AND_IF,
+	TK_OR_IF,
 }	t_token_type;
 
 typedef struct s_token
@@ -66,10 +63,6 @@ typedef struct s_token
 	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
-
-/* --- tokenizer.c --- */
-
-t_token			*tokenize_input(char *line);
 
 /* --- token_create.c --- */
 
@@ -88,6 +81,11 @@ t_result		clear_token_lst(t_token **lst);
 t_result		append_token_to_lst(t_token **lst, t_token *token);
 t_result		remove_token_from_lst(t_token *lst, t_token *target);
 
+/* --- token_utils.c --- */
+
+t_boolean		match(t_token	*token, t_token_type tk_type);
+void			print_token(t_token *token);
+
 /* --- token_validate_utils.c --- */
 
 t_boolean		is_valid_sequence(t_token *token_lst);
@@ -97,9 +95,8 @@ t_boolean		is_valid_sequence(t_token *token_lst);
 char			*extract_normal_word(char *str);
 char			*find_next_token_delim(char *cur);
 
-/* --- token_utils.c --- */
+/* --- tokenizer.c --- */
 
-t_boolean		match(t_token	*token, t_token_type tk_type);
-void			print_token(t_token *token);
+t_token			*tokenize_input(char *line);
 
 #endif

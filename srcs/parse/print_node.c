@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:23:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/05 19:02:43 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/14 02:06:57 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,16 @@ static void	print_cmd_node(t_syntax_node *node, int depth);
 static void	print_binary_node_type(t_syntax_node *node, int depth);
 static void	print_leaf_node(t_syntax_node *node, int depth);
 
+/**
+ * @brief 구문 트리 노드를 깊이 정보와 함께 사람이 읽기 쉬운 형태로 출력한다.
+ *
+ * 이진 노드(;, &, &&, ||, |, |&)는 print_binary_node_type()로,
+ * 명령 노드(NODE_SIMPLE_COMMAND, NODE_CMD_PREFIX, NODE_CMD_SUFFIX)는
+ * print_cmd_node()로, 그 외 리프 노드는 print_leaf_node()로 위임한다.
+ *
+ * @param node  출력할 노드
+ * @param depth 현재 출력 깊이(루트는 0)
+ */
 void	print_node(t_syntax_node *node, int depth)
 {
 	if (!node)
@@ -35,6 +45,13 @@ void	print_node(t_syntax_node *node, int depth)
 		print_leaf_node(node, depth);
 }
 
+/**
+ * @brief 이진 연산 노드(;, &, &&, ||, |, |&)의 타입을 출력하고 좌/우 자식을 재귀 출력한다.
+ *
+ * @param node  이진 노드(NODE_SEMICOLON, NODE_AMPERSAND, NODE_AND_IF,
+ *              NODE_OR_IF, NODE_PIPELINE, NODE_PIPELINE_ERR)
+ * @param depth 현재 출력 깊이
+ */
 static void	print_binary_node_type(t_syntax_node *node, int depth)
 {
 	if (node->type == NODE_SEMICOLON)
@@ -53,6 +70,15 @@ static void	print_binary_node_type(t_syntax_node *node, int depth)
 	print_node(node->value.b_node.right, depth + 1);
 }
 
+/**
+ * @brief 명령 계열 노드(NODE_SIMPLE_COMMAND, NODE_CMD_PREFIX, NODE_CMD_SUFFIX)를 포맷에 맞춰 출력한다.
+ *
+ * - NODE_SIMPLE_COMMAND: prefix → "cmd - <word>" → suffix 순으로 출력
+ * - NODE_CMD_PREFIX / NODE_CMD_SUFFIX: 좌/우 자식을 재귀 출력
+ *
+ * @param node  명령 계열 노드
+ * @param depth 현재 출력 깊이
+ */
 static void	print_cmd_node(t_syntax_node *node, int depth)
 {
 	if (node->type == NODE_SIMPLE_COMMAND)
@@ -76,6 +102,16 @@ static void	print_cmd_node(t_syntax_node *node, int depth)
 	}
 }
 
+/**
+ * @brief 리프 노드(리다이렉션, 단어, 할당)를 한 줄로 출력한다.
+ *
+ * - NODE_IO_REDIR_*: "io_redir, target - <io_target>"
+ * - NODE_ASSIGN_WORD: "assign_word"
+ * - NODE_WORD: "word, value - <word>"
+ *
+ * @param node  리프 노드
+ * @param depth 현재 출력 깊이
+ */
 static void	print_leaf_node(t_syntax_node *node, int depth)
 {
 	if (node->type == NODE_IO_REDIR_OUT
