@@ -6,63 +6,91 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:59:37 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/05 21:28:18 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/15 20:53:21 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-
-#include "libft.h"
+#include <sys/unistd.h>
+#include <unistd.h>
 
 #include "def.h"
-#include "utils.h"
-#include "flag.h"
+#include "libft.h"
 
 #include "expand.h"
 
-static void			replace_tilde(
-						char **value,
-						const char *cur,
-						const char *delim_pos);
-static t_boolean	is_tilde(char c);
+static char			*expand_tilde_with_user(char *value);
+static t_boolean	check_home_dir(char *username);
+static char			*get_home_prefix(void);
 
-t_token	*expand_tilde(t_token *token)
+char	*expand_tilde(char *value)
 {
-	char		*cur;
-	char		*delim_pos;
-	char		*new_value;
+	char	*cur;
+	char	*new_value;
 
-	new_value = NULL;
-	cur = token->value;
-	delim_pos = find_next_delim(cur, is_tilde, C_SQUOTE | C_BACKSLASH);
-	while (*cur && *delim_pos)
-	{
-		replace_tilde(&new_value, cur, delim_pos);
-		delim_pos = find_next_delim(cur, is_tilde, C_SQUOTE | C_BACKSLASH);
-		cur = delim_pos + 1;
-	}
-	if (new_value)
-	{
-		free(token->value);
-		token->value = new_value;
-	}
-	return (token);
+	if (*value != '~')
+		return (ft_strdup(value));
+	cur = value + 1;
+	if (*cur == '\0')
+		new_value = ft_strdup(getenv("HOME"));
+	else if (*cur == '+' && *(cur + 1) == '\0')
+		new_value = ft_strdup(getenv("PWD"));
+	else if (*cur == '-' && *(cur + 1) == '\0' && getenv("OLDPWD") != NULL)
+		new_value = ft_strdup((getenv("OLDPWD")));
+	else if (ft_isalpha(*cur) || *cur == '_')
+		new_value = expand_tilde_with_user(cur);
+	else
+		new_value = NULL;
+	if (!new_value)
+		return (ft_strdup(value));
+	return (new_value);
 }
 
-static void	replace_tilde(char **value, const char *cur, const char *delim_pos)
+static char	*expand_tilde_with_user(char *value)
 {
-	const char	*home_dir = getenv("HOME");
-	char		*prefix;
-	char		*temp;
+	char	*home_prefix;
+	char	*cur;
+	char	*username;
+	char	*expanded_value;
 
-	temp = (*value);
-	prefix = ft_substr(cur, 0, (delim_pos - cur));
-	*value = ft_multiplejoin(temp, prefix, home_dir);
-	free(temp);
-	free(prefix);
+	expanded_value = NULL;
+	home_prefix = get_home_prefix();
+	cur = value;
+	while (ft_isalnum(*(++cur)))
+		;
+	username = ft_substr(cur, 0, cur - value - 1);
+	if (check_home_dir(username))
+		expanded_value = ft_strjoin(home_prefix, username);
+	free(username);
+	free(home_prefix);
+	return (expanded_value);
 }
 
-static t_boolean	is_tilde(char c)
+static t_boolean	check_home_dir(char *username)
 {
-	return (c == '~');
+	t_boolean	result;
+	char		*home_prefix;
+	char		*home_dir;
+
+	result = FALSE;
+	home_prefix = get_home_prefix();
+	home_dir = ft_strjoin(home_prefix, username);
+	if (access(home_dir, R_OK) == 0)
+		result = TRUE;
+	free(home_dir);
+	free(home_prefix);
+	return (result);
+}
+
+static char	*get_home_prefix(void)
+{
+	char	*home_path;
+	char	*last_slash;
+
+	home_path = getenv("HOME");
+	last_slash = ft_strrchr(home_path, '/');
+	return (ft_substr(
+			home_path,
+			0,
+			ft_strlen(home_path) - ft_strlen(last_slash) + 1));
 }
