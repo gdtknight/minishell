@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 21:02:50 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 19:04:50 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/15 22:09:54 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,16 @@ t_boolean	is_valid_sequence(t_token *token_lst)
 		return (FALSE);
 	while (token_lst)
 	{
+		print_token(token_lst);
 		if (is_io_token(token_lst)
 			&& (is_op_token(token_lst->next)
-				|| is_io_token(token_lst->next)))
+				|| is_io_token(token_lst->next)
+				|| token_lst->next->type == TK_EOF))
 			return (FALSE);
 		if (is_op_token(token_lst)
 			&& (is_op_token(token_lst->next)
-				|| is_io_token(token_lst->next)))
+				|| is_io_token(token_lst->next)
+				|| token_lst->next->type == TK_EOF))
 			return (FALSE);
 		token_lst = token_lst->next;
 	}
