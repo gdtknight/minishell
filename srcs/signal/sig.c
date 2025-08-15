@@ -34,35 +34,28 @@
 static void	sigint_handler(int signo)
 {
 	(void)signo;
-	write(STDOUT_FILENO, "\n", 1);            // 현재 줄 내려주기
-	rl_replace_line("", 0);                   // 입력 내용 삭제
-	rl_on_new_line();                         // readline에 "새 줄" 상태 알림
-	rl_redisplay();                           // 프롬프트 다시 렌더링
-	(get_shell_data())->last_status = 1;      // 종료 상태값 업데이트}
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+	(get_shell_data())->last_status = 1;
 }
 
-void init_signals(void)
+void	init_signals(void)
 {
-    struct sigaction sa;
+	struct sigaction	sa;
 
-    // 기존 핸들러 백업
-    sigaction(SIGINT, NULL, &(get_shell_data()->old_int));
-    sigaction(SIGQUIT, NULL, &(get_shell_data()->old_quit));
-
-    // SIGINT: 커스텀 핸들러
-    sa.sa_handler = sigint_handler;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = SA_RESTART;
-    sigaction(SIGINT, &sa, NULL);
-
-    // SIGQUIT: 무시
-    signal(SIGQUIT, SIG_IGN);
+	sigaction(SIGINT, NULL, &(get_shell_data()->old_int));
+	sigaction(SIGQUIT, NULL, &(get_shell_data()->old_quit));
+	sa.sa_handler = sigint_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &sa, NULL);
+	signal(SIGQUIT, SIG_IGN);
 }
 
-void restore_signals(void)
+void	restore_signals(void)
 {
-    // SIGINT 복원
-    // SIGQUIT 복원
-    sigaction(SIGINT, &((get_shell_data())->old_int), NULL);
-    sigaction(SIGQUIT, &((get_shell_data())->old_quit), NULL);
+	sigaction(SIGINT, &((get_shell_data())->old_int), NULL);
+	sigaction(SIGQUIT, &((get_shell_data())->old_quit), NULL);
 }

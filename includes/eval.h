@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 14:14:25 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/05 15:47:32 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/15 22:35:24 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 # define PIPE_WRITE		(1)
 # define CHILD_LEFT		(0)
 # define CHILD_RIGHT	(1)
+
+# define PERMISSION_DENIED_CODE	(126)
+# define COMMAND_NOT_FOUND_CODE	(127)
 
 typedef struct s_cmd_form
 {
@@ -68,7 +71,13 @@ t_status	eval_pipeline(t_syntax_node	*pipeline_node);
 
 /* --- eval_utils.c --- */
 
+int			get_last_exit_code(int status);
 
+/* --- eval_builtin.c --- */
 t_status	execute_builtin(t_cmd_form cmd_form);
+t_boolean	is_builtin(char *cmd);
+
+/* --- eval_utils --- */
+t_status	wait_child(pid_t child_pid, int *status, int options);
 
 #endif

@@ -71,7 +71,8 @@ static void	print_binary_node_type(t_syntax_node *node, int depth)
 }
 
 /**
- * @brief 명령 계열 노드(NODE_SIMPLE_COMMAND, NODE_CMD_PREFIX, NODE_CMD_SUFFIX)를 포맷에 맞춰 출력한다.
+ * @brief 명령 계열 노드(NODE_SIMPLE_COMMAND, NODE_CMD_PREFIX, NODE_CMD_SUFFIX)를
+ *        포맷에 맞춰 출력한다.
  *
  * - NODE_SIMPLE_COMMAND: prefix → "cmd - <word>" → suffix 순으로 출력
  * - NODE_CMD_PREFIX / NODE_CMD_SUFFIX: 좌/우 자식을 재귀 출력
