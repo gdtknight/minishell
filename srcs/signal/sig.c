@@ -3,15 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   sig.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/11                                     */
-/*   Updated: 2025/08/11                                     */
+/*   Created: 2025/08/11 14:17:35 by yoshin            #+#    #+#             */
+/*   Updated: 2025/08/15 20:59:07 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
 #include <readline/readline.h>
@@ -20,42 +18,51 @@
 
 #include "shell_data.h"
 
-/* ---------- Ctrl-C(SIGINT) 핸들러 ---------- */
-static void sigint_handler(int signo)
+/**
+ * @brief SIGINT(Ctrl-C) 시그널 핸들러
+ *
+ * 사용자가 Ctrl-C를 입력했을 때 현재 입력 줄을 취소하고,
+ * 새 줄로 이동하여 프롬프트를 다시 표시한다.
+ * 또한 종료 상태값(last_status)을 1로 설정한다.
+ *
+ * @param signo 전달된 시그널 번호 (SIGINT)
+ *
+ * @note
+ * - rl_replace_line(), rl_on_new_line(), rl_redisplay()를 사용해 readline 버퍼를 갱신한다.
+ * - 표준 출력(STDOUT)에 개행을 출력해 커서를 다음 줄로 내린다.
+ */
+static void	sigint_handler(int signo)
 {
-    (void)signo;
-    write(STDOUT_FILENO, "\n", 1);            // 현재 줄 내려주기
-    rl_replace_line("", 0);                   // 입력 내용 삭제
-    rl_on_new_line();                         // readline에 "새 줄" 상태 알림
-    rl_redisplay();                            // 프롬프트 다시 렌더링
-    (get_shell_data())->last_status = 1;       // 종료 상태값 업데이트
+	(void)signo;
+	write(STDOUT_FILENO, "\n", 1);            // 현재 줄 내려주기
+	rl_replace_line("", 0);                   // 입력 내용 삭제
+	rl_on_new_line();                         // readline에 "새 줄" 상태 알림
+	rl_redisplay();                           // 프롬프트 다시 렌더링
+	(get_shell_data())->last_status = 1;      // 종료 상태값 업데이트}
 }
 
-/* ---------- 시그널 초기화 ---------- */
 void init_signals(void)
 {
     struct sigaction sa;
 
+    // 기존 핸들러 백업
+    sigaction(SIGINT, NULL, &(get_shell_data()->old_int));
+    sigaction(SIGQUIT, NULL, &(get_shell_data()->old_quit));
+
+    // SIGINT: 커스텀 핸들러
     sa.sa_handler = sigint_handler;
     sigemptyset(&sa.sa_mask);
-    sa.sa_flags = SA_RESTART; // 인터럽트 후 재시작
+    sa.sa_flags = SA_RESTART;
     sigaction(SIGINT, &sa, NULL);
 
-    signal(SIGQUIT, SIG_IGN); // Ctrl-\ 무시
+    // SIGQUIT: 무시
+    signal(SIGQUIT, SIG_IGN);
 }
 
-/* ---------- 터미널 설정 저장 ---------- */
-void save_terminal_settings(void)
+void restore_signals(void)
 {
-    struct termios tio;
-
-    tcgetattr(STDIN_FILENO, &tio);
-    (get_shell_data())->termios_backup = tio;
-}
-
-/* ---------- 터미널 기본 모드 복원 ---------- */
-void restore_terminal_settings(void)
-{
-    tcsetattr(STDIN_FILENO, TCSANOW,
-              &(get_shell_data())->termios_backup);
+    // SIGINT 복원
+    // SIGQUIT 복원
+    sigaction(SIGINT, &((get_shell_data())->old_int), NULL);
+    sigaction(SIGQUIT, &((get_shell_data())->old_quit), NULL);
 }
