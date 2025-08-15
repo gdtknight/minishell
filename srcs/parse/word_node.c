@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:47:58 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/04 17:58:47 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/14 02:37:35 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "tokenizer.h"
 
 #include "parser.h"
+#include "expand.h"
 
 t_syntax_node	*assignment_word(t_token **tk_lst)
 {
@@ -44,6 +45,7 @@ t_syntax_node	*word(t_token **tk_lst)
 		return (NULL);
 	}
 	word_node->type = NODE_WORD;
+	*tk_lst = expand_token(*tk_lst);
 	word_node->value.word = ft_strdup((*tk_lst)->value);
 	(*tk_lst) = (*tk_lst)->next;
 	return (word_node);
