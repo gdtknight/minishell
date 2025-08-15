@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
+/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 18:35:10 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/04 21:26:42 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/14 22:02:12 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 #include "def.h"
 #include "builtin.h"
+#include "shell_data.h"
 
 /**
  * @brief 현재 작업 디렉토리 경로를 출력한다.
@@ -25,14 +26,16 @@
  *
  * @return SUCCESS(출력 성공), FAIL(경로를 가져오지 못한 경우)
  */
-t_status	builtin_pwd(void)
+t_status	builtin_pwd(char **args)
 {
 	char	*cwd;
 
+	(void) args;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		return (FAILURE);
+		return (ERROR);
 	printf("%s\n", cwd);
 	free(cwd);
+	get_shell_data()->last_status = 0;
 	return (SUCCESS);
 }

@@ -6,55 +6,53 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/07 20:12:30 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/15 20:37:48 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-
-#include <stdio.h>
-
 #include "hashmap.h"
-#include "libft.h"
 #include "builtin.h"
+#include "shell_data.h"
 
 /**
- * @brief 해시맵에서 특정 key 값에 해당하는 entry를 삭제한다.
+ * @brief unset 빌트인 명령어를 실행하여 환경 변수(들)를 삭제한다.
  *
- * 전달받은 문자열 line을 공백 기준으로 분리하여 첫 번째 토큰을 key로 사용하고,
- * 해당 key를 해시맵에서 찾아 삭제한다.
+ * 이 함수는 인자로 전달된 각 이름에 해당하는 환경 변수 엔트리를
+ * 셸의 환경 맵에서 찾아 제거한다. 존재하지 않는 키가 주어져도
+ * 오류로 간주하지 않고 다음 인자를 계속 처리한다.
  *
- * @param line  key를 포함한 문자열
- * @param map   entry가 삭제될 대상 해시맵
- * @return SUCCESS(삭제 성공), FAIL(입력값 오류)
+ * 동작 방식:
+ * - argc가 NULL 이거나 인자가 없는 경우(argc[1] 없음): 아무 것도 하지 않고 SUCCESS 반환
+ * - 인자가 1개 이상인 경우: 각 인자에 대해 해시맵에서 엔트리를 찾아 삭제
+ * - 실행이 끝나면 last_status를 0으로 설정
+ *
+ * @param argc  Null-terminated 문자열 배열
+ *              - argc[0] : "unset"
+ *              - argc[1..n] : 삭제할 환경 변수 이름들
+ *
+ * @return t_status
+ *         - SUCCESS: 항상 성공 반환(존재하지 않는 키가 있어도 실패로 보지 않음)
+ *
+ * @note 현재 구현은 식별자 유효성(name_checker) 검증이나 에러 메시지 출력 없이
+ *       조용히 삭제를 시도한다. bash 호환성을 강화하려면
+ *       - 잘못된 식별자에 대한 오류 메시지 및 상태 코드 처리,
+ *       - readonly/특수 변수 보호 규칙(필요 시),
+ *       등을 추가할 수 있다.
  */
-void	free_un(char **keys)
+t_status	builtin_unset(char **argc)
 {
-	int	i;
+	t_hash_map	*envp_map;
+	int			i;
 
-	i = 0;
-	while (keys[i])
+	envp_map = &get_shell_data()->envp_map;
+	get_shell_data()->last_status = 0;
+	if (!argc)
+		return (SUCCESS);
+	i = 1;
+	while (argc[i])
 	{
-		free(keys[i]);
+		remove_entry(envp_map, get_entry(envp_map, argc[i]));
 		i++;
 	}
-	free (keys);
-}
-
-t_status	builtin_unset(char *line, t_hash_map *map)
-{
-	char			**envp_keys;
-	int				i;
-
-	if (!line || line[0] == 0 || !map)
-		return (FAILURE);
-	envp_keys = ft_split(line, ' ');
-	i = 0;
-	while (envp_keys[i])
-	{
-		remove_entry(map, get_entry(map, envp_keys[i]));
-		i++;
-	}
-	free_un(envp_keys);
 	return (SUCCESS);
 }
