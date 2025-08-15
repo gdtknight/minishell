@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:09 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/15 20:36:35 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/15 23:07:19 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_cd_err	check_error(char **argc)
 			argc[1][2] == 0))
 		err = CD_HOME_NOT_SET;
 	else if (argc[1][0] == '-')
-		err = CD_HOME_NOT_SET;
+		err = CD_OLDPWD_NOT_SET;
 	else if (errno == EACCES)
 		err = CD_EACCES;
 	else if (errno == ENOENT)
@@ -86,7 +86,7 @@ t_cd_err	check_error(char **argc)
  *   "too many arguments"는 2를 사용한다.
  * - 출력은 표준에러로 보내는 것이 일반적이다.
  */
-t_status	cd_fail(t_cd_err err, char *new_pwd, char *old_pwd)
+t_status	cd_fail(t_cd_err err, char *old_pwd)
 {
 	if (err == CD_TOO_MANY_ARGS)
 	{
@@ -100,11 +100,11 @@ t_status	cd_fail(t_cd_err err, char *new_pwd, char *old_pwd)
 	if (err == CD_OLDPWD_NOT_SET)
 		printf("cd: OLDPWD not set\n");
 	if (err == CD_EACCES)
-		printf("bash: cd: permission denied: %s\n", new_pwd);
+		perror("cd");
 	if (err == CD_ENOENT)
-		printf("bash: cd: no such file or directory: %s\n", new_pwd);
+		perror("cd");
 	if (err == CD_ENOTDIR)
-		printf("bash: cd: not a directory: %s\n", new_pwd);
+		perror("cd");
 	if (old_pwd)
 		free(old_pwd);
 	return (ERROR);
@@ -138,8 +138,13 @@ char	*route_set(char *path, char *old_pwd, t_hash_map *map)
 		new_pwd = old_pwd;
 	else if (path[0] == '-' && path[1] == 0)
 	{
-		new_pwd = get_value(map, "OLDPWD");
-		printf ("%s\n", new_pwd);
+		if (get_value(map, "OLDPWD"))
+		{
+			new_pwd = get_value(map, "OLDPWD");
+			printf ("%s\n", new_pwd);
+		}
+		else
+			new_pwd = NULL;
 	}
 	else
 		new_pwd = path;
@@ -178,7 +183,7 @@ t_status	builtin_cd(char **argc)
 	old_pwd = getcwd(NULL, 0);
 	new_pwd = route_set(argc[1], old_pwd, envp_map);
 	if (count_argc(argc) > 2 || !new_pwd || chdir(new_pwd) != 0)
-		return (cd_fail(check_error(argc), argc[1], old_pwd));
+		return (cd_fail(check_error(argc), old_pwd));
 	if (old_pwd)
 		put_key_value(envp_map, "OLDPWD", old_pwd);
 	cwd = getcwd(NULL, 0);
