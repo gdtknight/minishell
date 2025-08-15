@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eval_command_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 00:33:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/05 16:00:12 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/15 21:37:19 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,22 @@
 #include "eval.h"
 
 static int	count_args(t_syntax_node *cmd_suffix);
-static void	release_dirs(char ***p_dirs);
 
+/**
+ * @brief 명령어 suffix 노드에서 인자(argv) 배열을 생성한다.
+ *
+ * NODE_CMD_SUFFIX로 연결된 트리를 순회하며 NODE_WORD 타입의 값을
+ * 인자로 추가하고, 마지막에 NULL 포인터로 배열을 종료한다.
+ * argv[0]은 호출부에서 명령어로 설정한다.
+ *
+ * @param cmd_suffix 명령어 suffix를 나타내는 AST 노드
+ * @return char** NULL 종료된 인자 문자열 배열(동적 할당)
+ *
+ * @note
+ * - count_args()를 이용해 배열 크기를 미리 계산하여 메모리 할당.
+ * - 반환된 배열과 내부 문자열은 호출자가 free()로 해제해야 한다.
+ * - prefix의 인자는 포함하지 않는다.
+ */
 char	**get_args_from_suffix(t_syntax_node *cmd_suffix)
 {
 	t_syntax_node	*cur_node;
@@ -41,42 +55,13 @@ char	**get_args_from_suffix(t_syntax_node *cmd_suffix)
 }
 
 /**
- * @brief 주어진 명령어의 경로를 찾습니다.
- * 
- * 환경 변수인 PATH에 설정된 디렉토리들을 순차적으로 확인하여
- * 명령어를 실행할 수 있는 경로를 찾습니다.
- * 
- * @param cmd 실행할 명령어
- * @param envp 환경 변수
- * @return 실행 가능한 경로가 있을 경우 해당 경로, 없으면 NULL 반환
+ * @brief 명령어 suffix 노드에 포함된 인자 수를 계산한다.
+ *
+ * NODE_CMD_SUFFIX 체인을 순회하여 NODE_WORD 타입의 인자 개수를 센다.
+ *
+ * @param cmd_suffix 명령어 suffix를 나타내는 AST 노드
+ * @return int 인자의 개수
  */
-char	*find_path(char *cmd, char *envp[])
-{
-	char	*path_temp;
-	char	*path_full;
-	char	**dir;
-	char	**dirs;
-
-	dirs = NULL;
-	while (*envp)
-	{
-		if (ft_strncmp("PATH=", *envp++, 5) == 0)
-			dirs = ft_split((*(envp - 1) + 5), ':');
-	}
-	dir = dirs;
-	while (*dir)
-	{
-		path_temp = ft_strjoin(*dir++, "/");
-		path_full = ft_strjoin(path_temp, cmd);
-		free(path_temp);
-		if (access(path_full, X_OK) == 0)
-			break ;
-		free(path_full);
-	}
-	release_dirs(&dirs);
-	return (path_full);
-}
-
 static int	count_args(t_syntax_node *cmd_suffix)
 {
 	int				count;
@@ -95,24 +80,4 @@ static int	count_args(t_syntax_node *cmd_suffix)
 	if (cur_node->type == NODE_WORD)
 		count++;
 	return (count);
-}
-
-/**
- * @brief 디렉토리 배열을 해제합니다.
- * 
- * `find_path` 함수에서 사용하는 디렉토리 배열을 해제합니다.
- * 
- * @param p_dirs 디렉토리 배열의 포인터
- */
-static void	release_dirs(char ***p_dirs)
-{
-	char	**path;
-
-	if (!p_dirs || !*p_dirs)
-		return ;
-	path = *p_dirs;
-	while (*path)
-		free(*path++);
-	free(*p_dirs);
-	*p_dirs = NULL;
 }

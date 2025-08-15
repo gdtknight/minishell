@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eval_io_redir.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 20:39:35 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/08 21:32:38 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/15 20:38:57 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include "sig.h"
 
 #include "libft.h"
 
@@ -31,6 +32,20 @@ static t_status	set_stdin(t_syntax_node *io_redir_node);
 static t_status	set_heredoc(t_syntax_node *io_redir_node);
 static t_status	set_stdout(t_syntax_node *io_redir_node);
 
+/**
+ * @brief I/O 리다이렉션 노드를 평가하여 입출력 스트림을 재설정한다.
+ *
+ * 노드 타입에 따라 입력(STDIN) 또는 출력(STDOUT) 리다이렉션을 설정한다.
+ * - NODE_IO_REDIR_IN / NODE_IO_REDIR_HEREDOC → set_stdin()
+ * - NODE_IO_REDIR_OUT / NODE_IO_REDIR_APPEND → set_stdout()
+ *
+ * @param io_redir_node I/O 리다이렉션을 나타내는 구문 노드
+ * @return t_status SUCCESS(0) 또는 ERROR(비0)
+ *
+ * @note
+ * - NULL 노드 입력 시 아무 동작 없이 SUCCESS 반환.
+ * - 각 하위 함수는 dup2()를 사용하여 표준 입출력을 새로운 FD로 교체한다.
+ */
 t_status	eval_io_redir(t_syntax_node *io_redir_node)
 {
 	t_status	status;
@@ -47,6 +62,19 @@ t_status	eval_io_redir(t_syntax_node *io_redir_node)
 	return (status);
 }
 
+/**
+ * @brief 표준 입력(STDIN)을 재설정한다.
+ *
+ * - NODE_IO_REDIR_IN: 지정된 파일을 O_RDONLY로 열어 STDIN에 연결
+ * - NODE_IO_REDIR_HEREDOC: set_heredoc()으로 처리
+ *
+ * @param io_redir_node 입력 리다이렉션 노드
+ * @return t_status SUCCESS 또는 ERROR
+ *
+ * @note
+ * - open() 실패 시 errno 메시지를 perror()로 출력하고 ERROR 반환.
+ * - dup2() 이후 원본 FD는 닫지 않고 반환(heredoc 제외).
+ */
 static t_status	set_stdin(t_syntax_node *io_redir_node)
 {
 	int		infile_fd;
@@ -66,6 +94,19 @@ static t_status	set_stdin(t_syntax_node *io_redir_node)
 	return (set_heredoc(io_redir_node));
 }
 
+/**
+ * @brief heredoc(<<) 입력을 설정한다.
+ *
+ * 파이프를 생성하고, 자식 프로세스에서 heredoc 내용을 작성하여
+ * 부모 프로세스의 STDIN으로 연결한다.
+ *
+ * @param io_redir_node heredoc 리다이렉션 노드
+ * @return t_status 항상 SUCCESS (실패 시 ERROR 반환 가능)
+ *
+ * @note
+ * - heredoc() 함수로 내용 생성 → 파이프 쓰기 → 부모에서 파이프 읽기 FD를 STDIN에 연결
+ * - 자식 종료 상태를 get_shell_data()->last_status에 반영
+ */
 static t_status	set_heredoc(t_syntax_node *io_redir_node)
 {
 	int		pipe_fds[2];
@@ -77,6 +118,7 @@ static t_status	set_heredoc(t_syntax_node *io_redir_node)
 	pid = fork();
 	if (pid == 0)
 	{
+		restore_terminal_settings();
 		close(pipe_fds[PIPE_READ]);
 		ft_putstr_fd(
 			heredoc(io_redir_node->value.io_target),
@@ -94,6 +136,19 @@ static t_status	set_heredoc(t_syntax_node *io_redir_node)
 	return (SUCCESS);
 }
 
+/**
+ * @brief 표준 출력(STDOUT)을 재설정한다.
+ *
+ * - NODE_IO_REDIR_OUT: 쓰기 전용, 없으면 생성(O_CREAT), 기존 내용 삭제(O_TRUNC)
+ * - NODE_IO_REDIR_APPEND: 쓰기 전용, 없으면 생성(O_CREAT), 기존 내용 뒤에 추가(O_APPEND)
+ *
+ * @param io_redir_node 출력 리다이렉션 노드
+ * @return t_status SUCCESS 또는 ERROR
+ *
+ * @note
+ * - open() 실패 시 errno 메시지를 perror()로 출력하고 ERROR 반환.
+ * - 성공 시 dup2()로 STDOUT을 새 FD에 연결하고 원본 FD는 닫는다.
+ */
 static t_status	set_stdout(t_syntax_node *io_redir_node)
 {
 	t_status	outfile_fd;

@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 14:14:25 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 22:35:24 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/15 23:31:58 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,11 @@ t_status	eval_command(t_syntax_node *cmd_node);
 
 char		**get_args_from_suffix(t_syntax_node *cmd_suffix);
 char		*find_path(char *cmd, char *envp[]);
+
+/* --- eval_command_io_utils.c --- */
+
+t_status	eval_prefix_io(t_syntax_node *prefix);
+t_status	eval_suffix_io(t_syntax_node *suffix);
 
 /* --- eval_io_redir.c --- */
 
