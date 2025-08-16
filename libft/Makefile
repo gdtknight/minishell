@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+         #
+#    By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/25 18:16:41 by yoshin            #+#    #+#              #
-#    Updated: 2025/07/19 16:08:04 by yoshin           ###   ########.fr        #
+#    Updated: 2025/08/16 16:28:04 by jyoo             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,7 +68,8 @@ PART1_FUNCS		=	ft_isalpha\
 					ft_strnstr\
 					ft_atoi\
 					ft_calloc\
-					ft_strdup
+					ft_strdup\
+					ft_strnchr
 
 PART2_FUNCS		=	ft_substr\
 					ft_strjoin\
@@ -139,7 +140,7 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 $(BIN_DIR):
 	@mkdir -p $(BIN_DIR)
 
-clean: 
+clean:
 	@rm -rf $(BUILD_DIR)
 	@echo "$(LIGHT_YELLOW)[lib$(NAME)]$(RESET) clean completed!"
 
