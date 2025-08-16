@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/16 16:36:09 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/16 23:41:20 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,11 @@ t_status	check_and_set_enp(char *envp, t_hash_map *map)
 	if (name_checker(key))
 	{
 		if (ft_strnchr(envp, '=', ft_strlen(envp)) == -1)
+		{
+			free (key);
+			free (value);
 			return (status);
+		}
 		put_key_value(map, key, value);
 	}
 	else
