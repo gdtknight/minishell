@@ -3,21 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/16 02:07:52 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/16 16:36:09 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
-
-#include "libft.h"
-
-#include "def.h"
+#include <errno.h>
 
 #include "hashmap.h"
+#include "def.h"
+#include "libft.h"
 #include "builtin.h"
 #include "shell_data.h"
 #include "utils.h"
@@ -73,7 +72,11 @@ t_status	check_and_set_enp(char *envp, t_hash_map *map)
 	key = extract_key(envp);
 	value = extract_value(envp);
 	if (name_checker(key))
+	{
+		if (ft_strnchr(envp, '=', ft_strlen(envp)) == -1)
+			return (status);
 		put_key_value(map, key, value);
+	}
 	else
 	{
 		printf("bash: export: `%s': not a valid identifier\n", key);
