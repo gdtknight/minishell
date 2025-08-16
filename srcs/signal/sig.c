@@ -6,10 +6,11 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 14:17:35 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 20:59:07 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/16 13:54:45 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <signal.h>
 #include <unistd.h>
 #include <readline/readline.h>
