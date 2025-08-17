@@ -6,20 +6,16 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:44:13 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/18 02:09:06 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/18 03:53:22 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-#include <stdlib.h>
-#include <stdio.h>
 #include <unistd.h>
 
 #include "libft.h"
 
 #include "def.h"
 #include "builtin.h"
-#include "hashmap.h"
 #include "shell_data.h"
 
 static int	ft_isspace(int c)
@@ -40,7 +36,7 @@ static int	ft_isspace(int c)
  * @param flag_atoll 변환 성공 여부 플래그 포인터
  * @return 변환된 long long 값 (실패 시 값은 의미 없음)
  */
-static long long	ft_atoll(const char *nptr, t_boolean *flag_args)
+static long long	ft_atoll(const char *nptr, t_builtin_exit *flag_args)
 {
 	int			flag;
 	long long	result;
@@ -106,7 +102,7 @@ static t_builtin_exit	check_args(char **args)
  * @param flag_args 인자 검사 결과 플래그
  * @param args      명령어 인자 배열
  */
-static void	handle_flag(int flag_args, char **args, long long exit_code)
+static void	handle_flag(t_builtin_exit flag_args, char **args, long long exit_code)
 {
 	get_shell_data()->is_exit = TRUE;
 	if (flag_args == WITH_ARGC)
@@ -153,12 +149,12 @@ static void	handle_flag(int flag_args, char **args, long long exit_code)
  */
 t_status	builtin_exit(char **args)
 {
-	int			flag_args;
-	long long	exit_code;
+	t_builtin_exit	flag_args;
+	long long		exit_code;
 
 	ft_putstr_fd ("exit\n", STDOUT_FILENO);
 	flag_args = check_args(args);
 	exit_code = ft_atoll(args[1], &flag_args);
-	handel_flag(flag_args, args, exit_code);
+	handle_flag(flag_args, args, exit_code);
 	return (SUCCESS);
 }
