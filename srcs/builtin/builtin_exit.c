@@ -6,9 +6,10 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:44:13 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/15 20:37:10 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/18 02:09:06 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -39,7 +40,7 @@ static int	ft_isspace(int c)
  * @param flag_atoll 변환 성공 여부 플래그 포인터
  * @return 변환된 long long 값 (실패 시 값은 의미 없음)
  */
-static long long	ft_atoll(const char *nptr, t_boolean *flag_atoll)
+static long long	ft_atoll(const char *nptr, t_boolean *flag_args)
 {
 	int			flag;
 	long long	result;
@@ -60,10 +61,8 @@ static long long	ft_atoll(const char *nptr, t_boolean *flag_atoll)
 		result *= 10;
 		result += (*nptr++) - '0';
 		if (temp > result)
-			*flag_atoll = FALSE;
+			*flag_args = WRONG_ARGC;
 	}
-	if (*nptr)
-		*flag_atoll = FALSE;
 	return ((result) * (flag));
 }
 
@@ -107,17 +106,23 @@ static t_builtin_exit	check_args(char **args)
  * @param flag_args 인자 검사 결과 플래그
  * @param args      명령어 인자 배열
  */
-static void	print_error(int flag_args, char **args)
+static void	handle_flag(int flag_args, char **args, long long exit_code)
 {
+	get_shell_data()->is_exit = TRUE;
+	if (flag_args == WITH_ARGC)
+		get_shell_data()->last_status = (int)((exit_code) % 256);
 	if (flag_args == WRONG_ARGC)
 	{
-		printf("exit: %s: numeric argument required\n", args[1]);
+		ft_putstr_fd("exit: ", STDERR_FILENO);
+		ft_putstr_fd(args[1], STDERR_FILENO);
+		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 		get_shell_data()->last_status = 2;
 	}
 	if (flag_args == TOO_MANY_ARGC)
 	{
-		printf("exit: too many arguments\n");
+		ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
 		get_shell_data()->last_status = 1;
+		get_shell_data()->is_exit = FALSE;
 	}
 }
 
@@ -148,28 +153,12 @@ static void	print_error(int flag_args, char **args)
  */
 t_status	builtin_exit(char **args)
 {
-	t_hash_map	map;
-	t_boolean	flag_atoll;
 	int			flag_args;
 	long long	exit_code;
 
-	if (!args[1])
-		exit(get_shell_data()->last_status);
+	ft_putstr_fd ("exit\n", STDOUT_FILENO);
 	flag_args = check_args(args);
-	flag_atoll = TRUE;
-	if (flag_args == WITH_ARGC)
-	{
-		exit_code = ft_atoll(args[1], &flag_atoll);
-		if (flag_atoll == FALSE)
-			flag_args = (WRONG_ARGC);
-	}
-	print_error(flag_args, args);
-	if (flag_args == TOO_MANY_ARGC || flag_args == WRONG_ARGC)
-		return (SUCCESS);
-	map = get_shell_data()->envp_map;
-	clear_hashmap(&map);
-	if (flag_args == WITH_ARGC)
-		get_shell_data()->last_status = (int)((exit_code) % 256);
-	ft_putstr_fd ("exit\n", STDERR_FILENO);
-	exit(get_shell_data()->last_status);
+	exit_code = ft_atoll(args[1], &flag_args);
+	handel_flag(flag_args, args, exit_code);
+	return (SUCCESS);
 }
