@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.h                                           :+:      :+:    :+:   */
+/*   ast.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:19:50 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 21:04:33 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/19 06:50:08 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_H
-# define PARSER_H
+#ifndef AST_H
+# define AST_H
 
 # include "tokenizer.h"
 
@@ -36,16 +36,21 @@ typedef enum e_node_type
 	NODE_WORD
 }	t_node_type;
 
+typedef struct s_cmd_form
+{
+	char	*cmd;
+	char	**args;
+	char	**envp;
+}	t_cmd_form;
+
 typedef struct s_command
 {
+	int						heredoc_fds[2];
 	struct s_syntax_node	*prefix;
 	char					*word;
 	struct s_syntax_node	*suffix;
+	t_cmd_form				form;
 }	t_command;
-
-typedef struct s_unary_node
-{
-}	t_unary_node;
 
 typedef struct s_binary_node
 {
@@ -65,6 +70,7 @@ typedef union u_node_value
 
 typedef struct s_syntax_node
 {
+	struct s_syntax_node	*parent;
 	t_node_type				type;
 	t_node_value			value;
 }	t_syntax_node;

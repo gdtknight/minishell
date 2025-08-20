@@ -6,13 +6,13 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:29:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/30 17:31:31 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/18 01:45:06 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 
-#include "parser.h"
+#include "ast.h"
 
 /**
  * @brief <shell_input> 구문 규칙에 따라 구문 트리를 구성한다.

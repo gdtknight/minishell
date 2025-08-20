@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 23:45:14 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/13 23:24:13 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/20 06:12:36 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 #include <string.h>
 #include <errno.h>
 
-#include "parser.h"
+#include "ast.h"
+#include "eval.h"
+
+#include "debug.h"
 
 static void	remove_string_value(t_syntax_node *node);
 
@@ -40,6 +43,7 @@ t_syntax_node	*create_empty_node(void)
 		perror(strerror(errno));
 		exit(EXIT_FAILURE);
 	}
+	node->parent = NULL;
 	return (node);
 }
 
@@ -63,15 +67,23 @@ void	remove_syntax_node(t_syntax_node *node)
 		return ;
 	if (node->type == NODE_WORD || node->type == NODE_ASSIGN_WORD
 		|| node->type == NODE_IO_REDIR_IN || node->type == NODE_IO_REDIR_OUT
-		|| node->type == NODE_IO_REDIR_APPEND)
+		|| node->type == NODE_IO_REDIR_APPEND || node->type == NODE_IO_REDIR_HEREDOC)
 		remove_string_value(node);
 	else if (node->type == NODE_COMPOUND_COMMAND)
+	{
 		remove_syntax_node(node->value.child);
+		node->value.child = NULL;
+	}
 	else if (node->type == NODE_SIMPLE_COMMAND)
 	{
 		remove_syntax_node(node->value.command.prefix);
+		debug("cmd word free : %s", node->value.command.word);
 		free(node->value.command.word);
 		remove_syntax_node(node->value.command.suffix);
+		node->value.command.word = NULL;
+		node->value.command.prefix = NULL;
+		node->value.command.suffix = NULL;
+		clear_cmd_form(&(node->value.command.form));
 	}
 	else if (node->type == NODE_SEMICOLON || node->type == NODE_AMPERSAND
 		|| node->type == NODE_AND_IF || node->type == NODE_OR_IF
@@ -81,6 +93,8 @@ void	remove_syntax_node(t_syntax_node *node)
 	{
 		remove_syntax_node(node->value.b_node.left);
 		remove_syntax_node(node->value.b_node.right);
+		node->value.b_node.left = NULL;
+		node->value.b_node.right = NULL;
 	}
 	free(node);
 }
@@ -101,6 +115,10 @@ static void	remove_string_value(t_syntax_node *node)
 		free(node->value.assign_word);
 	else if (node->type == NODE_IO_REDIR_IN
 		|| node->type == NODE_IO_REDIR_OUT
-		|| node->type == NODE_IO_REDIR_APPEND)
+		|| node->type == NODE_IO_REDIR_APPEND
+		|| node->type == NODE_IO_REDIR_HEREDOC)
 		free(node->value.io_target);
+	node->value.assign_word = NULL;
+	node->value.word = NULL;
+	node->value.io_target = NULL;
 }

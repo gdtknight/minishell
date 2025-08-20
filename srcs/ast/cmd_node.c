@@ -6,14 +6,15 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:15:05 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 20:35:29 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/19 02:27:15 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "eval.h"
 #include "libft.h"
 
 #include "tokenizer.h"
-#include "parser.h"
+#include "ast.h"
 
 /**
  * @brief <command> 규칙을 파싱하여 구문 트리 노드를 생성한다.
@@ -42,12 +43,15 @@ t_syntax_node	*command(t_token **tk_lst)
 		command_node->type = NODE_COMPOUND_COMMAND;
 		(*tk_lst) = (*tk_lst)->next;
 		command_node->value.child = list(tk_lst);
+		command_node->value.child->parent = command_node;
 		if ((*tk_lst)->type != TK_RPAREN)
 			return (NULL);
 		(*tk_lst) = (*tk_lst)->next;
 	}
 	else
+	{
 		command_node = simple_command(tk_lst);
+	}
 	return (command_node);
 }
 
@@ -75,10 +79,16 @@ t_syntax_node	*simple_command(t_token **tk_lst)
 		return (NULL);
 	simple_command_node = create_empty_node();
 	simple_command_node->type = NODE_SIMPLE_COMMAND;
+	simple_command_node->value.command.heredoc_fds[PIPE_READ] = -1;
+	simple_command_node->value.command.heredoc_fds[PIPE_WRITE] = -1;
 	simple_command_node->value.command.prefix = cmd_prefix(tk_lst);
+	if (simple_command_node->value.command.prefix)
+		simple_command_node->value.command.prefix->parent = simple_command_node;
 	simple_command_node->value.command.word = ft_strdup((*tk_lst)->value);
 	(*tk_lst) = (*tk_lst)->next;
 	simple_command_node->value.command.suffix = cmd_suffix(tk_lst);
+	if (simple_command_node->value.command.suffix)
+		simple_command_node->value.command.suffix->parent = simple_command_node;
 	return (simple_command_node);
 }
 
@@ -120,7 +130,10 @@ t_syntax_node	*cmd_prefix(t_token **tk_lst)
 		cmd_prefix_node = create_empty_node();
 		cmd_prefix_node->type = NODE_CMD_PREFIX;
 		cmd_prefix_node->value.b_node.left = temp;
+		cmd_prefix_node->value.b_node.left->parent = cmd_prefix_node;
 		cmd_prefix_node->value.b_node.right = cmd_prefix(tk_lst);
+		if (cmd_prefix_node->value.b_node.right)
+			cmd_prefix_node->value.b_node.right->parent = cmd_prefix_node;
 	}
 	return (cmd_prefix_node);
 }
@@ -161,7 +174,10 @@ t_syntax_node	*cmd_suffix(t_token **tk_lst)
 		cmd_suffix_node = create_empty_node();
 		cmd_suffix_node->type = NODE_CMD_SUFFIX;
 		cmd_suffix_node->value.b_node.left = temp;
+		cmd_suffix_node->value.b_node.left->parent = cmd_suffix_node;
 		cmd_suffix_node->value.b_node.right = cmd_suffix(tk_lst);
+		if (cmd_suffix_node->value.b_node.right)
+			cmd_suffix_node->value.b_node.right->parent = cmd_suffix_node;
 	}
 	return (cmd_suffix_node);
 }

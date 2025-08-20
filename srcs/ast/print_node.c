@@ -6,13 +6,13 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:23:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/14 02:06:57 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/18 01:45:11 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 
-#include "parser.h"
+#include "ast.h"
 
 static void	print_cmd_node(t_syntax_node *node, int depth);
 static void	print_binary_node_type(t_syntax_node *node, int depth);

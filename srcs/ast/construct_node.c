@@ -6,14 +6,15 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 16:01:20 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/30 17:07:30 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 16:24:14 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
 #include "tokenizer.h"
-#include "parser.h"
+
+#include "ast.h"
 
 /**
  * @brief <list> 구문 규칙에 따라 구문 트리를 구성한다.
@@ -45,6 +46,9 @@ t_syntax_node	*list(t_token **tk_lst)
 		list_node->value.b_node.left = temp;
 		(*tk_lst) = (*tk_lst)->next;
 		list_node->value.b_node.right = and_or(tk_lst);
+		list_node->value.b_node.left->parent = list_node;
+		if (list_node->value.b_node.right)
+			list_node->value.b_node.right->parent = list_node;
 	}
 	return (list_node);
 }
@@ -79,6 +83,9 @@ t_syntax_node	*and_or(t_token **tk_lst)
 		and_or_node->value.b_node.left = temp;
 		(*tk_lst) = (*tk_lst)->next;
 		and_or_node->value.b_node.right = pipeline(tk_lst);
+		and_or_node->value.b_node.left->parent = and_or_node;
+		if (and_or_node->value.b_node.right)
+			and_or_node->value.b_node.right->parent = and_or_node;
 	}
 	return (and_or_node);
 }
@@ -111,8 +118,11 @@ t_syntax_node	*pipeline(t_token **tk_lst)
 		else
 			pipeline_node->type = NODE_PIPELINE_ERR;
 		pipeline_node->value.b_node.left = temp;
+		pipeline_node->value.b_node.left->parent = pipeline_node;
 		(*tk_lst) = (*tk_lst)->next;
 		pipeline_node->value.b_node.right = command(tk_lst);
+		if (pipeline_node->value.b_node.right)
+			pipeline_node->value.b_node.right->parent = pipeline_node;
 	}
 	return (pipeline_node);
 }

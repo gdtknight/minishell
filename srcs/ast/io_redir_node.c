@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 22:10:43 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/14 02:05:56 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/18 01:44:44 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include "tokenizer.h"
 
-#include "parser.h"
+#include "ast.h"
 
 static t_syntax_node	*io_redir_out(t_token **tk_lst);
 static t_syntax_node	*io_redir_append(t_token **tk_lst);
