@@ -6,16 +6,16 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 00:57:31 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 15:50:51 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 08:16:05 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <readline/readline.h>
-#include <sys/_types/_pid_t.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <readline/readline.h>
+#include <sys/wait.h>
 
 #include "libft.h"
 
