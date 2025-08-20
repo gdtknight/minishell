@@ -6,14 +6,16 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:06:19 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 20:58:31 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 15:29:37 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "ast.h"
 #include "def.h"
+#include "tokenizer.h"
 #include "utils.h"
 #include "hashmap.h"
 #include "shell_data.h"
@@ -35,6 +37,12 @@ t_shell_data	*get_shell_data(void)
 	static t_shell_data	shell_data;
 
 	return (&shell_data);
+}
+
+t_shell_input	*get_shell_input(void)
+{
+	static t_shell_input	shell_input;
+	return (&shell_input);
 }
 
 /**
@@ -71,8 +79,7 @@ t_result	init_shell_data(char *envp[])
 	}
 	(get_shell_data())->last_status = EXIT_SUCCESS;
 	(get_shell_data())->in_pipe = FALSE;
-	dup2(STDIN_FILENO, (get_shell_data())->stdin_fd);
-	dup2(STDOUT_FILENO, (get_shell_data())->stdout_fd);
+	(get_shell_data())->in_heredoc = FALSE;
 	return (COMPLETED);
 }
 
@@ -87,27 +94,21 @@ void	clear_shell_data(void)
 	clear_hashmap(&((get_shell_data())->envp_map));
 }
 
-/**
- * @brief 현재 터미널 설정을 저장한다.
- *
- * STDIN의 termios 속성을 읽어 get_shell_data()->termios_backup에 저장한다.
- *
- * @note
- * - 이후 restore_terminal_settings()에서 복원할 수 있다.
- */
-void	save_terminal_settings(void)
+void	clear_shell_input(void)
 {
-	tcgetattr(STDIN_FILENO, &((get_shell_data())->termios_backup));
-}
-
-/**
- * @brief 저장해둔 터미널 설정을 복원한다.
- *
- * get_shell_data()->termios_backup에 저장된 termios 값을
- * 즉시(TCSANOW) STDIN에 적용한다.
- */
-void	restore_terminal_settings(void)
-{
-	tcsetattr(STDIN_FILENO, TCSANOW,
-		&(get_shell_data())->termios_backup);
+	if ((get_shell_input())->input_line)
+	{
+		free((get_shell_input())->input_line);
+		(get_shell_input())->input_line = NULL;
+	}
+	if ((get_shell_input())->input_token)
+	{
+		clear_token_lst(&((get_shell_input())->input_token));
+		(get_shell_input())->input_token = NULL;
+	}
+	if ((get_shell_input())->input_node)
+	{
+		remove_syntax_node((get_shell_input())->input_node);
+		(get_shell_input())->input_node = NULL;
+	}
 }

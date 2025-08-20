@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:03:33 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/18 03:51:49 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 05:31:13 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <signal.h>
 # include <termios.h>
 
+#include "ast.h"
 # include "def.h"
 # include "hashmap.h"
 # include "color.h"
@@ -29,17 +30,43 @@ typedef struct s_shell_data
 	struct termios		termios_backup;
 	t_hash_map			envp_map;
 	int					last_status;
-	int					stdin_fd;
-	int					stdout_fd;
+	pid_t				child[2];
 	t_boolean			in_pipe;
+	t_boolean			in_heredoc;
 	t_boolean			is_exit;
 }	t_shell_data;
+
+typedef struct s_shell_input
+{
+	char			*input_line;
+	t_token			*input_token;
+	t_syntax_node	*input_node;
+}	t_shell_input;
+
+/* --- shell_data.c --- */
 
 t_shell_data	*get_shell_data(void);
 t_result		init_shell_data(char *envp[]);
 void			clear_shell_data(void);
 
-void			save_terminal_settings(void);
-void			restore_terminal_settings(void);
+t_shell_input	*get_shell_input(void);
+void			clear_shell_input(void);
+
+/* --- shell_signal.c --- */
+
+void			init_minishell_signal(void);
+void			init_pipeline_signal(void);
+void			init_heredoc_signal(void);
+void			restore_signal(void);
+
+/* --- shell_signal_handler.c --- */
+
+void			minishell_sigint_handler(int signo);
+void			heredoc_sigint_handler(int signo);
+void			pipeline_sigint_handler(int signo);
+
+/* --- shell_terminal.c --- */
+
+void			restore_tty(void);
 
 #endif
