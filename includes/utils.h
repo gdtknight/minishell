@@ -47,10 +47,6 @@ t_boolean	is_single_quote(char c);
 
 char		*ft_multiplejoin(const char *s1, const char *s2, const char *s3);
 
-/* --- heredoc.c --- */
-
-char		*heredoc(const char *limiter);
-
 /* --- wildcard_match.c --- */
 
 t_boolean	wildcard_match(const char *s, const char *p);

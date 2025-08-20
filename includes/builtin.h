@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 17:19:29 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/14 17:47:53 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/18 03:53:30 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 # define BUILTIN_H
 
 # include "def.h"
-# include "hashmap.h"
-# include "tokenizer.h"
 
 t_status	builtin_cd(char **args);
 t_status	builtin_export(char **args);

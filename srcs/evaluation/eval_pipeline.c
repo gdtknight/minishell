@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 15:45:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 22:20:22 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 16:38:20 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,16 @@
 #include <fcntl.h>
 #include <signal.h>
 
-#include "eval.h"
-#include "shell_data.h"
-#include "sig.h"
+#include "def.h"
 
-static void	setup_pipe(pid_t child_pids[2], int pipe_fds[2]);
-static int	wait_pipe(pid_t child_pids[2], int *status);
+#include "ast.h"
+#include "shell_data.h"
+#include "eval.h"
+
+#include "debug.h"
+
+static void			setup_pipe(pid_t child_pids[2], int pipe_fds[2]);
+static void			wait_pipe(pid_t child_pids[2], int *status);
 
 /**
  * @brief 파이프라인 노드를 평가하여 명령을 실행한다.
@@ -40,7 +44,7 @@ static int	wait_pipe(pid_t child_pids[2], int *status);
  * - 부모 프로세스는 setup_pipe()로 모든 파이프 FD를 닫는다.
  * - 종료 상태는 wait_pipe()에서 갱신되며 get_shell_data()->last_status에 저장된다.
  */
-t_status	eval_pipeline(t_syntax_node	*pipeline_node)
+void	eval_pipeline(t_syntax_node	*pipeline_node)
 {
 	t_status	status;
 	int			pipe_fds[2];
@@ -49,48 +53,32 @@ t_status	eval_pipeline(t_syntax_node	*pipeline_node)
 	child_pids[CHILD_LEFT] = INT_MAX;
 	child_pids[CHILD_RIGHT] = INT_MAX;
 	if (pipe(pipe_fds) == -1)
-		exit(EXIT_FAILURE);
+	{
+		perror("eval_pipeline");
+		get_shell_data()->last_status = EXIT_FAILURE;
+		return ;
+	}
 	child_pids[CHILD_LEFT] = fork();
 	if (child_pids[CHILD_LEFT] == 0)
 	{
-		restore_signals();
+		debug("[eval_pipeline] parent pid: %d, left pid: %d", getppid(), getpid());
 		setup_pipe(child_pids, pipe_fds);
-		exit(eval(pipeline_node->value.b_node.left));
+		init_pipeline_signal();
+		eval(pipeline_node->value.b_node.left);
+		exit(get_shell_data()->last_status);
 	}
 	child_pids[CHILD_RIGHT] = fork();
 	if (child_pids[CHILD_RIGHT] == 0)
 	{
-		restore_signals();
+		debug("[eval_pipeline] parent pid: %d, right pid: %d", getppid(), getpid());
 		setup_pipe(child_pids, pipe_fds);
-		exit(eval(pipeline_node->value.b_node.right));
+		init_pipeline_signal();
+		eval(pipeline_node->value.b_node.right);
+		exit(get_shell_data()->last_status);
 	}
 	setup_pipe(child_pids, pipe_fds);
-	return (wait_pipe(child_pids, &status));
-}
-
-/**
- * @brief 파이프라인의 두 자식 프로세스를 기다린다.
- *
- * 좌측/우측 자식 프로세스가 종료될 때까지 waitpid()로 대기하고,
- * 종료 상태를 분석하여 get_shell_data()->last_status에 저장한다.
- *
- * @param child_pids 자식 PID 배열 (CHILD_LEFT, CHILD_RIGHT)
- * @param status     마지막 waitpid()의 상태 코드를 저장할 포인터
- * @return int 마지막으로 대기한 프로세스의 상태 코드
- *
- * @note
- * - 정상 종료 시 WEXITSTATUS를, 시그널 종료 시 WTERMSIG를 last_status에 기록한다.
- */
-static int	wait_pipe(pid_t child_pids[2], int *status)
-{
-	waitpid(child_pids[0], status, 0);
-	if (WIFSIGNALED(*status))
-	{
-		kill(child_pids[1], SIGTERM);
-		(get_shell_data())->last_status = WTERMSIG(*status);
-		return (*status);
-	}
-	return (wait_child(child_pids[1], status, 0));
+	debug("[eval_pipeline] pid: %d, left pid: %d, right pid: %d", getpid(), child_pids[CHILD_LEFT], child_pids[CHILD_RIGHT]);
+	wait_pipe(child_pids, &status);
 }
 
 /**
@@ -109,23 +97,60 @@ static int	wait_pipe(pid_t child_pids[2], int *status)
  */
 static void	setup_pipe(pid_t child_pids[2], int pipe_fds[2])
 {
+	if (child_pids[CHILD_RIGHT] == 0)
+	{
+		close(STDIN_FILENO);
+		close(pipe_fds[PIPE_WRITE]);
+		dup2(pipe_fds[PIPE_READ], STDIN_FILENO);
+		return ;
+	}
 	if (child_pids[CHILD_LEFT] == 0)
 	{
 		close(STDOUT_FILENO);
 		close(pipe_fds[PIPE_READ]);
 		dup2(pipe_fds[PIPE_WRITE], STDOUT_FILENO);
-		close(pipe_fds[PIPE_WRITE]);
+		return ;
 	}
-	else if (child_pids[CHILD_RIGHT] == 0)
+	close(pipe_fds[PIPE_READ]);
+	close(pipe_fds[PIPE_WRITE]);
+}
+
+/**
+ * @brief 파이프라인의 두 자식 프로세스를 기다린다.
+ *
+ * 좌측/우측 자식 프로세스가 종료될 때까지 waitpid()로 대기하고,
+ * 종료 상태를 분석하여 get_shell_data()->last_status에 저장한다.
+ *
+ * @param child_pids 자식 PID 배열 (CHILD_LEFT, CHILD_RIGHT)
+ * @param status     마지막 waitpid()의 상태 코드를 저장할 포인터
+ * @return int 마지막으로 대기한 프로세스의 상태 코드
+ *
+ * @note
+ * - 정상 종료 시 WEXITSTATUS를, 시그널 종료 시 WTERMSIG를 last_status에 기록한다.
+ */
+static void	wait_pipe(pid_t child_pids[2], int *status)
+{
+	pid_t	child;
+	int		sig;
+
+	sig = 0;
+	debug("[wait_pipe] pid : %d, left_child : %d, right_child : %d", getpid(), child_pids[CHILD_LEFT], child_pids[CHILD_RIGHT]);
+	child = waitpid(-1, status, 0);
+	if (child == child_pids[CHILD_LEFT])
 	{
-		close(STDIN_FILENO);
-		close(pipe_fds[PIPE_WRITE]);
-		dup2(pipe_fds[PIPE_READ], STDIN_FILENO);
-		close(pipe_fds[PIPE_READ]);
+		if (WIFSIGNALED(*status))
+		{
+			sig = WTERMSIG(*status);
+			debug("[wait_pipe] pid : %d, left child (%d) exit with signal %d (%s)\n", getpid(), child, sig, strsignal(sig));
+			kill(child_pids[CHILD_RIGHT], SIGTERM);
+			(get_shell_data())->last_status = WTERMSIG(*status);
+			return ;
+		}
+		debug("[wait_pipe] pid : %d, left child (%d) normal exit\n", getpid(), child);
+		wait_child(child_pids[CHILD_RIGHT], status, 0);
+		return ;
 	}
-	else
-	{
-		close(pipe_fds[PIPE_READ]);
-		close(pipe_fds[PIPE_WRITE]);
-	}
+	(void)sig;
+	debug("[wait_pipe] pid : %d, right child (%d) normal exit\n", getpid(), child);
+	wait_child(child_pids[CHILD_LEFT], status, 0);
 }

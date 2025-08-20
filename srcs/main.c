@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 22:15:11 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 15:31:45 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,13 @@
 #include <errno.h>
 #include <termios.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #include "libft.h"
 
 #include "shell_data.h"
 #include "tokenizer.h"
-#include "parser.h"
 #include "eval.h"
-#include "sig.h"
 
 static void	interactive_mode(void);
 static void	process_input(char *input);
@@ -60,14 +59,13 @@ static void	process_input(char *input);
 int	main(int argc, char *argv[], char *envp[])
 {
 	(void)argv;
-	init_signals();
-	save_terminal_settings();
+	init_minishell_signal();
 	if (!init_shell_data(envp))
 		exit(errno);
 	if (argc == 1)
 		interactive_mode();
-	restore_terminal_settings();
-	restore_signals();
+	restore_signal();
+	clear_shell_data();
 	exit(get_shell_data()->last_status);
 }
 
@@ -93,40 +91,35 @@ int	main(int argc, char *argv[], char *envp[])
  */
 static void	interactive_mode(void)
 {
-	char			*input;
-
-	while (TRUE)
+	while (!(get_shell_data()->is_exit))
 	{
-		input = readline(PROMPT);
-		if (!input)
+		restore_tty();
+		(get_shell_input())->input_line = readline(PROMPT);
+		if ((get_shell_input())->input_line == NULL)
 			break ;
-		if (*input == '\0' || ft_strncmp(input, "", ft_strlen(input)) == 0)
+		if ((*(get_shell_input())->input_line) == '\0' \
+			|| ft_strncmp((get_shell_input())->input_line, \
+				"", ft_strlen("") + 1) == 0)
 			continue ;
-		add_history(input);
-		process_input(input);
+		add_history((get_shell_input())->input_line);
+		process_input((get_shell_input())->input_line);
+		clear_shell_input();
 	}
 }
 
 static void	process_input(char *input)
 {
-	t_token			*tk_lst;
-	t_token			*tk;
-	t_syntax_node	*syntax_tree;
-	t_syntax_node	*st;
+	t_token	*input_token;
 
-	tk_lst = tokenize_input(input);
-	if (!is_valid_sequence(tk_lst))
-		printf("Invalid input\n");
-	else
+	(get_shell_input())->input_token = tokenize_input(input);
+	if (!is_valid_sequence((get_shell_input())->input_token))
 	{
-		tk = tk_lst;
-		syntax_tree = parse_input(&tk);
-		clear_token_lst(&tk_lst);
-		st = syntax_tree;
-		eval(st);
-		remove_syntax_node(syntax_tree);
+		ft_putstr_fd("Invalid input\n", STDERR_FILENO);
+		(get_shell_data())->last_status = EXIT_FAILURE;
+		return ;
 	}
-	dup2(get_shell_data()->stdin_fd, STDIN_FILENO);
-	dup2(get_shell_data()->stdout_fd, STDOUT_FILENO);
-	clear_token_lst(&tk_lst);
+	input_token = (get_shell_input())->input_token;
+	(get_shell_input())->input_node = parse_input(&input_token);
+	eval_heredoc((get_shell_input())->input_node);
+	eval((get_shell_input())->input_node);
 }

@@ -6,27 +6,26 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 20:39:35 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 20:38:57 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 16:10:01 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include "sig.h"
+#include <readline/readline.h>
 
+#include "ast.h"
 #include "libft.h"
 
 #include "def.h"
 
-#include "eval.h"
-#include "parser.h"
 #include "shell_data.h"
-#include "utils.h"
+#include "eval.h"
 
 static t_status	set_stdin(t_syntax_node *io_redir_node);
 static t_status	set_heredoc(t_syntax_node *io_redir_node);
@@ -48,18 +47,15 @@ static t_status	set_stdout(t_syntax_node *io_redir_node);
  */
 t_status	eval_io_redir(t_syntax_node *io_redir_node)
 {
-	t_status	status;
-
-	status = 0;
 	if (!io_redir_node)
-		return (status);
+		return (SUCCESS);
 	if (io_redir_node->type == NODE_IO_REDIR_IN
 		|| io_redir_node->type == NODE_IO_REDIR_HEREDOC)
-		status = set_stdin(io_redir_node);
+		return (set_stdin(io_redir_node));
 	else if (io_redir_node->type == NODE_IO_REDIR_OUT
 		|| io_redir_node->type == NODE_IO_REDIR_APPEND)
-		status = set_stdout(io_redir_node);
-	return (status);
+		return (set_stdout(io_redir_node));
+	return (SUCCESS);
 }
 
 /**
@@ -84,8 +80,8 @@ static t_status	set_stdin(t_syntax_node *io_redir_node)
 		infile_fd = open(io_redir_node->value.io_target, O_RDONLY);
 		if (infile_fd == -1)
 		{
-			perror(strerror(errno));
-			return (ERROR);
+			perror(io_redir_node->value.io_target);
+			return (FAILURE);
 		}
 		close(STDIN_FILENO);
 		dup2(infile_fd, STDIN_FILENO);
@@ -109,30 +105,37 @@ static t_status	set_stdin(t_syntax_node *io_redir_node)
  */
 static t_status	set_heredoc(t_syntax_node *io_redir_node)
 {
-	int		pipe_fds[2];
-	pid_t	pid;
+	t_syntax_node	*cmd;
 	int		status;
+	pid_t	child;
 
-	if (pipe(pipe_fds) == -1)
-		return (ERROR);
-	pid = fork();
-	if (pid == 0)
+	cmd = io_redir_node;
+	while (cmd->type != NODE_SIMPLE_COMMAND)
+		cmd = cmd->parent;
+	(get_shell_data())->in_heredoc = TRUE;
+	if (cmd->value.command.heredoc_fds[PIPE_READ] != -1)
+		close(cmd->value.command.heredoc_fds[PIPE_READ]);
+	if (pipe(cmd->value.command.heredoc_fds) == -1)
 	{
-		restore_terminal_settings();
-		close(pipe_fds[PIPE_READ]);
+		perror("heredoc_fds");
+		exit(errno);
+	}
+	child = fork();
+	if (child == 0)
+	{
+		close((cmd->value.command.heredoc_fds)[PIPE_READ]);
 		ft_putstr_fd(
-			heredoc(io_redir_node->value.io_target),
-			pipe_fds[PIPE_WRITE]);
+			io_redir_node->value.io_target,
+			(cmd->value.command.heredoc_fds)[PIPE_WRITE]);
+		close((cmd->value.command.heredoc_fds)[PIPE_WRITE]);
+		clear_shell_input();
+		clear_shell_data();
 		exit(EXIT_SUCCESS);
 	}
-	close(pipe_fds[PIPE_WRITE]);
-	close(STDIN_FILENO);
-	dup2(pipe_fds[PIPE_READ], STDIN_FILENO);
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		(get_shell_data())->last_status = WEXITSTATUS(status);
-	if (WIFSIGNALED(status))
-		(get_shell_data())->last_status = WTERMSIG(status);
+	close((cmd->value.command.heredoc_fds)[PIPE_WRITE]);
+	dup2((cmd->value.command.heredoc_fds)[PIPE_READ], STDIN_FILENO);
+	waitpid(child, &status, 0);
+	(get_shell_data())->in_heredoc = FALSE;
 	return (SUCCESS);
 }
 
@@ -167,8 +170,8 @@ static t_status	set_stdout(t_syntax_node *io_redir_node)
 	}
 	if (outfile_fd == -1)
 	{
-		perror(strerror(errno));
-		return (ERROR);
+		perror(io_redir_node->value.io_target);
+		return (FAILURE);
 	}
 	close(STDOUT_FILENO);
 	dup2(outfile_fd, STDOUT_FILENO);

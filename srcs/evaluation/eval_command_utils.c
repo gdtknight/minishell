@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eval_command_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/05 00:33:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 21:37:19 by yoshin           ###   ########.fr       */
+/*   Created: 2025/08/15 22:17:29 by yoshin            #+#    #+#             */
+/*   Updated: 2025/08/20 06:08:57 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include "libft.h"
 
-#include "eval.h"
+#include "ast.h"
 
 static int	count_args(t_syntax_node *cmd_suffix);
 
@@ -80,4 +80,30 @@ static int	count_args(t_syntax_node *cmd_suffix)
 	if (cur_node->type == NODE_WORD)
 		count++;
 	return (count);
+}
+
+void	clear_cmd_form(t_cmd_form *cmd_form)
+{
+	char	**strs;
+
+	if (cmd_form->cmd)
+		free(cmd_form->cmd);
+	strs = NULL;
+	strs = cmd_form->args;
+	if (strs)
+	{
+		while (*strs)
+			free(*strs++);
+	}
+	free(cmd_form->args);
+	cmd_form->args = NULL;
+	strs = NULL;
+	strs = cmd_form->envp;
+	if (strs)
+	{
+		while (*strs)
+			free(*strs++);
+	}
+	free(cmd_form->envp);
+	cmd_form->envp = NULL;
 }

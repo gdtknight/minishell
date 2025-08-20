@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 17:35:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 21:31:10 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 16:34:04 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,11 @@
 #include <limits.h>
 #include <sys/wait.h>
 
-#include "eval.h"
 #include "def.h"
-#include "parser.h"
+#include "ast.h"
 #include "shell_data.h"
+
+#include "eval.h"
 
 /**
  * @brief 구문 트리 노드를 평가하여 명령을 실행한다.
@@ -38,25 +39,26 @@
  * - 현재 NODE_AMPERSAND(백그라운드 실행)는 지원하지 않으며, NODE_SEMICOLON과 동일하게 동기 처리된다.
  * - eval_pipeline() 실행 시 get_shell_data()->in_pipe를 TRUE로 설정해 파이프 상태를 알린다.
  */
-t_status	eval(t_syntax_node *node)
+void	eval(t_syntax_node *node)
 {
-	t_status	status;
-
-	status = ERROR;
+	if (!node)
+		return ;
 	if (node->type == NODE_SEMICOLON || node->type == NODE_AMPERSAND)
-		status = eval_list(node);
+		eval_list(node);
 	else if (node->type == NODE_AND_IF || node->type == NODE_OR_IF)
-		status = eval_and_or(node);
+		eval_and_or(node);
 	else if (node->type == NODE_PIPELINE || node->type == NODE_PIPELINE_ERR)
 	{
 		get_shell_data()->in_pipe = TRUE;
-		status = eval_pipeline(node);
+		eval_pipeline(node);
 		get_shell_data()->in_pipe = FALSE;
+		return ;
 	}
 	else if (node->type == NODE_SIMPLE_COMMAND
 		|| node->type == NODE_COMPOUND_COMMAND)
-		status = eval_command(node);
-	return (status);
+		eval_command(node);
+	else
+		(get_shell_data())->last_status = EXIT_FAILURE;
 }
 
 /**
@@ -72,28 +74,27 @@ t_status	eval(t_syntax_node *node)
  * - 왼쪽 명령은 fork()로 자식 프로세스에서 실행 후 waitpid()로 대기한다.
  * - 오른쪽 명령은 부모 프로세스에서 바로 eval()로 실행한다.
  */
-t_status	eval_list(t_syntax_node *node)
+void	eval_list(t_syntax_node *node)
 {
-	t_status	status;
+	int			status;
 	pid_t		child_pid;
 
 	if (node->type == NODE_SEMICOLON)
 	{
 		child_pid = fork();
 		if (child_pid == 0)
-			exit(eval(node->value.b_node.left));
+			eval(node->value.b_node.left);
 		waitpid(child_pid, &status, 0);
-		status = eval(node->value.b_node.right);
-		return (status);
+		eval(node->value.b_node.right);
 	}
+	// & 의 경우 pthread 생성해서 백그라운드 실행하고 추가 처리 필요함
 	else
 	{
 		child_pid = fork();
 		if (child_pid == 0)
-			exit(eval(node->value.b_node.left));
+			eval(node->value.b_node.left);
 		waitpid(child_pid, &status, WNOHANG);
-		status = eval(node->value.b_node.right);
-		return (status);
+		eval(node->value.b_node.right);
 	}
 }
 
@@ -107,16 +108,13 @@ t_status	eval_list(t_syntax_node *node)
  * @param and_or_node AND/OR 연산자를 나타내는 AST 노드
  * @return t_status 마지막으로 실행된 명령의 상태 코드
  */
-t_status	eval_and_or(t_syntax_node *and_or_node)
+void	eval_and_or(t_syntax_node *and_or_node)
 {
-	t_status	status;
-
-	status = eval(and_or_node->value.b_node.left);
+	eval(and_or_node->value.b_node.left);
 	if (and_or_node->type == NODE_AND_IF
 		&& (get_shell_data())->last_status == SUCCESS)
-		status = eval(and_or_node->value.b_node.right);
+		eval(and_or_node->value.b_node.right);
 	else if (and_or_node->type == NODE_OR_IF
 		&& (get_shell_data())->last_status != SUCCESS)
-		status = eval(and_or_node->value.b_node.right);
-	return (status);
+		eval(and_or_node->value.b_node.right);
 }
