@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 23:05:24 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 20:50:42 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 16:53:24 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,10 @@ void	clear_hashmap(t_hash_map *map)
 				free(cur->key);
 			if (cur->value)
 				free(cur->value);
+			cur->key = NULL;
+			cur->value = NULL;
 			free(cur);
+			cur = NULL;
 			cur = next;
 		}
 		map->table[idx] = NULL;
