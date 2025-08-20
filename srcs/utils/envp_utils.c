@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 00:49:34 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/05 16:03:33 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/19 22:09:01 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ char	**lst_from_hashmap(t_hash_map *map)
 			cur = cur->next;
 		}
 	}
+	list[list_idx] = NULL;
 	return (list);
 }
 
@@ -57,10 +58,17 @@ char	*extract_value(char *envp)
 {
 	char	*result;
 	char	*pos;
+	char	*temp;
 
 	pos = ft_strchr(envp, '=');
 	if (pos == NULL)
 		return (ft_strdup(""));
 	result = ft_substr(pos, 1, ft_strlen(pos) - 1);
+	if (*result == '\'' || *result == '\"')
+	{
+		temp = result;
+		result = ft_substr(result, 1, ft_strlen(result) - 2);
+		free(temp);
+	}
 	return (result);
 }
