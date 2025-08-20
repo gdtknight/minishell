@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:25:28 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 21:11:23 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 05:55:05 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,9 @@ void			print_token(t_token *token);
 /* --- token_validate_utils.c --- */
 
 t_boolean		is_valid_sequence(t_token *token_lst);
-
-/* --- token_word_utils.c --- */
-
-char			*extract_normal_word(char *str);
-char			*find_next_token_delim(char *cur);
+t_boolean		is_io_token(t_token *token);
+t_boolean		is_op_token(t_token *token);
+t_boolean		is_word_token(t_token *token);
 
 /* --- tokenizer.c --- */
 

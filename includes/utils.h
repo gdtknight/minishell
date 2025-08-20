@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 20:56:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/09 03:52:20 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/19 22:01:07 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,13 @@ char		*find_next_delim(
 				char *str,
 				t_boolean (*predicate)(char),
 				char mask);
+
+/* --- find_next_delim_utils.c --- */
+
+t_boolean	is_ifs(char c);
+t_boolean	is_dollar_sign(char c);
+t_boolean	is_tk_delim(char c);
+t_boolean	is_single_quote(char c);
 
 /* --- ft_multiplejoin.c --- */
 

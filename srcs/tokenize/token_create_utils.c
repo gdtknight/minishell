@@ -6,11 +6,14 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 23:40:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/13 19:06:55 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/17 23:12:51 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+#include "flag.h"
+#include "utils.h"
 
 #include "tokenizer.h"
 
@@ -106,7 +109,9 @@ static t_token_type	get_single_char_token_type(char *str)
  */
 void	set_token_value_from_str(t_token *target, char *str)
 {
-	target->value = extract_normal_word(str);
+	target->value = ft_substr(str, 0, \
+		find_next_delim(str, is_tk_delim, \
+				  C_BACKSLASH | C_SQUOTE | C_DQUOTE) - str);
 }
 
 /**
