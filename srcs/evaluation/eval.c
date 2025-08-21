@@ -55,12 +55,11 @@ void	eval(t_syntax_node *node)
 	}
 	if (node->type == NODE_PIPELINE || node->type == NODE_PIPELINE_ERR)
 	{
-		get_shell_data()->in_pipe = TRUE;
 		eval_pipeline(node);
-		get_shell_data()->in_pipe = FALSE;
 		return ;
 	}
-	if (node->type == NODE_SIMPLE_COMMAND || node->type == NODE_COMPOUND_COMMAND)
+	if (node->type == NODE_SIMPLE_COMMAND
+		|| node->type == NODE_COMPOUND_COMMAND)
 	{
 		eval_command(node);
 		return ;
@@ -98,19 +97,16 @@ void	eval_list(t_syntax_node *node)
 		}
 		waitpid(child_pid, &status, 0);
 		eval(node->value.b_node.right);
+		return ;
 	}
-	// & 의 경우 pthread 생성해서 백그라운드 실행하고 추가 처리 필요함
-	else
+	child_pid = fork();
+	if (child_pid == 0)
 	{
-		child_pid = fork();
-		if (child_pid == 0)
-		{
-			eval(node->value.b_node.left);
-			return ;
-		}
-		waitpid(child_pid, &status, WNOHANG);
-		eval(node->value.b_node.right);
+		eval(node->value.b_node.left);
+		return ;
 	}
+	waitpid(child_pid, &status, WNOHANG);
+	eval(node->value.b_node.right);
 }
 
 /**

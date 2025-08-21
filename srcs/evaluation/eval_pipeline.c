@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <sys/_types/_pid_t.h>
 #include <unistd.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -24,8 +25,13 @@
 #include "shell.h"
 #include "eval.h"
 
-static void			setup_pipe(pid_t child_pids[2], int pipe_fds[2]);
-static void			wait_pipe(pid_t child_pids[2], int *status);
+static void	start_child(
+				t_syntax_node *pipeline_node,
+				pid_t child_pids[2],
+				int pipe_fds[2],
+				int left_or_right);
+static void	setup_pipe(pid_t child_pids[2], int pipe_fds[2]);
+static void	wait_pipe(pid_t child_pids[2], int *status);
 
 /**
  * @brief 파이프라인 노드를 평가하여 명령을 실행한다.
@@ -51,6 +57,7 @@ void	eval_pipeline(t_syntax_node	*pipeline_node)
 
 	if (!pipeline_node || pipeline_node->eval == OFF)
 		return ;
+	get_shell_data()->in_pipe = TRUE;
 	child_pids[CHILD_LEFT] = INT_MAX;
 	child_pids[CHILD_RIGHT] = INT_MAX;
 	if (pipe(pipe_fds) == -1)
@@ -61,22 +68,35 @@ void	eval_pipeline(t_syntax_node	*pipeline_node)
 	}
 	child_pids[CHILD_LEFT] = fork();
 	if (child_pids[CHILD_LEFT] == 0)
+		start_child(pipeline_node, child_pids, pipe_fds, CHILD_LEFT);
+	child_pids[CHILD_RIGHT] = fork();
+	if (child_pids[CHILD_RIGHT] == 0)
+		start_child(pipeline_node, child_pids, pipe_fds, CHILD_RIGHT);
+	setup_pipe(child_pids, pipe_fds);
+	wait_pipe(child_pids, &status);
+	get_shell_data()->in_pipe = FALSE;
+}
+
+static void	start_child(
+				t_syntax_node *pipeline_node,
+				pid_t child_pids[2],
+				int pipe_fds[2],
+				int left_or_right)
+{
+	if (left_or_right == CHILD_LEFT)
 	{
 		setup_pipe(child_pids, pipe_fds);
 		init_pipeline_signal();
 		eval(pipeline_node->value.b_node.left);
 		exit(get_shell_data()->last_status);
 	}
-	child_pids[CHILD_RIGHT] = fork();
-	if (child_pids[CHILD_RIGHT] == 0)
+	else
 	{
 		setup_pipe(child_pids, pipe_fds);
 		init_pipeline_signal();
 		eval(pipeline_node->value.b_node.right);
 		exit(get_shell_data()->last_status);
 	}
-	setup_pipe(child_pids, pipe_fds);
-	wait_pipe(child_pids, &status);
 }
 
 /**

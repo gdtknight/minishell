@@ -23,9 +23,8 @@
 #include "eval.h"
 
 static void		eval_simple_command(t_command *command);
+static void		eval_command_from_child(t_syntax_node *cmd_node);
 static void		set_cmd_form(t_command *command);
-static t_status	set_io_from_prefix(t_syntax_node *prefix);
-static t_status	set_io_from_suffix(t_syntax_node *suffix);
 
 /**
  * @brief (파이프 여부에 따라) 명령 노드를 실행한다.
@@ -49,34 +48,33 @@ void	eval_command(t_syntax_node *cmd_node)
 
 	if (!cmd_node || cmd_node->eval == OFF)
 		return ;
-	if ((get_shell_data())->in_pipe)
+	if ((!(get_shell_data())->in_pipe)
+		&& ((cmd_node->type == NODE_SIMPLE_COMMAND)
+			&& is_builtin(cmd_node->value.command.word)))
 	{
-		if (cmd_node->type == NODE_COMPOUND_COMMAND)
-		{
-			eval(cmd_node->value.child);
-			return ;
-		}
-		eval_simple_command(&(cmd_node->value.command));
-		exit(get_shell_data()->last_status);
-	}
-	if ((cmd_node->type == NODE_SIMPLE_COMMAND
-		&& is_builtin(cmd_node->value.command.word)))
-	{
-		eval_simple_command(&(cmd_node->value.command));
+		pid = fork();
+		if (pid == 0)
+			eval_command_from_child(cmd_node);
+		wait_child(pid, &status, 0);
 		return ;
 	}
-	pid = fork();
-	if (pid == 0)
+	if (cmd_node->type == NODE_COMPOUND_COMMAND)
 	{
-		if (cmd_node->type == NODE_COMPOUND_COMMAND)
-		{
-			eval(cmd_node->value.child);
-			return ;
-		}
-		eval_simple_command(&(cmd_node->value.command));
-		exit(get_shell_data()->last_status);
+		eval(cmd_node->value.child);
+		return ;
 	}
-	wait_child(pid, &status, 0);
+	eval_simple_command(&(cmd_node->value.command));
+}
+
+static void	eval_command_from_child(t_syntax_node *cmd_node)
+{
+	if (cmd_node->type == NODE_COMPOUND_COMMAND)
+	{
+		eval(cmd_node->value.child);
+		return ;
+	}
+	eval_simple_command(&(cmd_node->value.command));
+	exit(get_shell_data()->last_status);
 }
 
 static void	eval_simple_command(t_command *command)
@@ -107,69 +105,4 @@ static void	set_cmd_form(t_command *command)
 	command->form.cmd = ft_strdup(command->word);
 	(command->form.args)[0] = ft_strdup((char *)(command->word));
 	command->form.envp = lst_from_hashmap(&(get_shell_data()->envp_map));
-}
-
-/**
- * @brief 명령 앞(prefix)에 붙은 I/O 리다이렉션 체인을 적용한다.
- *
- * NODE_CMD_PREFIX로 연결된 이진 트리를 좌측부터 순회하며
- * 각 노드의 I/O 리다이렉션을 eval_io_redir()로 적용한다.
- *
- * @param prefix 명령의 prefix 노드(또는 단일 I/O 노드)
- * @return t_status SUCCESS(0) 또는 ERROR(비0)
- *
- * @note
- * - prefix가 체인이면 left를 먼저 적용하고 right로 진행한다.
- * - 어느 한 단계라도 오류가 발생하면 즉시 해당 status를 반환한다.
- */
-static t_status	set_io_from_prefix(t_syntax_node *prefix)
-{
-	t_syntax_node	*cur_node;
-	t_status		status;
-
-	if (!prefix || prefix->eval == OFF)
-		return (SUCCESS);
-	cur_node = prefix;
-	while (cur_node && cur_node->type == NODE_CMD_PREFIX)
-	{
-		status = eval_io_redir(cur_node->value.b_node.left);
-		if (status)
-			return (status);
-		cur_node = cur_node->value.b_node.right;
-	}
-	status = eval_io_redir(cur_node);
-	return (status);
-}
-
-/**
- * @brief 명령 뒤(suffix)에 붙은 I/O 리다이렉션/인자 체인을 적용한다.
- *
- * NODE_CMD_SUFFIX로 연결된 이진 트리를 좌측부터 순회하며
- * 각 노드의 I/O 리다이렉션을 eval_io_redir()로 적용한다.
- * (인자 수집은 별도 경로에서 수행되며, 여기서는 I/O만 처리한다고 가정)
- *
- * @param suffix 명령의 suffix 노드(또는 단일 I/O 노드)
- * @return t_status SUCCESS(0) 또는 ERROR(비0)
- *
- * @note
- * - suffix가 체인이면 left를 먼저 적용하고 right로 진행한다.
- * - 어느 한 단계라도 오류가 발생하면 즉시 해당 status를 반환한다.
- */
-static t_status	set_io_from_suffix(t_syntax_node *suffix)
-{
-	t_syntax_node	*cur_node;
-	t_status		status;
-
-	if (!suffix || suffix->eval == OFF)
-		return (SUCCESS);
-	cur_node = suffix;
-	while (cur_node && cur_node->type == NODE_CMD_SUFFIX)
-	{
-		status = eval_io_redir(cur_node->value.b_node.left);
-		if (status)
-			return (status);
-		cur_node = cur_node->value.b_node.right;
-	}
-	status = eval_io_redir(cur_node);
-	return (status);
 }

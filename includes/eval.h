@@ -45,6 +45,8 @@ void		eval_command(t_syntax_node *cmd_node);
 
 char		**get_args_from_suffix(t_syntax_node *cmd_suffix);
 void		clear_cmd_form(t_cmd_form *cmd_form);
+t_status	set_io_from_prefix(t_syntax_node *prefix);
+t_status	set_io_from_suffix(t_syntax_node *suffix);
 
 /* --- eval_heredoc.c --- */
 
@@ -54,10 +56,15 @@ void		eval_heredoc(t_syntax_node *node);
 
 void		read_heredoc(t_syntax_node *node);
 
-
 /* --- eval_io_redir.c --- */
 
 t_status	eval_io_redir(t_syntax_node *io_redir_node);
+
+/* --- eval_io_redir_utils.c --- */
+
+t_status	set_stdin(t_syntax_node *io_redir_node);
+t_status	set_stdout(t_syntax_node *io_redir_node);
+t_status	set_heredoc(t_syntax_node *io_redir_node);
 
 /* --- eval_pipeline.c --- */
 

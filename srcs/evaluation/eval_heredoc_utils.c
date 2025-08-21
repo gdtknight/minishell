@@ -72,7 +72,7 @@ static void	read_input(const char *limiter)
 	restore_tty();
 	while (TRUE)
 	{
-		line = readline("heredoc> "); // signal
+		line = readline("heredoc> ");
 		if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
 			break ;
 		temp = *(get_heredoc_input());
@@ -99,7 +99,7 @@ static void	receive_heredoc(pid_t child_pid, int heredoc_pipe[2])
 	if (WIFSIGNALED(status))
 	{
 		close(heredoc_pipe[PIPE_READ]);
-		(get_shell_data())->last_status = 128 + SIGINT; // 항상 bash 규칙으로
+		(get_shell_data())->last_status = 128 + SIGINT;
 		return ;
 	}
 	if (WIFEXITED(status))
