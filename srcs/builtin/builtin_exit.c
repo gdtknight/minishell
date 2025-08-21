@@ -103,7 +103,10 @@ static t_builtin_exit	check_args(char **args)
  * @param flag_args 인자 검사 결과 플래그
  * @param args      명령어 인자 배열
  */
-static void	handle_flag(t_builtin_exit flag_args, char **args, long long exit_code)
+static void	handle_flag(
+				t_builtin_exit flag_args,
+				char **args,
+				long long exit_code)
 {
 	get_shell_data()->is_exit = TRUE;
 	if (flag_args == WITH_ARGC)
