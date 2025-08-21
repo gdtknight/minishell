@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -35,7 +36,7 @@ void	minishell_sigint_handler(int signo)
 	(void)signo;
 	turnoff_input_node_eval();
 	clear_heredoc_input();
-	(get_shell_data())->last_status = 128 + SIGINT; // 항상 bash 규칙으로
+	(get_shell_data())->last_status = 128 + SIGINT;
 	rl_replace_line("", 0);
 	write(STDERR_FILENO, "\n", 1);
 	if (!(get_shell_data())->in_heredoc)
@@ -55,7 +56,8 @@ void	pipeline_sigint_handler(int signo)
 void	heredoc_sigint_handler(int signo)
 {
 	int	status;
-    (void)signo;
+
+	(void) signo;
 	if (wait(&status) == -1)
 		write(STDERR_FILENO, "\n", 1);
 	clear_shell_input();

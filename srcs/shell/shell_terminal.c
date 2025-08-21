@@ -15,19 +15,24 @@
 
 void	restore_tty(void)
 {
-    /* STDIN, STDOUT이 터미널이 아니면 복구 시도 */
-    if (!isatty(STDIN_FILENO)) {
-        int fd = open("/dev/tty", O_RDONLY);
-        if (fd != -1) {
-            dup2(fd, STDIN_FILENO);
-            close(fd);
-        }
-    }
-    if (!isatty(STDOUT_FILENO)) {
-        int fd = open("/dev/tty", O_WRONLY);
-        if (fd != -1) {
-            dup2(fd, STDOUT_FILENO);
-            close(fd);
-        }
-    }
+	int	fd;
+
+	if (!isatty(STDIN_FILENO))
+	{
+		fd = open("/dev/tty", O_RDONLY);
+		if (fd != -1)
+		{
+			dup2(fd, STDIN_FILENO);
+			close(fd);
+		}
+	}
+	if (!isatty(STDOUT_FILENO))
+	{
+		fd = open("/dev/tty", O_WRONLY);
+		if (fd != -1)
+		{
+			dup2(fd, STDOUT_FILENO);
+			close(fd);
+		}
+	}
 }
