@@ -14,7 +14,7 @@
 
 #include "tokenizer.h"
 
-#include "debug.h"
+static t_boolean	is_valid_token(t_token *token, t_boolean *in_parenthesis);
 
 t_boolean	is_valid_sequence(t_token *token_lst)
 {
@@ -30,21 +30,8 @@ t_boolean	is_valid_sequence(t_token *token_lst)
 		return (FALSE);
 	while (token_lst)
 	{
-		if (token_lst->type == TK_LPAREN)
-		{
-			if (in_parenthesis)
-				return (FALSE);
-			else
-				in_parenthesis = TRUE;
-		}
-		if (token_lst->type == TK_RPAREN && !in_parenthesis)
+		if (!is_valid_token(token_lst, &in_parenthesis))
 			return (FALSE);
-		if (is_io_token(token_lst) && !is_word_token(token_lst->next))
-		{
-			debug("io (or op) token \'%s\' with none word token \'%s\'", \
-		 		(char *)token_lst->value, (char *)token_lst->next->value);
-			return (FALSE);
-		}
 		token_lst = token_lst->next;
 	}
 	if (in_parenthesis)
@@ -77,7 +64,23 @@ t_boolean	is_op_token(t_token *token)
 
 t_boolean	is_word_token(t_token *token)
 {
-	if(!token)
+	if (!token)
 		return (FALSE);
 	return (token->type == TK_WORD);
+}
+
+static t_boolean	is_valid_token(t_token *token, t_boolean *in_parenthesis)
+{
+	if (token->type == TK_LPAREN)
+	{
+		if (*in_parenthesis)
+			return (FALSE);
+		else
+			*in_parenthesis = TRUE;
+	}
+	if (token->type == TK_RPAREN && !*in_parenthesis)
+		return (FALSE);
+	if (is_io_token(token) && !is_word_token(token->next))
+		return (FALSE);
+	return (TRUE);
 }

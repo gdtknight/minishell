@@ -111,7 +111,7 @@ void	set_token_value_from_str(t_token *target, char *str)
 {
 	target->value = ft_substr(str, 0, \
 		find_next_delim(str, is_tk_delim, \
-				  C_BACKSLASH | C_SQUOTE | C_DQUOTE) - str);
+				C_BACKSLASH | C_SQUOTE | C_DQUOTE) - str);
 }
 
 /**
