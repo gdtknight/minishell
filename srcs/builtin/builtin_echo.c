@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 22:18:39 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/15 20:36:51 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 18:10:42 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "def.h"
 
 #include "builtin.h"
-#include "shell_data.h"
+#include "shell.h"
 
 static int	check_option(char **args)
 {

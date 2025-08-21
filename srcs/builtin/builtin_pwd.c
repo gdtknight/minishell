@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 18:35:10 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/14 22:02:12 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/20 18:11:09 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 #include "def.h"
 #include "builtin.h"
-#include "shell_data.h"
+#include "shell.h"
 
 /**
  * @brief 현재 작업 디렉토리 경로를 출력한다.

@@ -6,13 +6,13 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 03:30:48 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 03:31:29 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 05:07:58 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/wait.h>
 
-#include "shell_data.h"
+#include "shell.h"
 #include "eval.h"
 
 #include "debug.h"

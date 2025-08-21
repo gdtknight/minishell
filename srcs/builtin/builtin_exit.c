@@ -17,7 +17,7 @@
 
 #include "def.h"
 #include "builtin.h"
-#include "shell_data.h"
+#include "shell.h"
 
 static int	ft_isspace(int c)
 {

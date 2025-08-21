@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 14:25:06 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 06:13:59 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 18:10:06 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 
 #include "eval.h"
-#include "shell_data.h"
+#include "shell.h"
 
 #include "execute.h"
 

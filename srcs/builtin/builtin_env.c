@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/15 20:37:06 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 18:10:55 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "def.h"
 #include "hashmap.h"
 #include "builtin.h"
-#include "shell_data.h"
+#include "shell.h"
 
 /**
  * @brief env 빌트인 명령어를 실행하여 환경 변수를 출력한다.

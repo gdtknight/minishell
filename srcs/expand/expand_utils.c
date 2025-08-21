@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 23:08:26 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 08:19:11 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 18:10:25 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include "libft.h"
 
-#include "shell_data.h"
+#include "shell.h"
 
 static char	*replace_digit_param(char *cur, char **new_value);
 static char	*replace_env_key(char *str, char **new_value);

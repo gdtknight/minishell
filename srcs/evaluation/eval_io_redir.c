@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 20:39:35 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 16:10:01 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 03:55:55 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 #include "def.h"
 
-#include "shell_data.h"
+#include "shell.h"
 #include "eval.h"
 
 static t_status	set_stdin(t_syntax_node *io_redir_node);

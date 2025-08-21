@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/16 23:41:20 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/20 18:11:03 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "def.h"
 #include "libft.h"
 #include "builtin.h"
-#include "shell_data.h"
+#include "shell.h"
 #include "utils.h"
 
 /**

@@ -6,19 +6,17 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 02:37:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 15:42:28 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 06:10:06 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <readline/readline.h>
 
-#include "shell_data.h"
-
 #include "debug.h"
+#include "shell.h"
 
 /**
  * @brief SIGINT(Ctrl-C) 시그널 핸들러
@@ -35,15 +33,13 @@
  */
 void	minishell_sigint_handler(int signo)
 {
-	int	status;
-
 	(void)signo;
-	debug("[minishell_sigint_handler] ppid: %d, pid : %d", getppid(), getpid());
-	while (wait(&status) > 0)
-		;
+	turnoff_input_node_eval();
+	clear_heredoc_input();
 	(get_shell_data())->last_status = 128 + SIGINT; // 항상 bash 규칙으로
-	clear_shell_input();
-   	rl_replace_line("", 0);
+	debug("[minishell_sigint_handler] pid : %d, last_status : %d", \
+	   getpid(), get_shell_data()->last_status);
+	rl_replace_line("", 0);
 	write(STDERR_FILENO, "\n", 1);
 	if (!(get_shell_data())->in_heredoc)
 	{
@@ -55,7 +51,6 @@ void	minishell_sigint_handler(int signo)
 void	pipeline_sigint_handler(int signo)
 {
 	(void)signo;
-	debug("[pipeline_sigint_handler] ppid: %d, pid : %d", getppid(), getpid());
 	clear_shell_input();
 	exit(128 + SIGINT);
 }
@@ -64,9 +59,11 @@ void	heredoc_sigint_handler(int signo)
 {
 	int	status;
     (void)signo;
-	debug("[heredoc_sigint_handler] ppid: %d, pid : %d", getppid(), getpid());
 	if (wait(&status) == -1)
 		write(STDERR_FILENO, "\n", 1);
 	clear_shell_input();
+	clear_heredoc_input();
+	clear_shell_data();
+	debug("[heredoc_sigint_handler] pid: %d, set last_status to 128 + SIGINT", getpid());
 	exit (128 + SIGINT);
 }

@@ -6,12 +6,12 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/16 02:09:47 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 18:11:15 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "hashmap.h"
-#include "shell_data.h"
+#include "shell.h"
 
 #include "builtin.h"
 

@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   shell_data.h                                       :+:      :+:    :+:   */
+/*   shell.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:03:33 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 05:31:13 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 06:11:32 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SHELL_DATA_H
-# define SHELL_DATA_H
+#ifndef SHELL_H
+# define SHELL_H
 
 # include <signal.h>
 # include <termios.h>
 
-#include "ast.h"
+# include "ast.h"
 # include "def.h"
 # include "hashmap.h"
 # include "color.h"
@@ -49,8 +49,15 @@ t_shell_data	*get_shell_data(void);
 t_result		init_shell_data(char *envp[]);
 void			clear_shell_data(void);
 
+/* --- shell_input.c --- */
+
 t_shell_input	*get_shell_input(void);
 void			clear_shell_input(void);
+
+void			turnoff_input_node_eval(void);
+
+char			**get_heredoc_input(void);
+void			clear_heredoc_input(void);
 
 /* --- shell_signal.c --- */
 

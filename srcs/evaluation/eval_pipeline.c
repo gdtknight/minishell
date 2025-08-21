@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 15:45:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 16:38:20 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 04:16:39 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include "def.h"
 
 #include "ast.h"
-#include "shell_data.h"
+#include "shell.h"
 #include "eval.h"
 
 #include "debug.h"

@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 14:17:35 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 05:31:18 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 18:08:51 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <termios.h>
 #include <sys/wait.h>
 
-#include "shell_data.h"
+#include "shell.h"
 
 void	init_minishell_signal(void)
 {

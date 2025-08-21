@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:09 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/15 23:07:19 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/20 18:10:48 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 #include "def.h"
 #include "hashmap.h"
-#include "shell_data.h"
+#include "shell.h"
 #include "builtin.h"
 
 int	count_argc(char **argc)

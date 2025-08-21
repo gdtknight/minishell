@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 00:57:31 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 08:16:05 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 18:12:02 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 #include "libft.h"
 
 #include "ast.h"
-#include "shell_data.h"
 #include "eval.h"
 
 #include "debug.h"

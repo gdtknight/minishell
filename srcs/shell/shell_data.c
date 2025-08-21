@@ -6,19 +6,18 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:06:19 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 15:29:37 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 18:05:13 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "ast.h"
 #include "def.h"
-#include "tokenizer.h"
 #include "utils.h"
 #include "hashmap.h"
-#include "shell_data.h"
+
+#include "shell.h"
 
 /**
  * @brief 전역적으로 접근 가능한 shell_data 구조체를 반환
@@ -37,12 +36,6 @@ t_shell_data	*get_shell_data(void)
 	static t_shell_data	shell_data;
 
 	return (&shell_data);
-}
-
-t_shell_input	*get_shell_input(void)
-{
-	static t_shell_input	shell_input;
-	return (&shell_input);
 }
 
 /**
@@ -92,23 +85,4 @@ t_result	init_shell_data(char *envp[])
 void	clear_shell_data(void)
 {
 	clear_hashmap(&((get_shell_data())->envp_map));
-}
-
-void	clear_shell_input(void)
-{
-	if ((get_shell_input())->input_line)
-	{
-		free((get_shell_input())->input_line);
-		(get_shell_input())->input_line = NULL;
-	}
-	if ((get_shell_input())->input_token)
-	{
-		clear_token_lst(&((get_shell_input())->input_token));
-		(get_shell_input())->input_token = NULL;
-	}
-	if ((get_shell_input())->input_node)
-	{
-		remove_syntax_node((get_shell_input())->input_node);
-		(get_shell_input())->input_node = NULL;
-	}
 }
