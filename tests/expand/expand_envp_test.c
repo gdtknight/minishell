@@ -1,20 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_env_param_test.c                            :+:      :+:    :+:   */
+/*   expand_envp_test.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/14 02:10:10 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 02:58:40 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 12:54:51 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
 #include "expand.h"
+#include "shell.h"
+
 #include "debug.h"
-#include "shell_data.h"
 
 void	expand_envp_success_test1(void)
 {
