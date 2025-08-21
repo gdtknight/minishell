@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 22:12:37 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 05:21:54 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 10:23:51 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 #include "def.h"
 #include "builtin.h"
 #include "execute.h"
-
-#include "debug.h"
 
 /**
  * @brief 빌트인(builtin) 명령어를 실행한다.
@@ -60,7 +58,6 @@ void	execute_builtin(t_cmd_form *cmd_form)
 			return ;
 		}
 	}
-	debug("[execute_builtin] pid : %d, not builtin cmd : %s", getpid(), cmd_form->cmd);
 }
 
 t_boolean	is_builtin(char *cmd)

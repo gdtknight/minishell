@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:44:13 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/20 15:58:08 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 10:10:55 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,5 +157,5 @@ t_status	builtin_exit(char **args)
 	flag_args = check_args(args);
 	exit_code = ft_atoll(args[1], &flag_args);
 	handle_flag(flag_args, args, exit_code);
-	exit(get_shell_data()->last_status);
+	return (SUCCESS);
 }

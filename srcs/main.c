@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 18:08:59 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 10:05:12 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ static void	interactive_mode(void)
 			continue ;
 		add_history((get_shell_input())->input_line);
 		process_input((get_shell_input())->input_line);
+		clear_heredoc_input();
 		clear_shell_input();
 	}
 }

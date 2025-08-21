@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 23:45:14 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 08:37:19 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 10:12:14 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <unistd.h>
 
 #include "ast.h"
 #include "eval.h"
 
-static void	remove_string_value(t_syntax_node *node);
+static void	remove_leaf_node(t_syntax_node *node);
 static void	initialize_value(t_syntax_node *node);
 
 /**
@@ -77,23 +78,30 @@ void	remove_syntax_node(t_syntax_node *node)
 	if (node->type == NODE_WORD || node->type == NODE_ASSIGN_WORD
 		|| node->type == NODE_IO_REDIR_IN || node->type == NODE_IO_REDIR_OUT
 		|| node->type == NODE_IO_REDIR_APPEND || node->type == NODE_IO_REDIR_HEREDOC)
-		remove_string_value(node);
-	else if (node->type == NODE_COMPOUND_COMMAND)
+	{
+		remove_leaf_node(node);
+		return ;
+	}
+	if (node->type == NODE_COMPOUND_COMMAND)
 	{
 		remove_syntax_node(node->value.child);
 		node->value.child = NULL;
+		return ;
 	}
-	else if (node->type == NODE_SIMPLE_COMMAND)
+	if (node->type == NODE_SIMPLE_COMMAND)
 	{
 		remove_syntax_node(node->value.command.prefix);
-		free(node->value.command.word);
 		remove_syntax_node(node->value.command.suffix);
+		if (node->value.command.word)
+			free(node->value.command.word);
 		node->value.command.word = NULL;
 		node->value.command.prefix = NULL;
 		node->value.command.suffix = NULL;
 		clear_cmd_form(&(node->value.command.form));
+		free(node);
+		return ;
 	}
-	else if (node->type == NODE_SEMICOLON || node->type == NODE_AMPERSAND
+	if (node->type == NODE_SEMICOLON || node->type == NODE_AMPERSAND
 		|| node->type == NODE_AND_IF || node->type == NODE_OR_IF
 		|| node->type == NODE_PIPELINE
 		|| node->type == NODE_PIPELINE_ERR
@@ -103,9 +111,8 @@ void	remove_syntax_node(t_syntax_node *node)
 		remove_syntax_node(node->value.b_node.right);
 		node->value.b_node.left = NULL;
 		node->value.b_node.right = NULL;
+		return ;
 	}
-	if (node != NULL)
-		free(node);
 }
 
 /**
@@ -116,7 +123,7 @@ void	remove_syntax_node(t_syntax_node *node)
  *
  * @param node 문자열 값을 가진 노드 포인터
  */
-static void	remove_string_value(t_syntax_node *node)
+static void	remove_leaf_node(t_syntax_node *node)
 {
 	if (!node)
 		return ;
@@ -138,6 +145,7 @@ static void	remove_string_value(t_syntax_node *node)
 		free(node->value.io_target);
 		node->value.io_target = NULL;
 	}
+	free(node);
 }
 
 void	turnoff_node_eval(t_syntax_node *node)

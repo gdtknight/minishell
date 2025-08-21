@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:15:05 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/19 02:27:15 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 09:48:12 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,7 @@ t_syntax_node	*command(t_token **tk_lst)
 		(*tk_lst) = (*tk_lst)->next;
 	}
 	else
-	{
 		command_node = simple_command(tk_lst);
-	}
 	return (command_node);
 }
 
@@ -89,6 +87,9 @@ t_syntax_node	*simple_command(t_token **tk_lst)
 	simple_command_node->value.command.suffix = cmd_suffix(tk_lst);
 	if (simple_command_node->value.command.suffix)
 		simple_command_node->value.command.suffix->parent = simple_command_node;
+	simple_command_node->value.command.form.cmd = NULL;
+	simple_command_node->value.command.form.args = NULL;
+	simple_command_node->value.command.form.envp = NULL;
 	return (simple_command_node);
 }
 

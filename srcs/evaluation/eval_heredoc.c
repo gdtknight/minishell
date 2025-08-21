@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 00:57:31 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 08:42:37 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 09:32:17 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	eval_heredoc(t_syntax_node *node)
 
 static void	eval_heredoc_construct(t_syntax_node *node)
 {
-	if (!node)
+	if (!node || node->eval == OFF)
 		return ;
 	if (node->value.b_node.left)
 		eval_heredoc(node->value.b_node.left);
@@ -44,7 +44,7 @@ static void	eval_heredoc_construct(t_syntax_node *node)
 
 static void	eval_heredoc_command(t_syntax_node *node)
 {
-	if (!node)
+	if (!node || node->eval == OFF)
 		return ;
 	if (node->type == NODE_COMPOUND_COMMAND && node->value.child)
 		eval_heredoc(node->value.child);

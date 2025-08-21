@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 18:04:29 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 18:06:59 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 10:13:41 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 t_shell_input	*get_shell_input(void)
 {
 	static t_shell_input	shell_input;
+
 	return (&shell_input);
 }
 
@@ -53,10 +54,10 @@ char	**get_heredoc_input(void)
 
 void	clear_heredoc_input(void)
 {
-	char	*heredoc_input;
+	char	**heredoc_input;
 
-	heredoc_input = *(get_heredoc_input());
-	if (heredoc_input)
-		free(heredoc_input);
-	*(get_heredoc_input()) = NULL;
+	heredoc_input = get_heredoc_input();
+	if (*heredoc_input)
+		free(*heredoc_input);
+	*get_heredoc_input() = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 14:25:06 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 18:10:06 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 10:09:43 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "ast.h"
 #include "eval.h"
 #include "shell.h"
 
 #include "execute.h"
-
-#include "debug.h"
 
 static void	execute_absolute_path(t_cmd_form *cmd_form);
 
@@ -49,18 +48,13 @@ void	execute_command(t_cmd_form *cmd_form)
 		if (access(cmd, R_OK) != 0)
 		{
 			perror(cmd);
-			clear_shell_input();
-			clear_shell_data();
 			exit(COMMAND_NOT_FOUND_CODE);
 		}
 		if (access(cmd, X_OK) != 0)
 		{
 			perror(cmd);
-			clear_shell_input();
-			clear_shell_data();
 			exit(PERMISSION_DENIED_CODE);
 		}
-		debug("[execute_cmd] pid : %d - cmd : %s", getpid(), cmd_form->cmd);
 		restore_signal();
 		execve(cmd, cmd_form->args, cmd_form->envp);
 	}
@@ -69,7 +63,7 @@ void	execute_command(t_cmd_form *cmd_form)
 
 static void	execute_absolute_path(t_cmd_form *cmd_form)
 {
-	char	*path;
+	char		*path;
 
 	path = find_path(cmd_form->cmd, cmd_form->envp);
 	if (path)
@@ -78,10 +72,10 @@ static void	execute_absolute_path(t_cmd_form *cmd_form)
 		cmd_form->cmd = (char *)path;
 		free(cmd_form->args[0]);
 		cmd_form->args[0] = (char *)path;
-		debug("[execute_absolute_path] pid : %d - cmd : %s", getpid(), cmd_form->cmd);
 		restore_signal();
 		execve(path, cmd_form->args, cmd_form->envp);
 	}
+	clear_heredoc_input();
 	clear_shell_input();
 	clear_shell_data();
 	exit(COMMAND_NOT_FOUND_CODE);

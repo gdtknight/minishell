@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 02:37:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 06:10:06 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 10:04:05 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <sys/wait.h>
 #include <readline/readline.h>
 
-#include "debug.h"
 #include "shell.h"
 
 /**
@@ -37,8 +36,6 @@ void	minishell_sigint_handler(int signo)
 	turnoff_input_node_eval();
 	clear_heredoc_input();
 	(get_shell_data())->last_status = 128 + SIGINT; // 항상 bash 규칙으로
-	debug("[minishell_sigint_handler] pid : %d, last_status : %d", \
-	   getpid(), get_shell_data()->last_status);
 	rl_replace_line("", 0);
 	write(STDERR_FILENO, "\n", 1);
 	if (!(get_shell_data())->in_heredoc)
@@ -64,6 +61,5 @@ void	heredoc_sigint_handler(int signo)
 	clear_shell_input();
 	clear_heredoc_input();
 	clear_shell_data();
-	debug("[heredoc_sigint_handler] pid: %d, set last_status to 128 + SIGINT", getpid());
 	exit (128 + SIGINT);
 }
