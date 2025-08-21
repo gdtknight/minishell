@@ -13,7 +13,7 @@
 #ifndef UTILS_H
 # define UTILS_H
 
-# define INIT_CAPACITY 16
+# define INIT_CAPACITY (16)
 
 # include "def.h"
 
