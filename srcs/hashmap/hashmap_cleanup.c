@@ -72,7 +72,7 @@ void	clear_hashmap(t_hash_map *map)
 	if (!map)
 		return ;
 	idx = -1;
-	while (++idx < HASHTABLE_SIZE)
+	while (++idx < DEFAULT_HASHTABLE_SIZE)
 	{
 		cur = map->table[idx];
 		while (cur)

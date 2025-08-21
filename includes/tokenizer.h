@@ -15,25 +15,25 @@
 
 # include "def.h"
 
-# define STR_EOF			("EOF")
-# define STR_BLANK			("BLANK")
-# define STR_NEWLINE		("\n")
-# define STR_SEMICOLON		(";")
-# define STR_AMPERSAND		("&")
-# define STR_PIPE			("|")
-# define STR_PIPE_ERR		("|&")
-# define STR_REDIR_IN		("<")
-# define STR_REDIR_OUT		(">")
-# define STR_REDIR_HEREDOC	("<<")
-# define STR_REDIR_APPEND	(">>")
-# define STR_NEWLINE		("\n")
+# define STR_EOF			"EOF"
+# define STR_BLANK			"BLANK"
+# define STR_NEWLINE		"\n"
+# define STR_SEMICOLON		";"
+# define STR_AMPERSAND		"&"
+# define STR_PIPE			"|"
+# define STR_PIPE_ERR		"|&"
+# define STR_REDIR_IN		"<"
+# define STR_REDIR_OUT		">"
+# define STR_REDIR_HEREDOC	"<<"
+# define STR_REDIR_APPEND	">>"
+# define STR_NEWLINE		"\n"
 
 /* ----- Bonus Part ----- */
 
-# define STR_LPAREN			("(")
-# define STR_RPAREN			(")")
-# define STR_AND_IF			("&&")
-# define STR_OR_IF			("||")
+# define STR_LPAREN			"("
+# define STR_RPAREN			")"
+# define STR_AND_IF			"&&"
+# define STR_OR_IF			"||"
 
 typedef enum e_token_type
 {

@@ -29,7 +29,7 @@ char	**lst_from_hashmap(t_hash_map *map)
 		return (NULL);
 	table_idx = -1;
 	list_idx = 0;
-	while (++table_idx < HASHTABLE_SIZE)
+	while (++table_idx < DEFAULT_HASHTABLE_SIZE)
 	{
 		cur = (map->table)[table_idx];
 		while (cur)

@@ -57,7 +57,7 @@ int	count_entry(t_hash_map *map)
 
 	cnt = 0;
 	idx = -1;
-	while (++idx < HASHTABLE_SIZE)
+	while (++idx < DEFAULT_HASHTABLE_SIZE)
 	{
 		cur = (map->table)[idx];
 		while (cur)
@@ -127,6 +127,6 @@ int	hash(const char *key)
 
 	hash = 0;
 	while (*key)
-		hash = ((hash + (*key++) * 31) % HASHTABLE_SIZE);
+		hash = ((hash + (*key++) * 31) % DEFAULT_HASHTABLE_SIZE);
 	return (hash);
 }

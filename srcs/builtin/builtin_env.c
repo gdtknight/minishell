@@ -44,7 +44,7 @@ t_status	builtin_env(char **argc)
 	(void) argc;
 	map = get_shell_data()->envp_map;
 	i = 0;
-	while (i < HASHTABLE_SIZE)
+	while (i < DEFAULT_HASHTABLE_SIZE)
 	{
 		current = map.table[i];
 		while (current)

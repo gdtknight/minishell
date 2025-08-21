@@ -17,13 +17,23 @@
 
 # include "ast.h"
 
-# define PIPE_READ		(0)
-# define PIPE_WRITE		(1)
-# define CHILD_LEFT		(0)
-# define CHILD_RIGHT	(1)
+typedef enum e_child_fd
+{
+	CHILD_LEFT = 0,
+	CHILD_RIGHT = 1,
+}	t_child_fd;
 
-# define PERMISSION_DENIED_CODE	(126)
-# define COMMAND_NOT_FOUND_CODE	(127)
+typedef enum e_pipe_fd
+{
+	PIPE_READ = 0,
+	PIPE_WRITE = 1,
+}	t_pipe_fd;
+
+typedef enum e_exit_code
+{
+	PERMISSION_DENIED_CODE = 126,
+	COMMAND_NOT_FOUND_CODE = 127,
+}	t_exit_code;
 
 /* --- eval.c --- */
 

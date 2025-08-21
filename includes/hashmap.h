@@ -13,7 +13,10 @@
 #ifndef HASHMAP_H
 # define HASHMAP_H
 
-# define HASHTABLE_SIZE		(1024)
+typedef enum e_hashtable_size
+{
+	DEFAULT_HASHTABLE_SIZE = 1024,
+}	t_hashtable_size;
 
 # include "def.h"
 
@@ -27,7 +30,7 @@ typedef struct s_hash_entry
 
 typedef struct s_hash_map
 {
-	t_hash_entry	*table[HASHTABLE_SIZE];
+	t_hash_entry	*table[DEFAULT_HASHTABLE_SIZE];
 }	t_hash_map;
 
 /* --- hashmap.c --- */
