@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:34:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 06:48:45 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 12:47:05 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	eval_command(t_syntax_node *cmd_node)
 	if (!cmd_node || cmd_node->eval == OFF)
 		return ;
 	if ((!(get_shell_data())->in_pipe)
-		&& ((cmd_node->type == NODE_SIMPLE_COMMAND)
+		&& !((cmd_node->type == NODE_SIMPLE_COMMAND)
 			&& is_builtin(cmd_node->value.command.word)))
 	{
 		pid = fork();

@@ -6,12 +6,11 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 15:45:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 08:44:11 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 12:44:41 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
-#include <sys/_types/_pid_t.h>
 #include <unistd.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -167,4 +166,6 @@ static void	wait_pipe(pid_t child_pids[2], int *status)
 	}
 	(void)sig;
 	wait_child(child_pids[CHILD_LEFT], status, 0);
+	clear_heredoc_input();
+	turnoff_node_eval(get_shell_input()->input_node);
 }

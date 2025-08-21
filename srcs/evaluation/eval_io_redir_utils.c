@@ -6,14 +6,13 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 21:21:43 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 21:21:43 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 12:38:42 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include <sys/_types/_pid_t.h>
 #include <sys/wait.h>
 #include <errno.h>
 

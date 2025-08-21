@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 02:37:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 10:04:05 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 12:42:22 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <sys/wait.h>
 #include <readline/readline.h>
 
+#include "shell.h"
 #include "shell.h"
 
 /**
@@ -49,7 +50,9 @@ void	minishell_sigint_handler(int signo)
 void	pipeline_sigint_handler(int signo)
 {
 	(void)signo;
+	clear_heredoc_input();
 	clear_shell_input();
+	clear_shell_data();
 	exit(128 + SIGINT);
 }
 
