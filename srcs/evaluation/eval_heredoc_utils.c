@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 17:19:13 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 09:58:10 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 12:09:31 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ static void	receive_heredoc(pid_t child_pid, int heredoc_pipe[2])
 	{
 		clear_heredoc_input();
 		read_heredoc_pipe(heredoc_pipe[PIPE_READ]);
-		clear_heredoc_input();
 		(get_shell_data())->last_status = WEXITSTATUS(status);
 	}
 	(get_shell_data())->in_heredoc = FALSE;

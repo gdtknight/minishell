@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 23:45:14 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 10:12:14 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 12:11:38 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void	remove_syntax_node(t_syntax_node *node)
 	{
 		remove_syntax_node(node->value.child);
 		node->value.child = NULL;
+		free(node);
 		return ;
 	}
 	if (node->type == NODE_SIMPLE_COMMAND)
@@ -111,6 +112,7 @@ void	remove_syntax_node(t_syntax_node *node)
 		remove_syntax_node(node->value.b_node.right);
 		node->value.b_node.left = NULL;
 		node->value.b_node.right = NULL;
+		free(node);
 		return ;
 	}
 }
