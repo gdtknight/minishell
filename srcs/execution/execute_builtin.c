@@ -48,6 +48,8 @@ void	execute_builtin(t_cmd_form *cmd_form)
 	};
 	size_t					idx;
 
+	if (!cmd_form)
+		return ;
 	idx = -1;
 	while (++idx < sizeof(builtins) / sizeof(t_builtin_entry))
 	{
@@ -73,6 +75,8 @@ t_boolean	is_builtin(char *cmd)
 	};
 	size_t		idx;
 
+	if (!cmd)
+		return (FALSE);
 	idx = -1;
 	while (++idx < sizeof(builtins) / sizeof(char *))
 	{

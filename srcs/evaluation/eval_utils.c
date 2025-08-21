@@ -17,17 +17,9 @@
 
 void	wait_child(pid_t child_pid, int *status, int options)
 {
-	int		sig;
-
-	(void)sig;
 	waitpid(child_pid, status, options);
 	if (WIFEXITED(*status))
-	{
 		(get_shell_data())->last_status = WEXITSTATUS(*status);
-	}
 	if (WIFSIGNALED(*status))
-	{
-		sig = WTERMSIG(*status);
 		(get_shell_data())->last_status = 128 + WTERMSIG(*status);
-	}
 }

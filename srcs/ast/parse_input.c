@@ -36,9 +36,9 @@ t_syntax_node	*parse_input(t_token **tk_lst)
 	t_syntax_node	*input_node;
 
 	input_node = list(tk_lst);
-	while ((*tk_lst)->type == TK_NEWLINE)
+	while ((*tk_lst) && ((*tk_lst)->type == TK_NEWLINE))
 		(*tk_lst) = (*tk_lst)->next;
-	if ((*tk_lst)->type != TK_EOF)
+	if ((*tk_lst) && (*tk_lst)->type != TK_EOF)
 	{
 		printf("invalid input");
 		return (NULL);

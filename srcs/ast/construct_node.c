@@ -35,7 +35,8 @@ t_syntax_node	*list(t_token **tk_lst)
 
 	list_node = and_or(tk_lst);
 	temp = (NULL);
-	while ((*tk_lst)->type == TK_SEMICOLON || (*tk_lst)->type == TK_AMPERSAND)
+	while ((*tk_lst) && \
+		((*tk_lst)->type == TK_SEMICOLON || (*tk_lst)->type == TK_AMPERSAND))
 	{
 		temp = list_node;
 		list_node = create_empty_node();
@@ -72,7 +73,8 @@ t_syntax_node	*and_or(t_token **tk_lst)
 
 	and_or_node = pipeline(tk_lst);
 	temp = (NULL);
-	while ((*tk_lst)->type == TK_AND_IF || (*tk_lst)->type == TK_OR_IF)
+	while (*tk_lst && \
+		((*tk_lst)->type == TK_AND_IF || (*tk_lst)->type == TK_OR_IF))
 	{
 		temp = and_or_node;
 		and_or_node = create_empty_node();
@@ -109,7 +111,8 @@ t_syntax_node	*pipeline(t_token **tk_lst)
 
 	pipeline_node = command(tk_lst);
 	temp = (NULL);
-	while ((*tk_lst)->type == TK_PIPE || (*tk_lst)->type == TK_PIPE_ERR)
+	while ((*tk_lst) && \
+		((*tk_lst)->type == TK_PIPE || (*tk_lst)->type == TK_PIPE_ERR))
 	{
 		temp = pipeline_node;
 		pipeline_node = create_empty_node();

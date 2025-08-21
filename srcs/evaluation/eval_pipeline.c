@@ -154,23 +154,21 @@ static void	setup_pipe(pid_t child_pids[2], int pipe_fds[2])
 static void	wait_pipe(pid_t child_pids[2], int *status)
 {
 	pid_t	child;
-	int		sig;
 
-	sig = 0;
 	child = waitpid(-1, status, 0);
 	if (child == child_pids[CHILD_LEFT])
 	{
 		if (WIFSIGNALED(*status))
 		{
-			sig = WTERMSIG(*status);
 			kill(child_pids[CHILD_RIGHT], SIGTERM);
 			(get_shell_data())->last_status = WTERMSIG(*status);
 			return ;
 		}
 		wait_child(child_pids[CHILD_RIGHT], status, 0);
+		clear_heredoc_input();
+		turnoff_node_eval(get_shell_input()->input_node);
 		return ;
 	}
-	(void)sig;
 	wait_child(child_pids[CHILD_LEFT], status, 0);
 	clear_heredoc_input();
 	turnoff_node_eval(get_shell_input()->input_node);

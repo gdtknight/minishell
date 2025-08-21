@@ -42,6 +42,8 @@ void	execute_command(t_cmd_form *cmd_form)
 {
 	char		*cmd;
 
+	if (!cmd_form)
+		return ;
 	cmd = cmd_form->cmd;
 	if (*cmd == '.' && *(cmd + 1) == '/')
 	{
