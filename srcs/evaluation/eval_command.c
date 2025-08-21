@@ -74,6 +74,9 @@ static void	eval_command_from_child(t_syntax_node *cmd_node)
 		return ;
 	}
 	eval_simple_command(&(cmd_node->value.command));
+	clear_heredoc_input();
+	clear_shell_input();
+	clear_shell_data();
 	exit(get_shell_data()->last_status);
 }
 

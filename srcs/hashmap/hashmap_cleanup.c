@@ -85,6 +85,7 @@ void	clear_hashmap(t_hash_map *map)
 				free(cur->value);
 			cur->value = NULL;
 			free(cur);
+			cur = NULL;
 			cur = next;
 		}
 		map->table[idx] = NULL;

@@ -87,6 +87,9 @@ static void	start_child(
 		setup_pipe(child_pids, pipe_fds);
 		init_pipeline_signal();
 		eval(pipeline_node->value.b_node.left);
+		clear_heredoc_input();
+		clear_shell_input();
+		clear_shell_data();
 		exit(get_shell_data()->last_status);
 	}
 	else
@@ -94,6 +97,9 @@ static void	start_child(
 		setup_pipe(child_pids, pipe_fds);
 		init_pipeline_signal();
 		eval(pipeline_node->value.b_node.right);
+		clear_heredoc_input();
+		clear_shell_input();
+		clear_shell_data();
 		exit(get_shell_data()->last_status);
 	}
 }
