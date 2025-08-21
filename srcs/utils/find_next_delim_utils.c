@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "utils.h"
-#include "debug.h"
 
 t_boolean	is_ifs(char c)
 {
@@ -20,11 +19,10 @@ t_boolean	is_ifs(char c)
 
 	cur = (char *)ifs;
 	while (*cur)
+	{
 		if (c == *cur++)
-		{
-			debug("find ifs!! : \'%c\'", c);
 			return (TRUE);
-		}
+	}
 	return (FALSE);
 }
 
