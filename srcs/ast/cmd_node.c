@@ -121,8 +121,7 @@ t_syntax_node	*cmd_prefix(t_token **tk_lst)
 		cmd_prefix_node = assignment_word(tk_lst);
 	if (cmd_prefix_node == NULL)
 		return (NULL);
-	while ((*tk_lst)->type == TK_REDIR_IN
-		|| (*tk_lst)->type == TK_REDIR_OUT
+	while ((*tk_lst)->type == TK_REDIR_IN || (*tk_lst)->type == TK_REDIR_OUT
 		|| (*tk_lst)->type == TK_REDIR_HEREDOC
 		|| (*tk_lst)->type == TK_REDIR_APPEND
 		|| (*tk_lst)->type == TK_ASSIGN_WORD)
