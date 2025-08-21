@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 23:45:14 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 06:12:36 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 08:37:19 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,8 @@
 #include "ast.h"
 #include "eval.h"
 
-#include "debug.h"
-
 static void	remove_string_value(t_syntax_node *node);
+static void	initialize_value(t_syntax_node *node);
 
 /**
  * @brief 비어 있는 구문 트리 노드를 생성한다.
@@ -43,8 +42,18 @@ t_syntax_node	*create_empty_node(void)
 		perror(strerror(errno));
 		exit(EXIT_FAILURE);
 	}
+	node->eval	= ON;
 	node->parent = NULL;
+	initialize_value(node);
 	return (node);
+}
+
+static void	initialize_value(t_syntax_node *node)
+{
+	node->value.assign_word = NULL;
+	node->value.word = NULL;
+	node->value.io_target = NULL;
+	node->value.child = NULL;
 }
 
 /**
@@ -77,7 +86,6 @@ void	remove_syntax_node(t_syntax_node *node)
 	else if (node->type == NODE_SIMPLE_COMMAND)
 	{
 		remove_syntax_node(node->value.command.prefix);
-		debug("cmd word free : %s", node->value.command.word);
 		free(node->value.command.word);
 		remove_syntax_node(node->value.command.suffix);
 		node->value.command.word = NULL;
@@ -96,7 +104,8 @@ void	remove_syntax_node(t_syntax_node *node)
 		node->value.b_node.left = NULL;
 		node->value.b_node.right = NULL;
 	}
-	free(node);
+	if (node != NULL)
+		free(node);
 }
 
 /**
@@ -109,16 +118,47 @@ void	remove_syntax_node(t_syntax_node *node)
  */
 static void	remove_string_value(t_syntax_node *node)
 {
+	if (!node)
+		return ;
 	if (node->type == NODE_WORD)
+	{
 		free(node->value.word);
+		node->value.word = NULL;
+	}
 	else if (node->type == NODE_ASSIGN_WORD)
+	{
 		free(node->value.assign_word);
+		node->value.assign_word = NULL;
+	}
 	else if (node->type == NODE_IO_REDIR_IN
 		|| node->type == NODE_IO_REDIR_OUT
 		|| node->type == NODE_IO_REDIR_APPEND
 		|| node->type == NODE_IO_REDIR_HEREDOC)
+	{
 		free(node->value.io_target);
-	node->value.assign_word = NULL;
-	node->value.word = NULL;
-	node->value.io_target = NULL;
+		node->value.io_target = NULL;
+	}
+}
+
+void	turnoff_node_eval(t_syntax_node *node)
+{
+	if (!node)
+		return ;
+	node->eval = OFF;
+	if (node->type == NODE_COMPOUND_COMMAND)
+		turnoff_node_eval(node->value.child);
+	else if (node->type == NODE_SIMPLE_COMMAND)
+	{
+		turnoff_node_eval(node->value.command.prefix);
+		turnoff_node_eval(node->value.command.suffix);
+	}
+	else if (node->type == NODE_SEMICOLON || node->type == NODE_AMPERSAND
+		|| node->type == NODE_AND_IF || node->type == NODE_OR_IF
+		|| node->type == NODE_PIPELINE
+		|| node->type == NODE_PIPELINE_ERR
+		|| node->type == NODE_CMD_PREFIX || node->type == NODE_CMD_SUFFIX)
+	{
+		turnoff_node_eval(node->value.b_node.left);
+		turnoff_node_eval(node->value.b_node.right);
+	}
 }

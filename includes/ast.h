@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:19:50 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/19 06:50:08 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 17:49:22 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_syntax_node
 	struct s_syntax_node	*parent;
 	t_node_type				type;
 	t_node_value			value;
+	t_toggle				eval;
 }	t_syntax_node;
 
 /* --- parse_input.c --- */
@@ -106,5 +107,6 @@ t_syntax_node		*assignment_word(t_token **tk_lst);
 t_syntax_node		*create_empty_node(void);
 void				remove_syntax_node(t_syntax_node *target);
 void				print_node(t_syntax_node *node, int depth);
+void				turnoff_node_eval(t_syntax_node *node);
 
 #endif

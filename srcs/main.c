@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 15:31:45 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/20 18:08:59 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 #include "libft.h"
 
-#include "shell_data.h"
+#include "shell.h"
 #include "tokenizer.h"
 #include "eval.h"
 

@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 20:39:35 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 03:55:55 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 06:46:44 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,14 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <readline/readline.h>
 
-#include "ast.h"
 #include "libft.h"
 
 #include "def.h"
-
+#include "ast.h"
 #include "shell.h"
 #include "eval.h"
 
@@ -47,7 +45,7 @@ static t_status	set_stdout(t_syntax_node *io_redir_node);
  */
 t_status	eval_io_redir(t_syntax_node *io_redir_node)
 {
-	if (!io_redir_node)
+	if (!io_redir_node || io_redir_node->eval == OFF)
 		return (SUCCESS);
 	if (io_redir_node->type == NODE_IO_REDIR_IN
 		|| io_redir_node->type == NODE_IO_REDIR_HEREDOC)
@@ -75,6 +73,8 @@ static t_status	set_stdin(t_syntax_node *io_redir_node)
 {
 	int		infile_fd;
 
+	if (!io_redir_node || io_redir_node->eval == OFF)
+		return (SUCCESS);
 	if (io_redir_node->type == NODE_IO_REDIR_IN)
 	{
 		infile_fd = open(io_redir_node->value.io_target, O_RDONLY);
@@ -109,6 +109,8 @@ static t_status	set_heredoc(t_syntax_node *io_redir_node)
 	int		status;
 	pid_t	child;
 
+	if (!io_redir_node || io_redir_node->eval == OFF)
+		return (SUCCESS);
 	cmd = io_redir_node;
 	while (cmd->type != NODE_SIMPLE_COMMAND)
 		cmd = cmd->parent;
@@ -125,15 +127,17 @@ static t_status	set_heredoc(t_syntax_node *io_redir_node)
 	{
 		close((cmd->value.command.heredoc_fds)[PIPE_READ]);
 		ft_putstr_fd(
-			io_redir_node->value.io_target,
+			(*(get_heredoc_input())),
 			(cmd->value.command.heredoc_fds)[PIPE_WRITE]);
 		close((cmd->value.command.heredoc_fds)[PIPE_WRITE]);
 		clear_shell_input();
 		clear_shell_data();
+		clear_heredoc_input();
 		exit(EXIT_SUCCESS);
 	}
 	close((cmd->value.command.heredoc_fds)[PIPE_WRITE]);
 	dup2((cmd->value.command.heredoc_fds)[PIPE_READ], STDIN_FILENO);
+	close((cmd->value.command.heredoc_fds)[PIPE_READ]);
 	waitpid(child, &status, 0);
 	(get_shell_data())->in_heredoc = FALSE;
 	return (SUCCESS);
@@ -156,6 +160,8 @@ static t_status	set_stdout(t_syntax_node *io_redir_node)
 {
 	t_status	outfile_fd;
 
+	if (!io_redir_node || io_redir_node->eval == OFF)
+		return (SUCCESS);
 	if (io_redir_node->type == NODE_IO_REDIR_OUT)
 	{
 		outfile_fd = open(io_redir_node->value.io_target, \

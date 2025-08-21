@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 14:14:25 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 06:32:35 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 06:11:54 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,12 @@ void		clear_cmd_form(t_cmd_form *cmd_form);
 
 /* --- eval_heredoc.c --- */
 
-void	eval_heredoc(t_syntax_node *node);
+void		eval_heredoc(t_syntax_node *node);
+
+/* --- eval_heredoc_utils.c --- */
+
+void		read_heredoc(t_syntax_node *node);
+
 
 /* --- eval_io_redir.c --- */
 

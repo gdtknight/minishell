@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:34:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 03:55:42 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 06:48:45 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,8 @@
 #include "ast.h"
 #include "shell.h"
 #include "execute.h"
-#include "eval.h"
 #include "utils.h"
-
-#include "debug.h"
+#include "eval.h"
 
 static void		eval_simple_command(t_command *command);
 static void		set_cmd_form(t_command *command);
@@ -49,6 +47,8 @@ void	eval_command(t_syntax_node *cmd_node)
 	int		status;
 	pid_t	pid;
 
+	if (!cmd_node || cmd_node->eval == OFF)
+		return ;
 	if ((get_shell_data())->in_pipe)
 	{
 		if (cmd_node->type == NODE_COMPOUND_COMMAND)
@@ -88,6 +88,8 @@ static void	eval_simple_command(t_command *command)
 		(get_shell_data())->last_status = EXIT_FAILURE;
 		return ;
 	}
+	if (get_shell_input()->input_node->eval == OFF)
+		return ;
 	if (is_builtin(command->word))
 	{
 		execute_builtin(&(command->form));
@@ -125,6 +127,8 @@ static t_status	set_io_from_prefix(t_syntax_node *prefix)
 	t_syntax_node	*cur_node;
 	t_status		status;
 
+	if (!prefix || prefix->eval == OFF)
+		return (SUCCESS);
 	cur_node = prefix;
 	while (cur_node && cur_node->type == NODE_CMD_PREFIX)
 	{
@@ -156,6 +160,8 @@ static t_status	set_io_from_suffix(t_syntax_node *suffix)
 	t_syntax_node	*cur_node;
 	t_status		status;
 
+	if (!suffix || suffix->eval == OFF)
+		return (SUCCESS);
 	cur_node = suffix;
 	while (cur_node && cur_node->type == NODE_CMD_SUFFIX)
 	{

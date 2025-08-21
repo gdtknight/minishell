@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 17:35:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 04:11:11 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 08:40:17 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,24 +41,31 @@
  */
 void	eval(t_syntax_node *node)
 {
-	if (!node)
+	if (!node || node->eval == OFF)
 		return ;
 	if (node->type == NODE_SEMICOLON || node->type == NODE_AMPERSAND)
+	{
 		eval_list(node);
-	else if (node->type == NODE_AND_IF || node->type == NODE_OR_IF)
+		return ;
+	}
+	if (node->type == NODE_AND_IF || node->type == NODE_OR_IF)
+	{
 		eval_and_or(node);
-	else if (node->type == NODE_PIPELINE || node->type == NODE_PIPELINE_ERR)
+		return ;
+	}
+	if (node->type == NODE_PIPELINE || node->type == NODE_PIPELINE_ERR)
 	{
 		get_shell_data()->in_pipe = TRUE;
 		eval_pipeline(node);
 		get_shell_data()->in_pipe = FALSE;
 		return ;
 	}
-	else if (node->type == NODE_SIMPLE_COMMAND
-		|| node->type == NODE_COMPOUND_COMMAND)
+	if (node->type == NODE_SIMPLE_COMMAND || node->type == NODE_COMPOUND_COMMAND)
+	{
 		eval_command(node);
-	else
-		(get_shell_data())->last_status = EXIT_FAILURE;
+		return ;
+	}
+	(get_shell_data())->last_status = EXIT_FAILURE;
 }
 
 /**
@@ -79,11 +86,16 @@ void	eval_list(t_syntax_node *node)
 	int			status;
 	pid_t		child_pid;
 
+	if (!node || node->eval == OFF)
+		return ;
 	if (node->type == NODE_SEMICOLON)
 	{
 		child_pid = fork();
 		if (child_pid == 0)
+		{
 			eval(node->value.b_node.left);
+			return ;
+		}
 		waitpid(child_pid, &status, 0);
 		eval(node->value.b_node.right);
 	}
@@ -92,7 +104,10 @@ void	eval_list(t_syntax_node *node)
 	{
 		child_pid = fork();
 		if (child_pid == 0)
+		{
 			eval(node->value.b_node.left);
+			return ;
+		}
 		waitpid(child_pid, &status, WNOHANG);
 		eval(node->value.b_node.right);
 	}
@@ -110,6 +125,8 @@ void	eval_list(t_syntax_node *node)
  */
 void	eval_and_or(t_syntax_node *and_or_node)
 {
+	if (!and_or_node || and_or_node->eval == OFF)
+		return ;
 	eval(and_or_node->value.b_node.left);
 	if (and_or_node->type == NODE_AND_IF
 		&& (get_shell_data())->last_status == SUCCESS)

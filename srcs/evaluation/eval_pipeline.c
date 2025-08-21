@@ -6,10 +6,11 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 15:45:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 04:16:39 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/21 08:44:11 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <unistd.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -22,8 +23,6 @@
 #include "ast.h"
 #include "shell.h"
 #include "eval.h"
-
-#include "debug.h"
 
 static void			setup_pipe(pid_t child_pids[2], int pipe_fds[2]);
 static void			wait_pipe(pid_t child_pids[2], int *status);
@@ -50,6 +49,8 @@ void	eval_pipeline(t_syntax_node	*pipeline_node)
 	int			pipe_fds[2];
 	pid_t		child_pids[2];
 
+	if (!pipeline_node || pipeline_node->eval == OFF)
+		return ;
 	child_pids[CHILD_LEFT] = INT_MAX;
 	child_pids[CHILD_RIGHT] = INT_MAX;
 	if (pipe(pipe_fds) == -1)
@@ -61,7 +62,6 @@ void	eval_pipeline(t_syntax_node	*pipeline_node)
 	child_pids[CHILD_LEFT] = fork();
 	if (child_pids[CHILD_LEFT] == 0)
 	{
-		debug("[eval_pipeline] parent pid: %d, left pid: %d", getppid(), getpid());
 		setup_pipe(child_pids, pipe_fds);
 		init_pipeline_signal();
 		eval(pipeline_node->value.b_node.left);
@@ -70,14 +70,12 @@ void	eval_pipeline(t_syntax_node	*pipeline_node)
 	child_pids[CHILD_RIGHT] = fork();
 	if (child_pids[CHILD_RIGHT] == 0)
 	{
-		debug("[eval_pipeline] parent pid: %d, right pid: %d", getppid(), getpid());
 		setup_pipe(child_pids, pipe_fds);
 		init_pipeline_signal();
 		eval(pipeline_node->value.b_node.right);
 		exit(get_shell_data()->last_status);
 	}
 	setup_pipe(child_pids, pipe_fds);
-	debug("[eval_pipeline] pid: %d, left pid: %d, right pid: %d", getpid(), child_pids[CHILD_LEFT], child_pids[CHILD_RIGHT]);
 	wait_pipe(child_pids, &status);
 }
 
@@ -134,23 +132,19 @@ static void	wait_pipe(pid_t child_pids[2], int *status)
 	int		sig;
 
 	sig = 0;
-	debug("[wait_pipe] pid : %d, left_child : %d, right_child : %d", getpid(), child_pids[CHILD_LEFT], child_pids[CHILD_RIGHT]);
 	child = waitpid(-1, status, 0);
 	if (child == child_pids[CHILD_LEFT])
 	{
 		if (WIFSIGNALED(*status))
 		{
 			sig = WTERMSIG(*status);
-			debug("[wait_pipe] pid : %d, left child (%d) exit with signal %d (%s)\n", getpid(), child, sig, strsignal(sig));
 			kill(child_pids[CHILD_RIGHT], SIGTERM);
 			(get_shell_data())->last_status = WTERMSIG(*status);
 			return ;
 		}
-		debug("[wait_pipe] pid : %d, left child (%d) normal exit\n", getpid(), child);
 		wait_child(child_pids[CHILD_RIGHT], status, 0);
 		return ;
 	}
 	(void)sig;
-	debug("[wait_pipe] pid : %d, right child (%d) normal exit\n", getpid(), child);
 	wait_child(child_pids[CHILD_LEFT], status, 0);
 }
