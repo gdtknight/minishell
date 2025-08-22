@@ -30,7 +30,6 @@ typedef struct s_shell_data
 	struct termios		termios_backup;
 	t_hash_map			envp_map;
 	int					last_status;
-	pid_t				child[2];
 	t_boolean			in_pipe;
 	t_boolean			in_heredoc;
 	t_boolean			is_exit;
