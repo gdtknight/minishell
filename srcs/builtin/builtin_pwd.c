@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 18:35:10 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/20 18:11:09 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/22 16:48:45 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,11 @@
 #include "shell.h"
 
 /**
- * @brief 현재 작업 디렉토리 경로를 출력한다.
+ * @brief Implementation of the builtin pwd command.
  *
- * getcwd 함수를 사용해 현재 작업 디렉토리의 절대 경로를 가져와
- * 표준 출력(stdout)에 출력한다.
- *
- * @return SUCCESS(출력 성공), FAIL(경로를 가져오지 못한 경우)
+ * Prints the current working directory to standard output.
+ * @param args The argument array (unused).
+ * @return SUCCESS if the directory is printed, ERROR otherwise.
  */
 t_status	builtin_pwd(char **args)
 {

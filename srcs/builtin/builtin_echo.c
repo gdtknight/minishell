@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
+/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 22:18:39 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/20 18:10:42 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/22 16:47:37 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@
 #include "builtin.h"
 #include "shell.h"
 
+/**
+ * @brief Checks for the -n option(s) in echo arguments.
+ *
+ * @param args The argument array.
+ * @return The index of the first argument that is not an -n option.
+ */
 static int	check_option(char **args)
 {
 	int	i;
@@ -37,25 +43,10 @@ static int	check_option(char **args)
 }
 
 /**
- * @brief echo 빌트인 명령어를 실행한다.
+ * @brief Implementation of the builtin echo command.
  *
- * 이 함수는 `echo` 명령어를 구현한 것으로, 인자를 공백으로 구분하여 출력한다.
- * 옵션 `-n`이 없는 경우 출력 후 개행 문자를 추가한다.
- *
- * 동작 방식:
- * - 인자가 없는 경우: 개행 문자만 출력하고 종료
- * - 인자가 있는 경우:
- *   - `check_option()`을 통해 `-n` 옵션 여부를 확인
- *   - 옵션 이후의 모든 인자를 공백으로 구분하여 출력
- *   - `-n` 옵션이 없으면 마지막에 개행 문자 출력
- * - 실행이 끝나면 `last_status`를 0으로 설정
- *
- * @param args  Null-terminated 문자열 배열
- *              - args[0] : "echo"
- *              - args[1..n] : 출력할 문자열 및 옵션
- *
- * @return t_status
- *         - SUCCESS: 항상 성공 반환
+ * @param args The argument array.
+ * @return SUCCESS status after printing the arguments.
  */
 t_status	builtin_echo(char **args)
 {
