@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 21:24:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 21:12:28 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/24 19:00:23 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ static void	print_str_token(t_token *token);
  */
 t_boolean	match(t_token	*token, t_token_type tk_type)
 {
+	if (!token)
+		return (FALSE);
 	return (token->type == tk_type);
 }
 
