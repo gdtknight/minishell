@@ -78,7 +78,7 @@ int	count_entry(t_hash_map *map)
  * @param key 존재 여부를 확인할 키 문자열
  * @return TRUE(존재함), FALSE(존재하지 않음)
  */
-t_boolean	contains_key(t_hash_map *map, char *key)
+t_boolean	contains_key(t_hash_map *map, const char *key)
 {
 	int				idx;
 	t_hash_entry	*cur;
@@ -104,7 +104,7 @@ t_boolean	contains_key(t_hash_map *map, char *key)
  * @param target_key 비교 대상 키 문자열
  * @return TRUE(동일), FALSE(다름)
  */
-t_boolean	equal_key(char *ori_key, char *target_key)
+t_boolean	equal_key(const char *ori_key, const char *target_key)
 {
 	if (!ori_key || !target_key)
 		return (FALSE);

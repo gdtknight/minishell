@@ -45,15 +45,15 @@ void			put_entry(t_hash_map *map, t_hash_entry *entry);
 
 /* --- hashmap_get.c --- */
 
-t_hash_entry	*get_entry(t_hash_map *map, char *key);
-char			*get_value(t_hash_map *map, char *key);
+t_hash_entry	*get_entry(t_hash_map *map, const char *key);
+char			*get_value(t_hash_map *map, const char *key);
 
 /* --- hashmap_utils.c --- */
 
 t_hash_entry	*create_new_entry(char *key, char *value);
 int				count_entry(t_hash_map *map);
-t_boolean		contains_key(t_hash_map *map, char *key);
-t_boolean		equal_key(char *ori_key, char *target_key);
+t_boolean		contains_key(t_hash_map *map, const char *key);
+t_boolean		equal_key(const char *ori_key, const char *target_key);
 int				hash(const char *key);
 
 #endif

@@ -28,7 +28,7 @@
  * @param key 조회할 키 문자열
  * @return 키에 해당하는 t_hash_entry 포인터, 없으면 NULL 반환
  */
-t_hash_entry	*get_entry(t_hash_map *map, char *key)
+t_hash_entry	*get_entry(t_hash_map *map, const char *key)
 {
 	int				idx;
 	t_hash_entry	*cur;
@@ -59,7 +59,7 @@ t_hash_entry	*get_entry(t_hash_map *map, char *key)
  * @note 반환되는 값 포인터는 해시맵 내부 메모리를 가리키며,
  *       호출자가 해제(free)하면 안 됩니다.
  */
-char	*get_value(t_hash_map *map, char *key)
+char	*get_value(t_hash_map *map, const char *key)
 {
 	int				idx;
 	t_hash_entry	*cur;
