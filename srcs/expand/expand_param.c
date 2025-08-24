@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_param_refactor.c                            :+:      :+:    :+:   */
+/*   expand_param.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:29:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/24 23:22:56 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 06:19:49 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@
 #include "flag.h"
 #include "utils.h"
 #include "shell.h"
-#include "expand_refactor.h"
-
-#include "debug.h"
+#include "expand.h"
 
 static void	get_envpair(t_exp_token *exp_token, size_t idx, char ***env_pair);
 static void	replace_exp(t_exp_token *exp_token, size_t *idx, char *env_pair[2]);
@@ -91,8 +89,6 @@ static void	replace_exp(t_exp_token *exp_token, size_t *idx, char **env_pair)
 	ft_memcpy(new_exp_qmask + *idx + ft_strlen(env_pair[VALUE_IDX]), &(exp_token->qmask)[*idx + ft_strlen(env_pair[PARAM_IDX])], suffix_len);
 	free(exp_token->value);
 	free(exp_token->qmask);
-	debug("[replace_exp] exp_token->value : \'%s\'", new_exp_value);
-	debug("[replace_exp] exp_token->qmask : \'%s\'", new_exp_qmask);
 	exp_token->value = new_exp_value;
 	exp_token->qmask = new_exp_qmask;
 	*idx = *idx + (ft_strlen(env_pair[VALUE_IDX]) + 1);
@@ -104,7 +100,6 @@ static char	*extract_envparam(char *str)
 	char	*cur;
 
 	cur = str + 1;
-	debug("[extract_envparam] cur : %s", str);
 	if (ft_isdigit(*cur) || *cur == '*' || *cur == '@' || *cur == '?'
 		|| *cur == '$' || *cur == '!' || (*cur == '_' && *(cur + 1) == '\0'))
 		env_param = ft_substr(str, 0, 2);
@@ -128,7 +123,6 @@ static char	*get_envvalue(const char *env_param)
 	if (!env_param)
 		return (NULL);
 	cur = env_param + 1;
-	debug("[get_envvalue] env_param : %s", env_param);
 	env_value = NULL;
 	if (*cur == '?')
 		env_value = (ft_itoa(get_shell_data()->last_status));

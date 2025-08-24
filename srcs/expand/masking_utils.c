@@ -6,17 +6,17 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:24:32 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/24 22:20:15 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 06:17:06 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-#include "def.h"
 #include "libft.h"
 
-#include "expand_refactor.h"
+#include "def.h"
 #include "utils.h"
+#include "expand.h"
 
 static void	check_char(t_boolean *state, char *masking, char c);
 

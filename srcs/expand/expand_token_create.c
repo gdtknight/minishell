@@ -6,15 +6,13 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:35:28 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/24 22:19:01 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 06:16:33 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-#include "libft.h"
-
-#include "expand_refactor.h"
+#include "expand.h"
 
 t_exp_token	*create_empty_exp_token(void)
 {

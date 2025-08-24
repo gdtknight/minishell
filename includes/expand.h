@@ -6,29 +6,72 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:12:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 08:17:23 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 06:28:50 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPAND_H
 # define EXPAND_H
 
+# include "libft.h"
 # include "tokenizer.h"
 
-/* --- expand.c --- */
+# define MASK_QUOTED	'1'
+# define MASK_UNQUOTED	'0'
+# define MASK_IFS		'2'
 
-t_token		*expand_token(t_token *token);
+# define PARAM_IDX		0
+# define VALUE_IDX		1
 
-/* --- expand_envp.c --- */
+typedef enum e_state_idx
+{
+	IN_SQUOTE = 0,
+	IN_DQUOTE = 1,
+	IN_ESCAPE = 2,
+}	t_state_idx;
 
-char		*expand_envp(char *value);
+typedef struct s_exp_token
+{
+	char				*value;
+	char				*qmask;
+	struct s_exp_token	*prev;
+	struct s_exp_token	*next;
+}	t_exp_token;
 
-/* --- expand_tilde.c --- */
+/* --- expand_token_refactor.c --- */
 
-char		*expand_tilde(char *value);
+t_token		*expand_token_refactor(t_token *token);
+void		expand_heredoc_target(t_token **token);
+
+/* --- expand_tilde_refactor.c --- */
+
+t_exp_token	*expand_tilde_refactor(t_exp_token *exp_token);
+char		*extract_tilde_with_username(char *value);
+
+/* --- expand_param_refactor.c --- */
+
+t_exp_token	*expand_param_refactor(t_exp_token *exp_token);
+
+/* --- split_field_refactor.c --- */
+
+void		split_field_refactor(t_list **exp_list, t_exp_token *exp_token);
+
+/* --- expand_token_create.c --- */
+
+t_exp_token	*create_empty_exp_token(void);
+t_exp_token	*create_exp_token(char *value);
+
+/* --- masking_utils.c --- */
+
+char		*masking_token(const char *value);
+char		*expand_mask(
+				char *quote_mask,
+				size_t pos,
+				char *before,
+				char *after);
 
 /* --- expand_utils.c --- */
-
-char		*replace_param(char *str, char **new_value);
+void		quote_removal(void *content);
+void		remove_exp_token(void *content);
 
 #endif

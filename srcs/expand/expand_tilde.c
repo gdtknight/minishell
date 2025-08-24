@@ -5,68 +5,104 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/02 00:59:37 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/15 20:53:21 by yoshin           ###   ########.fr       */
+/*   Created: 2025/08/22 16:28:58 by yoshin            #+#    #+#             */
+/*   Updated: 2025/08/25 06:16:23 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include <sys/unistd.h>
 #include <unistd.h>
 
 #include "def.h"
-#include "libft.h"
-
 #include "expand.h"
 
-static char			*expand_tilde_with_user(char *value);
-static t_boolean	check_home_dir(char *username);
+static char			*get_homedir(char *username);
+static t_boolean	check_homedir(char *username);
 static char			*get_home_prefix(void);
 
-char	*expand_tilde(char *value)
+t_exp_token	*expand_tilde_refactor(t_exp_token *exp_token)
 {
-	char	*cur;
 	char	*new_value;
+	char	*new_qmask;
+	char	*before;
+	char	*after;
 
-	if (*value != '~')
-		return (ft_strdup(value));
-	cur = value + 1;
-	if (*cur == '\0')
-		new_value = ft_strdup(getenv("HOME"));
-	else if (*cur == '+' && *(cur + 1) == '\0')
-		new_value = ft_strdup(getenv("PWD"));
-	else if (*cur == '-' && *(cur + 1) == '\0' && getenv("OLDPWD") != NULL)
-		new_value = ft_strdup((getenv("OLDPWD")));
-	else if (ft_isalpha(*cur) || *cur == '_')
-		new_value = expand_tilde_with_user(cur);
-	else
-		new_value = NULL;
+	if (!exp_token || (exp_token->value)[0] != '~')
+		return (exp_token);
+	new_value = NULL;
+	new_qmask = NULL;
+	if ((exp_token->value)[1] == '\0')
+	{
+		after = ft_strdup(getenv("HOME"));
+		new_value = ft_strdup(after);
+		new_qmask = expand_mask(exp_token->qmask, 0, "~", after);
+	}
+	else if ((exp_token->value)[1] == '+' && (exp_token->value)[2] == '\0')
+	{
+		after = ft_strdup(getenv("PWD"));
+		new_value = ft_strdup(after);
+		new_qmask = expand_mask(exp_token->qmask, 0, "~+", after);
+	}
+	else if ((exp_token->value)[1] == '-' && (exp_token->value)[2] == '\0' && getenv("OLDPWD") != NULL)
+	{
+		after = ft_strdup(getenv("OLDPWD"));
+		new_value = ft_strdup(after);
+		new_qmask = expand_mask(exp_token->qmask, 0, "~-", after);
+	}
+	else if (ft_isalpha((exp_token->value)[1]) || (exp_token->value)[1] == '_')
+	{
+		before = extract_tilde_with_username(exp_token->value);
+		if (!before)
+			return (exp_token);
+		after = get_homedir(before + 1);
+		new_value = ft_strdup(after);
+		new_qmask = expand_mask(exp_token->qmask, 0, before, after);
+	}
 	if (!new_value)
-		return (ft_strdup(value));
-	return (new_value);
+	{
+		return (exp_token);
+	}
+	free(exp_token->value);
+	free(exp_token->qmask);
+	exp_token->value = new_value;
+	exp_token->qmask = new_qmask;
+	return (exp_token);
 }
 
-static char	*expand_tilde_with_user(char *value)
+char	*extract_tilde_with_username(char *value)
 {
 	char	*home_prefix;
 	char	*cur;
 	char	*username;
-	char	*expanded_value;
 
-	expanded_value = NULL;
 	home_prefix = get_home_prefix();
-	cur = value;
-	while (ft_isalnum(*(++cur)))
-		;
-	username = ft_substr(cur, 0, cur - value - 1);
-	if (check_home_dir(username))
-		expanded_value = ft_strjoin(home_prefix, username);
+	cur = value + 1;
+	while (ft_isalnum(*cur) || *cur == '_')
+		cur++;
+	username = ft_substr(value, 0, cur - value);
+	if (check_homedir(username + 1))
+	{
+		free(username);
+		return (ft_strjoin("~", username));
+	}
+	free(username);
+	free(home_prefix);
+	return (NULL);
+}
+
+static char	*get_homedir(char *username)
+{
+	char	*expanded_value;
+	char	*home_prefix;
+
+	home_prefix = get_home_prefix();
+	expanded_value = ft_strjoin(home_prefix, username);
 	free(username);
 	free(home_prefix);
 	return (expanded_value);
 }
 
-static t_boolean	check_home_dir(char *username)
+static t_boolean	check_homedir(char *username)
 {
 	t_boolean	result;
 	char		*home_prefix;
