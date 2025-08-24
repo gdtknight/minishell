@@ -15,8 +15,9 @@
 
 # define INIT_CAPACITY (16)
 
-# include "def.h"
+# include <stdlib.h>
 
+# include "def.h"
 # include "hashmap.h"
 
 /* --- envp_utils.c --- */
@@ -32,6 +33,10 @@ char		**match_files_in_dir(const char *pattern);
 /* --- find_next_delim.c --- */
 
 char		*find_next_delim(
+				char *str,
+				t_boolean (*predicate)(char),
+				char mask);
+size_t		find_next_delim_pos(
 				char *str,
 				t_boolean (*predicate)(char),
 				char mask);

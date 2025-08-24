@@ -10,9 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "flag.h"
+#include <limits.h>
+#include <stdlib.h>
 
 #include "def.h"
+#include "flag.h"
 
 static t_boolean	update_flag(char c, char *flag, char mask);
 
@@ -31,6 +33,8 @@ char	*find_next_delim(char *str, t_boolean (*predicate)(char), char mask)
 {
 	char	flag;
 
+	if (!str)
+		return (NULL);
 	flag = 0;
 	while (*str)
 	{
@@ -44,6 +48,29 @@ char	*find_next_delim(char *str, t_boolean (*predicate)(char), char mask)
 		str++;
 	}
 	return (str);
+}
+
+size_t	find_next_delim_pos(char *str, t_boolean (*predicate)(char), char mask)
+{
+	size_t	idx;
+	char	flag;
+
+	if (!str)
+		return (ULONG_MAX);
+	flag = 0;
+	idx = 0;
+	while (str[idx])
+	{
+		if (update_flag(str[idx], &flag, mask))
+		{
+			idx++;
+			continue ;
+		}
+		if ((flag & mask) == 0 && predicate(str[idx]))
+			return (idx);
+		idx++;
+	}
+	return (idx);
 }
 
 /**
