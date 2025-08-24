@@ -73,6 +73,8 @@ t_result	init_shell_data(char *envp[])
 	(get_shell_data())->last_status = EXIT_SUCCESS;
 	(get_shell_data())->in_pipe = FALSE;
 	(get_shell_data())->in_heredoc = FALSE;
+	(get_shell_data())->last_bg_pid = -1;
+	(get_shell_data())->last_arg = NULL;
 	return (COMPLETED);
 }
 
@@ -84,5 +86,8 @@ t_result	init_shell_data(char *envp[])
  */
 void	clear_shell_data(void)
 {
+	if (get_shell_data()->last_arg)
+		free(get_shell_data()->last_arg);
+	get_shell_data()->last_arg = NULL;
 	clear_hashmap(&((get_shell_data())->envp_map));
 }
