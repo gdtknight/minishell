@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 23:04:02 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 05:17:44 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 03:52:25 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ char	*find_path(char *cmd, char *envp[])
 	release_dirs(&dirs);
 	if (!path_full)
 	{
-		perror(cmd);
-		exit(COMMAND_NOT_FOUND_CODE);
+		ft_putstr_fd(cmd, STDERR_FILENO);
+		ft_putendl_fd(": command not found", STDERR_FILENO);
 	}
 	return (path_full);
 }
