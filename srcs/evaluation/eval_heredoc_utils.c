@@ -32,6 +32,7 @@ void	read_heredoc(t_syntax_node *node)
 {
 	int		heredoc_pipe[2];
 	pid_t	child_pid;
+	char	*temp;
 
 	if (!node)
 		return ;
@@ -44,6 +45,10 @@ void	read_heredoc(t_syntax_node *node)
 	if (child_pid == 0)
 		start_heredoc(heredoc_pipe, node);
 	receive_heredoc(child_pid, heredoc_pipe);
+	temp = node->value.io_target;
+	node->value.io_target = ft_strdup(*get_heredoc_input());
+	free(temp);
+	clear_heredoc_input();
 }
 
 static void	start_heredoc(int heredoc_pipe[2], t_syntax_node *node)

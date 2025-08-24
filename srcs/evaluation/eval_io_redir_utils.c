@@ -23,8 +23,12 @@
 #include "shell.h"
 #include "eval.h"
 
-static void	set_heredoc_to_pipe(t_syntax_node *cmd);
-static void	set_heredoc_from_pipe(t_syntax_node *cmd, pid_t child);
+static void				set_heredoc_to_pipe(
+							t_syntax_node *cmd,
+							t_syntax_node *io_redir_node);
+static void				set_heredoc_from_pipe(
+							t_syntax_node *cmd,
+							pid_t child);
 
 /**
  * @brief 표준 입력(STDIN)을 재설정한다.
@@ -81,11 +85,9 @@ t_status	set_heredoc(t_syntax_node *io_redir_node)
 	if (!io_redir_node || io_redir_node->eval == OFF)
 		return (SUCCESS);
 	(get_shell_data())->in_heredoc = TRUE;
-	cmd = io_redir_node;
-	while (cmd->type != NODE_SIMPLE_COMMAND)
-		cmd = cmd->parent;
-	if (cmd->value.command.heredoc_fds[PIPE_READ] != -1)
-		close(cmd->value.command.heredoc_fds[PIPE_READ]);
+	cmd = find_cmd_node(io_redir_node);
+	if (!cmd)
+		return (SUCCESS);
 	if (pipe(cmd->value.command.heredoc_fds) == -1)
 	{
 		perror("heredoc_fds");
@@ -93,17 +95,18 @@ t_status	set_heredoc(t_syntax_node *io_redir_node)
 	}
 	child = fork();
 	if (child == 0)
-		set_heredoc_to_pipe(cmd);
+		set_heredoc_to_pipe(cmd, io_redir_node);
 	set_heredoc_from_pipe(cmd, child);
 	(get_shell_data())->in_heredoc = FALSE;
 	return (SUCCESS);
 }
 
-static void	set_heredoc_to_pipe(t_syntax_node *cmd)
+
+static void	set_heredoc_to_pipe(t_syntax_node *cmd, t_syntax_node *io_redir_node)
 {
 	close((cmd->value.command.heredoc_fds)[PIPE_READ]);
 	ft_putstr_fd(
-		(*(get_heredoc_input())),
+		io_redir_node->value.io_target,
 		(cmd->value.command.heredoc_fds)[PIPE_WRITE]);
 	close((cmd->value.command.heredoc_fds)[PIPE_WRITE]);
 	clear_shell_input();
