@@ -23,6 +23,7 @@
 
 #include "shell.h"
 #include "tokenizer.h"
+#include "utils.h"
 #include "eval.h"
 
 static void	interactive_mode(void);
@@ -112,6 +113,12 @@ static void	process_input(char *input)
 {
 	t_token	*input_token;
 
+	if (!is_valid_pair(input))
+	{
+		ft_putstr_fd("Invalid input\n", STDERR_FILENO);
+		(get_shell_data())->last_status = EXIT_FAILURE;
+		return ;
+	}
 	(get_shell_input())->input_token = tokenize_input(input);
 	if (!is_valid_sequence((get_shell_input())->input_token))
 	{

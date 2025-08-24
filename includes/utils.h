@@ -56,4 +56,8 @@ char		*ft_multiplejoin(const char *s1, const char *s2, const char *s3);
 
 t_boolean	wildcard_match(const char *s, const char *p);
 
+/* --- validate_utils.c --- */
+
+t_boolean	is_valid_pair(char *input);
+
 #endif
