@@ -89,13 +89,7 @@ void	eval_list(t_syntax_node *node)
 		return ;
 	if (node->type == NODE_SEMICOLON)
 	{
-		child_pid = fork();
-		if (child_pid == 0)
-		{
-			eval(node->value.b_node.left);
-			return ;
-		}
-		waitpid(child_pid, &status, 0);
+		eval(node->value.b_node.left);
 		eval(node->value.b_node.right);
 		return ;
 	}
@@ -106,6 +100,7 @@ void	eval_list(t_syntax_node *node)
 		return ;
 	}
 	waitpid(child_pid, &status, WNOHANG);
+	get_shell_data()->last_bg_pid = child_pid;
 	eval(node->value.b_node.right);
 }
 
