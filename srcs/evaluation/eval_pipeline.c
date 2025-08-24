@@ -125,6 +125,7 @@ static void	setup_pipe(pid_t child_pids[2], int pipe_fds[2])
 		close(STDIN_FILENO);
 		close(pipe_fds[PIPE_WRITE]);
 		dup2(pipe_fds[PIPE_READ], STDIN_FILENO);
+		close(pipe_fds[PIPE_READ]);
 		return ;
 	}
 	if (child_pids[CHILD_LEFT] == 0)
@@ -132,6 +133,7 @@ static void	setup_pipe(pid_t child_pids[2], int pipe_fds[2])
 		close(STDOUT_FILENO);
 		close(pipe_fds[PIPE_READ]);
 		dup2(pipe_fds[PIPE_WRITE], STDOUT_FILENO);
+		close(pipe_fds[PIPE_WRITE]);
 		return ;
 	}
 	close(pipe_fds[PIPE_READ]);
