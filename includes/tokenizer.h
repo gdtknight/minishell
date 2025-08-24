@@ -96,5 +96,6 @@ t_boolean		is_word_token(t_token *token);
 /* --- tokenizer.c --- */
 
 t_token			*tokenize_input(char *line);
+t_token			*get_last_token(t_token	**lst);
 
 #endif

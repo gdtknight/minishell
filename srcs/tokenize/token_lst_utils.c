@@ -115,3 +115,15 @@ t_result	remove_token_from_lst(t_token *lst, t_token *target)
 	}
 	return (COMPLETED);
 }
+
+t_token	*get_last_token(t_token	**lst)
+{
+	t_token	*cur;
+
+	if (!lst || !*lst)
+		return (NULL);
+	cur = *lst;
+	while (cur->next)
+		cur = cur->next;
+	return (cur);
+}
