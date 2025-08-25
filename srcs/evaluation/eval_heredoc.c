@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 00:57:31 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:05:42 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/26 00:46:50 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	eval_heredoc(t_syntax_node *node)
 		eval_heredoc_construct(node);
 	else if (node->type == NODE_COMPOUND_COMMAND
 		|| node->type == NODE_SIMPLE_COMMAND
-		|| node->type == NODE_CMD_PREFIX || node->type == NODE_CMD_PREFIX)
+		|| node->type == NODE_CMD_PREFIX || node->type == NODE_CMD_SUFFIX)
 		eval_heredoc_command(node);
 	else if (node->type == NODE_IO_REDIR_HEREDOC)
 		read_heredoc(node);
@@ -72,16 +72,12 @@ static void	eval_heredoc_command(t_syntax_node *node)
 		eval_heredoc(node->value.child);
 	else if (node->type == NODE_SIMPLE_COMMAND)
 	{
-		if (node->value.command.prefix)
-			eval_heredoc(node->value.command.prefix);
-		if (node->value.command.suffix)
-			eval_heredoc(node->value.command.suffix);
+		eval_heredoc(node->value.command.prefix);
+		eval_heredoc(node->value.command.suffix);
 	}
-	else if (node->type == NODE_CMD_PREFIX || node->type == NODE_CMD_PREFIX)
+	else if (node->type == NODE_CMD_PREFIX || node->type == NODE_CMD_SUFFIX)
 	{
-		if (node->value.b_node.left)
-			eval_heredoc(node->value.b_node.left);
-		if (node->value.b_node.right)
-			eval_heredoc(node->value.b_node.right);
+		eval_heredoc(node->value.b_node.left);
+		eval_heredoc(node->value.b_node.right);
 	}
 }

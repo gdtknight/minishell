@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 17:19:13 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:05:14 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/26 00:51:31 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,23 +130,22 @@ static void	receive_heredoc(pid_t child_pid, int heredoc_pipe[2])
 	int	status;
 
 	status = 0;
-	close(heredoc_pipe[PIPE_WRITE]);
 	(get_shell_data())->in_heredoc = TRUE;
+	close(heredoc_pipe[PIPE_WRITE]);
 	waitpid(child_pid, &status, 0);
 	if (WIFSIGNALED(status))
 	{
 		close(heredoc_pipe[PIPE_READ]);
 		(get_shell_data())->last_status = 128 + SIGINT;
-		return ;
 	}
 	if (WIFEXITED(status))
 	{
 		clear_heredoc_input();
 		read_heredoc_pipe(heredoc_pipe[PIPE_READ]);
+		close(heredoc_pipe[PIPE_READ]);
 		(get_shell_data())->last_status = WEXITSTATUS(status);
 	}
 	(get_shell_data())->in_heredoc = FALSE;
-	close(heredoc_pipe[PIPE_READ]);
 }
 
 /**
