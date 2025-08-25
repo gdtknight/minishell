@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 20:26:39 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 22:38:44 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/26 00:54:36 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@
 #include "libft.h"
 #include "tokenizer.h"
 #include "expand.h"
-
-#include "debug.h"
 
 /* Static helper declarations */
 static t_token	*new_token_from_exp_token_list(
@@ -92,8 +90,6 @@ t_token	*expand_token(t_token *token)
 	ft_lstiter(expand_lst, quote_removal);
 	new_token = new_token_from_exp_token_list(token, expand_lst);
 	ft_lstclear(&expand_lst, remove_exp_token);
-	debug("[expand_token] before value : %s", (char *)(token->value));
-	debug("[expand_token] after value : %s", (char *)(new_token->value));
 	return (new_token);
 }
 
