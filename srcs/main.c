@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 20:54:25 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/26 07:48:12 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,10 @@
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/wait.h>
 
 #include "libft.h"
+#include "get_next_line_bonus.h"
 #include "shell.h"
 #include "tokenizer.h"
 #include "utils.h"
@@ -53,6 +55,9 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	(void)argv;
 	init_minishell_signal();
+	clear_heredoc_input();
+	clear_shell_input();
+	clear_shell_data();
 	if (!init_shell_data(envp))
 		exit(errno);
 	if (argc == 1)
@@ -73,18 +78,27 @@ static void	interactive_mode(void)
 {
 	while (!(get_shell_data()->is_exit))
 	{
-		restore_tty();
-		(get_shell_input())->input_line = readline(PROMPT);
+		if (isatty(STDIN_FILENO)
+			&& getenv("MINISHELL_PIPE_LEFT") && getenv("MINISHELL_PIPE_RIGHT"))
+			continue ;
+		else if (isatty(STDIN_FILENO) && getenv("MINISHELL_PIPE_LEFT")
+			&& !getenv("MINISHELL_PIPE_RIGHT"))
+		{
+			ft_putstr_fd(PROMPT, STDERR_FILENO);
+			(get_shell_input())->input_line = get_next_line(STDIN_FILENO);
+		}
+		else if (!isatty(STDIN_FILENO)
+			&& getenv("MINISHELL_PIPE_LEFT") && getenv("MINISHELL_PIPE_RIGHT"))
+			(get_shell_input())->input_line = get_next_line(STDIN_FILENO);
+		else
+			(get_shell_input())->input_line = readline(PROMPT);
 		if ((get_shell_input())->input_line == NULL)
 			break ;
 		if ((*(get_shell_input())->input_line) == '\0' \
-			|| ft_strncmp((get_shell_input())->input_line, \
-				"", ft_strlen("") + 1) == 0)
+			|| ft_strncmp((get_shell_input())->input_line, "", \
+				ft_strlen("") + 1) == 0)
 			continue ;
-		add_history((get_shell_input())->input_line);
 		process_input((get_shell_input())->input_line);
-		clear_heredoc_input();
-		clear_shell_input();
 	}
 }
 
@@ -101,6 +115,7 @@ static void	process_input(char *input)
 {
 	t_token	*input_token;
 
+	add_history((get_shell_input())->input_line);
 	if (!is_valid_pair(input))
 	{
 		ft_putstr_fd("Invalid input\n", STDERR_FILENO);
@@ -118,4 +133,6 @@ static void	process_input(char *input)
 	(get_shell_input())->input_node = parse_input(&input_token);
 	eval_heredoc((get_shell_input())->input_node);
 	eval((get_shell_input())->input_node);
+	clear_heredoc_input();
+	clear_shell_input();
 }
