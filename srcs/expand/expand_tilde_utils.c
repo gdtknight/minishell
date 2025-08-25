@@ -6,15 +6,32 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 06:33:51 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 17:03:28 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:36:11 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file expand_tilde_utils.c
+ * @brief Utility functions for tilde (~) expansion.
+ *
+ * This module provides functions to construct and validate home directory paths
+ * for tilde expansions in shell input.
+ */
 
 #include <stdlib.h>
 #include <unistd.h>
 
 #include "expand.h"
 
+/**
+ * @brief Get the home directory path for a given username.
+ *
+ * Constructs the full home directory path by appending the username to the
+ * common home prefix (usually "/home/").
+ *
+ * @param username Dynamically allocated username string (will be freed)
+ * @return char* Newly allocated full path to user's home directory
+ */
 char	*get_homedir(char *username)
 {
 	char	*home_dir;
@@ -27,6 +44,13 @@ char	*get_homedir(char *username)
 	return (home_dir);
 }
 
+/**
+ * @brief Check whether a given username has a readable home directory.
+ *
+ * @param username Username string to check
+ * @return t_boolean TRUE if the home directory exists and is readable,
+ *         FALSE otherwise
+ */
 t_boolean	check_homedir(char *username)
 {
 	t_boolean	result;
@@ -43,6 +67,14 @@ t_boolean	check_homedir(char *username)
 	return (result);
 }
 
+/**
+ * @brief Get the common home prefix path.
+ *
+ * Returns the part of the HOME environment variable up to the last slash.
+ * For example, if HOME="/home/user", it returns "/home/".
+ *
+ * @return char* Newly allocated string of the home prefix
+ */
 char	*get_home_prefix(void)
 {
 	char	*home_path;

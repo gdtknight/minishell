@@ -6,27 +6,63 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:56:12 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 16:33:54 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:40:45 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+/**
+ * @file split_field.c
+ * @brief Split an expanded token into separate words using IFS (field separators).
+ *
+ * This module handles field splitting for expanded tokens after tilde and parameter
+ * expansions. It respects quoting and escape sequences to avoid splitting inside quotes.
+ */
 
+#include <stdlib.h>
 #include "libft.h"
 #include "def.h"
 #include "utils.h"
 #include "expand.h"
 
+/**
+ * @brief Update the quote/escape state based on the current character.
+ *
+ * @param state Array of 3 booleans: [IN_SQUOTE, IN_DQUOTE, IN_ESCAPE]
+ * @param c Current character
+ */
 static void		update_state(t_boolean state[3], char c);
 
+/**
+ * @brief Create a new token from a substring and add it to the list.
+ *
+ * @param exp_list Pointer to the list of tokens
+ * @param exp_token Original expanded token
+ * @param start Pointer to the start index of the substring
+ * @param end Pointer to the end index of the substring
+ */
 static void		add_token(
 					t_list **exp_list,
 					t_exp_token *exp_token,
 					size_t *start,
 					size_t *end);
 
+/**
+ * @brief Skip over IFS characters starting from the given index.
+ *
+ * @param str Input string
+ * @param idx Starting index
+ * @return size_t Index after skipping IFS characters
+ */
 static size_t	skip_ifs(const char *str, size_t idx);
 
+/**
+ * @brief Split an expanded token into multiple tokens based on IFS.
+ *
+ * @param exp_list Pointer to the list where resulting tokens will be added
+ * @param exp_token The expanded token to split
+ *
+ * @note Handles quoting and escape characters to prevent splitting inside quotes.
+ */
 void	split_field(t_list **exp_list, t_exp_token *exp_token)
 {
 	t_boolean	state[3];

@@ -6,26 +6,45 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:29:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 16:51:04 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:32:40 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file expand_param.c
+ * @brief Environment variable expansion in token values.
+ *
+ * This module handles the expansion of shell environment variables
+ * and special parameters (e.g., $?, $$, $!, $0, $*, etc.) within
+ * tokens identified during shell parsing.
+ */
 
 #include <stddef.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 #include "libft.h"
-
 #include "flag.h"
 #include "utils.h"
 #include "shell.h"
 #include "expand.h"
 
+/* Function prototypes for internal helpers */
 static void	get_envpair(t_exp_token *exp_token, size_t idx, char ***env_pair);
 static char	*extract_envparam(char *str);
 static char	*get_envvalue(const char *env_param);
 static char	*get_special_value(char c);
 
+/**
+ * @brief Expand all environment variables in the given token.
+ *
+ * This function scans the token's value for dollar-sign-prefixed variables
+ * and replaces them with their corresponding values from the shell
+ * environment or special parameters.
+ *
+ * @param exp_token Token to be expanded
+ * @return t_exp_token* Pointer to the expanded token
+ */
 t_exp_token	*expand_param(t_exp_token *exp_token)
 {
 	size_t	idx;
@@ -48,6 +67,15 @@ t_exp_token	*expand_param(t_exp_token *exp_token)
 	return (exp_token);
 }
 
+/**
+ * @brief Extract the next environment variable and its value.
+ *
+ * Allocates a pair of strings: the variable name and its value.
+ *
+ * @param exp_token Token containing the string to parse
+ * @param idx Current index to start scanning
+ * @param env_pair Pointer to store the resulting key-value pair
+ */
 static void	get_envpair(t_exp_token *exp_token, size_t idx, char ***env_pair)
 {
 	size_t	dollar_pos;
@@ -57,9 +85,10 @@ static void	get_envpair(t_exp_token *exp_token, size_t idx, char ***env_pair)
 		return ;
 	(*env_pair)[PARAM_IDX] = NULL;
 	(*env_pair)[VALUE_IDX] = NULL;
-	dollar_pos = \
-		find_next_delim_pos(&((exp_token->value)[idx]), \
-			is_dollar_sign, C_BACKSLASH | C_SQUOTE);
+	dollar_pos = find_next_delim_pos(
+			&((exp_token->value)[idx]),
+			is_dollar_sign,
+			C_BACKSLASH | C_SQUOTE);
 	if ((idx + dollar_pos) == ft_strlen(exp_token->value))
 	{
 		free(*env_pair);
@@ -76,6 +105,14 @@ static void	get_envpair(t_exp_token *exp_token, size_t idx, char ***env_pair)
 	(*env_pair)[VALUE_IDX] = get_envvalue((*env_pair)[PARAM_IDX]);
 }
 
+/**
+ * @brief Extract the environment variable name from the string.
+ *
+ * Handles numeric and special parameters as well as normal variable names.
+ *
+ * @param str String starting with '$'
+ * @return char* Newly allocated string containing the variable name
+ */
 static char	*extract_envparam(char *str)
 {
 	char	*env_param;
@@ -96,6 +133,12 @@ static char	*extract_envparam(char *str)
 	return (env_param);
 }
 
+/**
+ * @brief Get the value of an environment variable or special parameter.
+ *
+ * @param env_param Variable name starting with '$'
+ * @return char* Newly allocated string containing the value
+ */
 static char	*get_envvalue(const char *env_param)
 {
 	t_hash_map	*map;
@@ -114,6 +157,12 @@ static char	*get_envvalue(const char *env_param)
 	return (env_value);
 }
 
+/**
+ * @brief Get the value of special shell parameters like $? $$ $! $0 $* $@.
+ *
+ * @param c Character representing the special parameter
+ * @return char* Newly allocated string containing the value
+ */
 static char	*get_special_value(char c)
 {
 	if (c == '?')
