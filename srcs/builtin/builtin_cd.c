@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:09 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/25 21:53:16 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/25 22:11:55 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,9 @@ t_cd_err	check_error(char **argc)
  */
 t_status	cd_fail(t_cd_err err, char *old_pwd)
 {
+	get_shell_data()->last_status = 1;
 	if (err == CD_TOO_MANY_ARGS)
-	{
-		get_shell_data()->last_status = 2;
 		printf("cd: too many arguments\n");
-	}
-	else
-		get_shell_data()->last_status = 1;
 	if (err == CD_HOME_NOT_SET)
 		printf("cd: HOME not set\n");
 	if (err == CD_OLDPWD_NOT_SET)
