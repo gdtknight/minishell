@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 22:17:29 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:12:20 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/25 21:56:38 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,20 +95,14 @@ void	clear_cmd_form(t_cmd_form *cmd_form)
 		free(cmd_form->cmd);
 	cmd_form->cmd = NULL;
 	strs = cmd_form->args;
-	if (strs)
-	{
-		while (*strs)
-			free(*strs++);
-	}
+	while (strs && *strs)
+		free(*strs++);
 	if (cmd_form->args)
 		free(cmd_form->args);
 	cmd_form->args = NULL;
 	strs = cmd_form->envp;
-	if (strs)
-	{
-		while (*strs)
-			free(*strs++);
-	}
+	while (strs && *strs)
+		free(*strs++);
 	if (cmd_form->envp)
 		free(cmd_form->envp);
 	cmd_form->envp = NULL;
