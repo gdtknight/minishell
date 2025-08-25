@@ -6,12 +6,12 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 19:19:46 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 20:58:48 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:17:25 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
- * @file multiplejoin.c
+ * @file ft_multiplejoin.c
  * @brief String utility function for joining multiple strings.
  *
  * Provides a helper function to concatenate three strings into one,
