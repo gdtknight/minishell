@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:28:58 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 15:20:15 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 07:02:39 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ t_exp_token	*expand_tilde(t_exp_token *exp_token)
 
 char	*extract_tilde_with_username(char *value)
 {
+	char	*tilde_with_user;
 	char	*home_prefix;
 	char	*cur;
 	char	*username;
@@ -74,11 +75,12 @@ char	*extract_tilde_with_username(char *value)
 	cur = value + 1;
 	while (ft_isalnum(*cur) || *cur == '_')
 		cur++;
-	username = ft_substr(value, 0, cur - value);
-	if (check_homedir(username + 1))
+	username = ft_substr(value, 1, cur - value - 1);
+	if (check_homedir(username))
 	{
+		tilde_with_user = ft_strjoin("~", username);
 		free(username);
-		return (ft_strjoin("~", username));
+		return (tilde_with_user);
 	}
 	free(username);
 	free(home_prefix);
