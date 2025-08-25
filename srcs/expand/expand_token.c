@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 20:26:39 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 15:44:01 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 16:42:38 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,13 @@
 static t_token	*new_token_from_exp_token_list(
 					t_token *token,
 					t_list *expand_lst);
+
 static void		replace_token(
 					t_token *token,
-					t_token *first,
-					t_token *new_token);
+					t_token *first_token,
+					t_token *last_token);
+
+static t_token	*extract_token(t_exp_token *exp_token);
 
 void	expand_heredoc_target(t_token **token)
 {
@@ -66,46 +69,55 @@ static t_token	*new_token_from_exp_token_list(
 					t_token *token,
 					t_list *expand_lst)
 {
-	t_exp_token	*cur;
-	t_token		*first;
 	t_token		*new_token;
+	t_token		*cur_token;
 	t_token		*prev;
 
 	if (!token || !expand_lst)
 		return (token);
-	first = NULL;
 	new_token = NULL;
+	cur_token = NULL;
 	prev = NULL;
 	while (expand_lst)
 	{
-		cur = (t_exp_token *) expand_lst->content;
-		new_token = create_empty_token();
-		new_token->type = TK_WORD;
-		new_token->value = ft_strdup(cur->value);
-		if (!first)
-			first = new_token;
+		cur_token = extract_token(expand_lst->content);
+		if (!new_token)
+			new_token = cur_token;
 		if (prev)
 		{
-			prev->next = new_token;
-			new_token->prev = prev;
+			prev->next = cur_token;
+			cur_token->prev = prev;
 		}
-		prev = new_token;
+		prev = cur_token;
 		expand_lst = expand_lst->next;
 	}
-	replace_token(token, first, new_token);
-	return (first);
+	replace_token(token, new_token, cur_token);
+	return (new_token);
 }
 
-static	void	replace_token(t_token *token, t_token *first, t_token *new_token)
+static void	replace_token(
+				t_token *token,
+				t_token *first_token,
+				t_token *last_token)
 {
 	if (token->prev)
 	{
-		token->prev->next = first;
-		first->prev = token->prev;
+		token->prev->next = first_token;
+		first_token->prev = token->prev;
 	}
 	if (token->next)
 	{
-		new_token->next = token->next;
-		token->next->prev = new_token;
+		last_token->next = token->next;
+		token->next->prev = last_token;
 	}
+}
+
+static t_token	*extract_token(t_exp_token *exp_token)
+{
+	t_token	*new_token;
+
+	new_token = create_empty_token();
+	new_token->type = TK_WORD;
+	new_token->value = ft_strdup(exp_token->value);
+	return (new_token);
 }
