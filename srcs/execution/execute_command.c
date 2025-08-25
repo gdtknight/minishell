@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 14:25:06 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 07:15:39 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 20:50:44 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 #include "execute.h"
 
+static void	execute_relative_path(t_cmd_form *cmd_form);
 static void	execute_absolute_path(t_cmd_form *cmd_form);
 
 /**
@@ -40,13 +41,22 @@ static void	execute_absolute_path(t_cmd_form *cmd_form);
  */
 void	execute_command(t_cmd_form *cmd_form)
 {
-	char		*cmd;
+	if (!cmd_form || !(cmd_form->cmd))
+		return ;
+	if (access(cmd_form->cmd, X_OK) == 0)
+	{
+		restore_signal();
+		execve(cmd_form->cmd, cmd_form->args, cmd_form->envp);
+	}
+	execute_relative_path(cmd_form);
+	execute_absolute_path(cmd_form);
+}
 
-	if (!cmd_form)
-		return ;
+static void	execute_relative_path(t_cmd_form *cmd_form)
+{
+	char	*cmd;
+
 	cmd = cmd_form->cmd;
-	if (!cmd)
-		return ;
 	if (*cmd == '.' && *(cmd + 1) == '/')
 	{
 		if (access(cmd, R_OK) != 0)
@@ -62,7 +72,6 @@ void	execute_command(t_cmd_form *cmd_form)
 		restore_signal();
 		execve(cmd, cmd_form->args, cmd_form->envp);
 	}
-	execute_absolute_path(cmd_form);
 }
 
 static void	execute_absolute_path(t_cmd_form *cmd_form)
