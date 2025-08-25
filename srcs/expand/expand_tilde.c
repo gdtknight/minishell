@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:28:58 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 07:02:39 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 17:03:58 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,67 +15,41 @@
 
 #include "expand.h"
 
+static char	*get_tilde_expansion(char *value);
+
 t_exp_token	*expand_tilde(t_exp_token *exp_token)
 {
-	char	*new_value;
-	char	*new_qmask;
-	char	*before;
 	char	*after;
+	char	*new_qmask;
 
-	if (!exp_token || (exp_token->value)[0] != '~')
+	if (!exp_token || exp_token->value[0] != '~')
 		return (exp_token);
-	new_value = NULL;
-	new_qmask = NULL;
-	if ((exp_token->value)[1] == '\0')
-	{
-		after = ft_strdup(getenv("HOME"));
-		new_value = ft_strdup(after);
-		new_qmask = expand_mask(exp_token->qmask, 0, "~", after);
-	}
-	else if ((exp_token->value)[1] == '+' && (exp_token->value)[2] == '\0')
-	{
-		after = ft_strdup(getenv("PWD"));
-		new_value = ft_strdup(after);
-		new_qmask = expand_mask(exp_token->qmask, 0, "~+", after);
-	}
-	else if ((exp_token->value)[1] == '-' && (exp_token->value)[2] == '\0' && getenv("OLDPWD") != NULL)
-	{
-		after = ft_strdup(getenv("OLDPWD"));
-		new_value = ft_strdup(after);
-		new_qmask = expand_mask(exp_token->qmask, 0, "~-", after);
-	}
-	else if (ft_isalpha((exp_token->value)[1]) || (exp_token->value)[1] == '_')
-	{
-		before = extract_tilde_with_username(exp_token->value);
-		if (!before)
-			return (exp_token);
-		after = get_homedir(before + 1);
-		new_value = ft_strdup(after);
-		new_qmask = expand_mask(exp_token->qmask, 0, before, after);
-	}
-	if (!new_value)
-	{
+	after = get_tilde_expansion(exp_token->value);
+	if (!after)
 		return (exp_token);
-	}
+	new_qmask = expand_mask(
+			exp_token->qmask,
+			0,
+			exp_token->value, after);
 	free(exp_token->value);
 	free(exp_token->qmask);
-	exp_token->value = new_value;
+	exp_token->value = after;
 	exp_token->qmask = new_qmask;
 	return (exp_token);
 }
 
 char	*extract_tilde_with_username(char *value)
 {
-	char	*tilde_with_user;
-	char	*home_prefix;
-	char	*cur;
 	char	*username;
+	char	*tilde_with_user;
+	char	*cur;
 
-	home_prefix = get_home_prefix();
 	cur = value + 1;
 	while (ft_isalnum(*cur) || *cur == '_')
 		cur++;
 	username = ft_substr(value, 1, cur - value - 1);
+	if (!username)
+		return (NULL);
 	if (check_homedir(username))
 	{
 		tilde_with_user = ft_strjoin("~", username);
@@ -83,6 +57,30 @@ char	*extract_tilde_with_username(char *value)
 		return (tilde_with_user);
 	}
 	free(username);
-	free(home_prefix);
 	return (NULL);
+}
+
+static char	*get_tilde_expansion(char *value)
+{
+	char	*user;
+	char	*home;
+
+	if (value[1] == '\0')
+		return (ft_strdup(getenv("HOME")));
+	if (value[1] == '+' && value[2] == '\0')
+		return (ft_strdup(getenv("PWD")));
+	if (value[1] == '-' && value[2] == '\0')
+		return (ft_strdup(getenv("OLDPWD")));
+	if (!ft_isalpha(value[1]) && !(value[1] == '_'))
+		return (NULL);
+	user = extract_tilde_with_username(value);
+	if (!user)
+		return (NULL);
+	home = get_homedir(user + 1);
+	if (!home)
+	{
+		free(user);
+		return (NULL);
+	}
+	return (home);
 }
