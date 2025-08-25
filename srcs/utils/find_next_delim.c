@@ -6,9 +6,18 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 02:00:47 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/04 19:17:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 20:56:50 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file find_delim.c
+ * @brief Utility functions for finding delimiter positions in strings.
+ *
+ * This file provides functions to locate delimiters in a string while
+ * respecting quoting (`'`, `"`) and escaping (`\`) rules. It is mainly
+ * used for tokenization and parsing in the shell.
+ */
 
 #include <limits.h>
 #include <stdlib.h>
@@ -19,15 +28,21 @@
 static t_boolean	update_flag(char c, char *flag, char mask);
 
 /**
- * @brief 주어진 조건을 만족하는 다음 구분자 문자를 찾습니다.
+ * @brief Find the next delimiter character in a string.
  *
- * 문자열을 순회하면서 인용 부호 상태(싱글, 더블)와 백슬래시 상태를 추적하며,
- * 현재 문자가 마스크된 플래그에 해당하지 않는 상태이고 `predicate` 조건을 만족하면 해당 위치를 반환합니다.
+ * Iterates through the string while keeping track of quoting
+ * (single and double quotes) and escaping states. If the current
+ * character satisfies the `predicate` condition and is not masked
+ * by the quoting/escaping state, the pointer to that character is returned.
  *
- * @param str 문자열의 시작 주소
- * @param predicate 구분자 조건을 검사하는 함수 포인터
- * @param mask 무시할 인용 상태를 지정하는 플래그 마스크
- * @return 조건을 만족하는 구분자 문자의 위치를 가리키는 포인터
+ * @param str Input string.
+ * @param predicate Function pointer that checks whether a character
+ *        qualifies as a delimiter.
+ * @param mask Bitmask specifying which states (e.g., C_SQUOTE, C_DQUOTE,
+ *        C_BACKSLASH) should be ignored.
+ * @return Pointer to the delimiter character if found,
+ *         or pointer to the null terminator if not found,
+ *         or NULL if `str` is NULL.
  */
 char	*find_next_delim(char *str, t_boolean (*predicate)(char), char mask)
 {
@@ -50,6 +65,21 @@ char	*find_next_delim(char *str, t_boolean (*predicate)(char), char mask)
 	return (str);
 }
 
+/**
+ * @brief Find the index of the next delimiter character in a string.
+ *
+ * Works like `find_next_delim()` but returns the position (index)
+ * instead of a pointer. This is useful when index-based access is preferred.
+ *
+ * @param str Input string.
+ * @param predicate Function pointer that checks whether a character
+ *        qualifies as a delimiter.
+ * @param mask Bitmask specifying which states (e.g., C_SQUOTE, C_DQUOTE,
+ *        C_BACKSLASH) should be ignored.
+ * @return Index of the delimiter character if found,
+ *         length of the string if not found,
+ *         or ULONG_MAX if `str` is NULL.
+ */
 size_t	find_next_delim_pos(char *str, t_boolean (*predicate)(char), char mask)
 {
 	size_t	idx;
@@ -74,15 +104,17 @@ size_t	find_next_delim_pos(char *str, t_boolean (*predicate)(char), char mask)
 }
 
 /**
- * @brief 플래그 상태를 갱신합니다.
+ * @brief Update the parsing state flags based on the current character.
  *
- * 주어진 문자 `c`를 기반으로 현재 인용 부호나 백슬래시 상태를 추적합니다.
- * `mask`에 지정된 플래그들에 대해서만 상태를 변경합니다.
+ * Tracks quoting (`'`, `"`) and escaping (`\`) states while scanning a string.
+ * The behavior depends on the `mask`, which specifies which states should be
+ * considered. If the flag state changes, returns TRUE.
  *
- * @param c 현재 처리 중인 문자
- * @param flag 플래그 상태를 저장하는 변수의 포인터
- * @param mask 체크할 플래그 마스크 (예: C_SQUOTE, C_DQUOTE, C_BACKSLASH)
- * @return 플래그 상태가 변경되었으면 TRUE, 변경되지 않았으면 FALSE
+ * @param c The current character being processed.
+ * @param flag Pointer to the current flag state (modified in place).
+ * @param mask Bitmask specifying which flags to check (e.g., C_SQUOTE,
+ *        C_DQUOTE, C_BACKSLASH).
+ * @return TRUE if the flag state changed, FALSE otherwise.
  */
 static t_boolean	update_flag(char c, char *flag, char mask)
 {

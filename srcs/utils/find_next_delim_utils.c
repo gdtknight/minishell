@@ -6,12 +6,29 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 20:46:34 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/19 22:00:39 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 20:58:18 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * @file char_utils.c
+ * @brief Character classification helpers for minishell.
+ *
+ * This file provides helper functions to check whether a character
+ * belongs to a specific category such as IFS (Internal Field Separator),
+ * token delimiters, quotes, or special symbols used in the shell.
+ */
+
 #include "utils.h"
 
+/**
+ * @brief Check if a character is an IFS (Internal Field Separator).
+ *
+ * By default, IFS characters are space, tab, and newline.
+ *
+ * @param c Character to check.
+ * @return TRUE if the character is an IFS, FALSE otherwise.
+ */
 t_boolean	is_ifs(char c)
 {
 	static const char	*ifs = " \t\n";
@@ -26,19 +43,32 @@ t_boolean	is_ifs(char c)
 	return (FALSE);
 }
 
+/**
+ * @brief Check if a character is a dollar sign (`$`).
+ *
+ * Used to detect variable expansion markers in the shell.
+ *
+ * @param c Character to check.
+ * @return TRUE if the character is '$', FALSE otherwise.
+ */
 t_boolean	is_dollar_sign(char c)
 {
 	return (c == '$');
 }
 
 /**
- * @brief 토큰 구분자인지 여부를 판별한다.
+ * @brief Check if a character is a token delimiter.
  *
- * 공백, 탭, 파이프('|'), 앰퍼샌드('&'), 세미콜론(';'),
- * 리다이렉션 기호('<', '>'), 괄호('(', ')')를 구분자로 인식한다.
+ * Recognized delimiters include:
+ * - Whitespace (space, tab)
+ * - Pipe (`|`)
+ * - Ampersand (`&`)
+ * - Semicolon (`;`)
+ * - Redirection operators (`<`, `>`)
+ * - Parentheses (`(`, `)`)
  *
- * @param c 판별할 문자
- * @return t_boolean TRUE(구분자), FALSE(아님)
+ * @param c Character to check.
+ * @return TRUE if the character is a delimiter, FALSE otherwise.
  */
 t_boolean	is_tk_delim(char c)
 {
@@ -57,6 +87,14 @@ t_boolean	is_tk_delim(char c)
 	return (FALSE);
 }
 
+/**
+ * @brief Check if a character is a single quote (`'`).
+ *
+ * Used to track quoting state in parsing.
+ *
+ * @param c Character to check.
+ * @return TRUE if the character is a single quote, FALSE otherwise.
+ */
 t_boolean	is_single_quote(char c)
 {
 	return (c == '\'');
