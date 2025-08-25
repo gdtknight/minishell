@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:27:10 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 15:45:42 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 07:12:59 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,10 @@ static t_boolean	check_ambigous(t_token **token_lst, t_token *token)
 	if (!expanded)
 		return (FALSE);
 	if (!expanded->next || !(expanded->next->type == TK_WORD))
+	{
+		clear_token_lst(&expanded);
 		return (FALSE);
+	}
 	ft_putstr_fd(token->value, STDERR_FILENO);
 	ft_putendl_fd(": ambigous redirect", STDERR_FILENO);
 	clear_token_lst(&expanded);
