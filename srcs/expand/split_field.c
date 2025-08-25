@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:56:12 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:42:19 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:44:49 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ static size_t	skip_ifs(const char *str, size_t idx);
  * @param exp_list Pointer to the list where resulting tokens will be added
  * @param exp_token The expanded token to split
  *
- * @note Handles quoting and escape characters to prevent splitting inside quotes.
+ * @note Handles quoting and escape characters to prevent splitting inside
+ *       quotes.
  */
 void	split_field(t_list **exp_list, t_exp_token *exp_token)
 {
