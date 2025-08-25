@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   construct_node.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 16:01:20 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 16:24:14 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:11:39 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,12 @@
 #include "ast.h"
 
 /**
- * @brief <list> 구문 규칙에 따라 구문 트리를 구성한다.
+ * @brief Parses a list of commands separated by semicolons or ampersands.
  *
- * <list> ::= <and_or>
- *          | <list> ";" <and_or>
- *          | <list> "&" <and_or>
+ * Builds a binary tree of command lists, handling ';' and '&' operators.
  *
- * @param tk_lst 현재 토큰 리스트 포인터의 주소.  
- *               함수 실행 중 토큰 리스트 포인터가 진행된다.
- * @return 구문 트리의 루트 노드 포인터.  
- *         메모리 할당 실패 시 NULL을 반환할 수 있다.
+ * @param tk_lst Pointer to the current token list position.
+ * @return t_syntax_node* The root node of the list, or NULL on failure.
  */
 t_syntax_node	*list(t_token **tk_lst)
 {
@@ -55,16 +51,13 @@ t_syntax_node	*list(t_token **tk_lst)
 }
 
 /**
- * @brief <and_or> 구문 규칙에 따라 구문 트리를 구성한다.
+ * @brief Parses a sequence of commands connected by '&&' or '||'.
  *
- * <and_or> ::= <pipeline>
- *            | <and_or> "&&" <pipeline>
- *            | <and_or> "||" <pipeline>
+ * Builds a binary tree for logical AND/OR operations between pipelines.
  *
- * @param tk_lst 현재 토큰 리스트 포인터의 주소.  
- *               함수 실행 중 토큰 리스트 포인터가 진행된다.
- * @return 구문 트리의 루트 노드 포인터.  
- *         메모리 할당 실패 시 NULL을 반환할 수 있다.
+ * @param tk_lst Pointer to the current token list position.
+ * @return t_syntax_node* The root node of the and/or sequence, or NULL
+ * on failure.
  */
 t_syntax_node	*and_or(t_token **tk_lst)
 {
@@ -93,16 +86,13 @@ t_syntax_node	*and_or(t_token **tk_lst)
 }
 
 /**
- * @brief <pipeline> 구문 규칙에 따라 구문 트리를 구성한다.
+ * @brief Parses a pipeline of commands separated by '|' or '|&'.
  *
- * <pipeline> ::= <command>
- *              | <pipeline> "|" <command>
- *              | <pipeline> "|&" <command>
+ * Builds a binary tree for pipelines, handling both standard and error
+ * pipelines.
  *
- * @param tk_lst 현재 토큰 리스트 포인터의 주소.  
- *               함수 실행 중 토큰 리스트 포인터가 진행된다.
- * @return 구문 트리의 루트 노드 포인터.  
- *         메모리 할당 실패 시 NULL을 반환할 수 있다.
+ * @param tk_lst Pointer to the current token list position.
+ * @return t_syntax_node* The root node of the pipeline, or NULL on failure.
  */
 t_syntax_node	*pipeline(t_token **tk_lst)
 {

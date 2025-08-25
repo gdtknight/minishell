@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_node.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:15:05 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 09:48:12 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:11:37 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,13 @@
 #include "ast.h"
 
 /**
- * @brief <command> 규칙을 파싱하여 구문 트리 노드를 생성한다.
+ * @brief Parses a command node from the token list.
  *
- * <command> ::= <simple_command>
- *             | <compound_command>
- *             | <function_def> (미구현)
+ * If the current token is a left parenthesis, parses a compound command node.
+ * Otherwise, parses a simple command node.
  *
- * @param tk_lst 현재 파싱 위치를 나타내는 토큰 리스트 포인터
- * @return t_syntax_node* 생성된 command 노드, 실패 시 NULL
- *
- * @note
- * - '(' 로 시작하면 NODE_COMPOUND_COMMAND를 생성하고 list()로 하위 파싱을 수행.
- * - 그렇지 않으면 simple_command()로 처리.
- * - ')' 가 누락되면 NULL 반환.
+ * @param tk_lst Pointer to the current token list position.
+ * @return t_syntax_node* The created command node, or NULL on failure.
  */
 t_syntax_node	*command(t_token **tk_lst)
 {
@@ -54,20 +48,12 @@ t_syntax_node	*command(t_token **tk_lst)
 }
 
 /**
- * @brief <simple_command> 규칙을 파싱하여 구문 트리 노드를 생성한다.
+ * @brief Parses a simple command node from the token list.
  *
- * <simple_command> ::= <cmd_prefix> <cmd_word> <cmd_suffix>
- *                     | <cmd_word> <cmd_suffix>
- *                     | <cmd_prefix> <cmd_word>
- *                     | <cmd_word>
+ * Handles prefix, command word, and suffix for a simple command.
  *
- * @param tk_lst 현재 파싱 위치를 나타내는 토큰 리스트 포인터
- * @return t_syntax_node* NODE_SIMPLE_COMMAND 노드, 실패 시 NULL
- *
- * @note
- * - prefix는 cmd_prefix()로 파싱.
- * - word는 현재 토큰의 value를 복사(ft_strdup)하여 저장.
- * - suffix는 cmd_suffix()로 파싱.
+ * @param tk_lst Pointer to the current token list position.
+ * @return t_syntax_node* The created simple command node, or NULL on failure.
  */
 t_syntax_node	*simple_command(t_token **tk_lst)
 {
@@ -94,20 +80,15 @@ t_syntax_node	*simple_command(t_token **tk_lst)
 }
 
 /**
- * @brief <cmd_prefix> 규칙을 파싱하여 구문 트리 노드를 생성한다.
+ * @brief Parses the <cmd_prefix> rule and creates a syntax tree node.
  *
  * <cmd_prefix> ::= <io_redirect>
- *                 | <cmd_prefix> <io_redirect>
- *                 | <assignment_word>
- *                 | <cmd_prefix> <assignment_word>
+ *               | <cmd_prefix> <io_redirect>
+ *               | <assignment_word>
+ *               | <cmd_prefix> <assignment_word>
  *
- * @param tk_lst 현재 파싱 위치를 나타내는 토큰 리스트 포인터
- * @return t_syntax_node* 생성된 prefix 노드, 실패 시 NULL
- *
- * @note
- * - 최초 노드는 io_redir() 또는 assignment_word()로 파싱.
- * - 이후 연속되는 TK_REDIR_* 또는 TK_ASSIGN_WORD가 있으면
- *   NODE_CMD_PREFIX로 묶어 왼쪽·오른쪽 자식으로 연결.
+ * @param tk_lst Pointer to the current token list position.
+ * @return t_syntax_node* The created prefix node, or NULL on failure.
  */
 t_syntax_node	*cmd_prefix(t_token **tk_lst)
 {
@@ -139,20 +120,15 @@ t_syntax_node	*cmd_prefix(t_token **tk_lst)
 }
 
 /**
- * @brief <cmd_suffix> 규칙을 파싱하여 구문 트리 노드를 생성한다.
+ * @brief Parses the <cmd_suffix> rule and creates a syntax tree node.
  *
  * <cmd_suffix> ::= <io_redirect>
- *                 | <cmd_suffix> <io_redirect>
- *                 | <word>
- *                 | <cmd_suffix> <word>
+ *               | <cmd_suffix> <io_redirect>
+ *               | <word>
+ *               | <cmd_suffix> <word>
  *
- * @param tk_lst 현재 파싱 위치를 나타내는 토큰 리스트 포인터
- * @return t_syntax_node* 생성된 suffix 노드, 실패 시 NULL
- *
- * @note
- * - 최초 노드는 io_redir() 또는 word()로 파싱.
- * - 이후 연속되는 TK_REDIR_* 또는 TK_WORD가 있으면
- *   NODE_CMD_SUFFIX로 묶어 왼쪽·오른쪽 자식으로 연결.
+ * @param tk_lst Pointer to the current token list position.
+ * @return t_syntax_node* The created suffix node, or NULL on failure.
  */
 t_syntax_node	*cmd_suffix(t_token **tk_lst)
 {

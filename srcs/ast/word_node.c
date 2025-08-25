@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   word_node.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:47:58 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/18 01:45:17 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:11:43 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,15 @@
 
 #include "ast.h"
 
+/**
+ * @brief Parses an assignment word node from the token list.
+ *
+ * Checks if the current token is a word containing '=' and creates an
+ * assignment node if so.
+ *
+ * @param tk_lst Pointer to the current token list position.
+ * @return t_syntax_node* The assignment word node, or NULL on failure.
+ */
 t_syntax_node	*assignment_word(t_token **tk_lst)
 {
 	t_syntax_node	*assignment_word;
@@ -33,6 +42,14 @@ t_syntax_node	*assignment_word(t_token **tk_lst)
 	return (assignment_word);
 }
 
+/**
+ * @brief Parses a word node from the token list.
+ *
+ * Checks if the current token is a word and creates a word node if valid.
+ *
+ * @param tk_lst Pointer to the current token list position.
+ * @return t_syntax_node* The word node, or NULL on failure.
+ */
 t_syntax_node	*word(t_token **tk_lst)
 {
 	t_syntax_node	*word_node;

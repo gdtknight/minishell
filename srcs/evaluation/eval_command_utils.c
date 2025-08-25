@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eval_command_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 22:17:29 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 10:15:47 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:12:20 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,13 @@
 static int	count_args(t_syntax_node *cmd_suffix);
 
 /**
- * @brief 명령어 suffix 노드에서 인자(argv) 배열을 생성한다.
+ * @brief Builds an argument array from a command suffix node.
  *
- * NODE_CMD_SUFFIX로 연결된 트리를 순회하며 NODE_WORD 타입의 값을
- * 인자로 추가하고, 마지막에 NULL 포인터로 배열을 종료한다.
- * argv[0]은 호출부에서 명령어로 설정한다.
+ * Traverses the suffix nodes and collects all word arguments into a
+ * dynamically allocated array.
  *
- * @param cmd_suffix 명령어 suffix를 나타내는 AST 노드
- * @return char** NULL 종료된 인자 문자열 배열(동적 할당)
- *
- * @note
- * - count_args()를 이용해 배열 크기를 미리 계산하여 메모리 할당.
- * - 반환된 배열과 내부 문자열은 호출자가 free()로 해제해야 한다.
- * - prefix의 인자는 포함하지 않는다.
+ * @param cmd_suffix Pointer to the command suffix node.
+ * @return char** Array of argument strings, NULL-terminated.
  */
 char	**get_args_from_suffix(t_syntax_node *cmd_suffix)
 {
@@ -56,12 +50,12 @@ char	**get_args_from_suffix(t_syntax_node *cmd_suffix)
 }
 
 /**
- * @brief 명령어 suffix 노드에 포함된 인자 수를 계산한다.
+ * @brief Counts the number of arguments in a command suffix node.
  *
- * NODE_CMD_SUFFIX 체인을 순회하여 NODE_WORD 타입의 인자 개수를 센다.
+ * Traverses the suffix nodes and counts all word arguments.
  *
- * @param cmd_suffix 명령어 suffix를 나타내는 AST 노드
- * @return int 인자의 개수
+ * @param cmd_suffix Pointer to the command suffix node.
+ * @return int Number of arguments found.
  */
 static int	count_args(t_syntax_node *cmd_suffix)
 {
@@ -83,6 +77,14 @@ static int	count_args(t_syntax_node *cmd_suffix)
 	return (count);
 }
 
+/**
+ * @brief Frees all memory in a command form structure.
+ *
+ * Frees the command string, argument array, and environment array in the
+ * given t_cmd_form struct.
+ *
+ * @param cmd_form Pointer to the command form to clear.
+ */
 void	clear_cmd_form(t_cmd_form *cmd_form)
 {
 	char	**strs;
@@ -113,17 +115,13 @@ void	clear_cmd_form(t_cmd_form *cmd_form)
 }
 
 /**
- * @brief 명령 앞(prefix)에 붙은 I/O 리다이렉션 체인을 적용한다.
+ * @brief Evaluates and sets I/O redirections from a prefix node.
  *
- * NODE_CMD_PREFIX로 연결된 이진 트리를 좌측부터 순회하며
- * 각 노드의 I/O 리다이렉션을 eval_io_redir()로 적용한다.
+ * Traverses the prefix nodes and applies I/O redirections using
+ * eval_io_redir().
  *
- * @param prefix 명령의 prefix 노드(또는 단일 I/O 노드)
- * @return t_status SUCCESS(0) 또는 ERROR(비0)
- *
- * @note
- * - prefix가 체인이면 left를 먼저 적용하고 right로 진행한다.
- * - 어느 한 단계라도 오류가 발생하면 즉시 해당 status를 반환한다.
+ * @param prefix Pointer to the command prefix node.
+ * @return t_status SUCCESS on success, error code otherwise.
  */
 t_status	set_io_from_prefix(t_syntax_node *prefix)
 {
@@ -145,18 +143,13 @@ t_status	set_io_from_prefix(t_syntax_node *prefix)
 }
 
 /**
- * @brief 명령 뒤(suffix)에 붙은 I/O 리다이렉션/인자 체인을 적용한다.
+ * @brief Evaluates and sets I/O redirections from a suffix node.
  *
- * NODE_CMD_SUFFIX로 연결된 이진 트리를 좌측부터 순회하며
- * 각 노드의 I/O 리다이렉션을 eval_io_redir()로 적용한다.
- * (인자 수집은 별도 경로에서 수행되며, 여기서는 I/O만 처리한다고 가정)
+ * Traverses the suffix nodes and applies I/O redirections using
+ * eval_io_redir().
  *
- * @param suffix 명령의 suffix 노드(또는 단일 I/O 노드)
- * @return t_status SUCCESS(0) 또는 ERROR(비0)
- *
- * @note
- * - suffix가 체인이면 left를 먼저 적용하고 right로 진행한다.
- * - 어느 한 단계라도 오류가 발생하면 즉시 해당 status를 반환한다.
+ * @param suffix Pointer to the command suffix node.
+ * @return t_status SUCCESS on success, error code otherwise.
  */
 t_status	set_io_from_suffix(t_syntax_node *suffix)
 {

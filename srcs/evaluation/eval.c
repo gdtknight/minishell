@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eval.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 17:35:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 08:40:17 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:09:01 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,11 @@
 #include "eval.h"
 
 /**
- * @brief 구문 트리 노드를 평가하여 명령을 실행한다.
+ * @brief Evaluates a syntax node and dispatches to the correct handler.
  *
- * AST 노드의 타입에 따라 적절한 평가 함수를 호출하여 명령을 실행한다.
- * - NODE_SEMICOLON / NODE_AMPERSAND: eval_list()로 처리
- * - NODE_AND_IF / NODE_OR_IF: eval_and_or()로 처리
- * - NODE_PIPELINE / NODE_PIPELINE_ERR: eval_pipeline()로 처리 (파이프 플래그 on/off)
- * - NODE_SIMPLE_COMMAND / NODE_COMPOUND_COMMAND: eval_command()로 처리
+ * Calls the appropriate evaluation function based on the node type.
  *
- * @param node 평가할 구문 트리 노드
- * @return t_status 명령 실행 결과 상태 코드
- *
- * @note
- * - 현재 NODE_AMPERSAND(백그라운드 실행)는 지원하지 않으며, NODE_SEMICOLON과 동일하게 동기 처리된다.
- * - eval_pipeline() 실행 시 get_shell_data()->in_pipe를 TRUE로 설정해 파이프 상태를 알린다.
+ * @param node Pointer to the syntax node to evaluate.
  */
 void	eval(t_syntax_node *node)
 {
@@ -68,17 +59,11 @@ void	eval(t_syntax_node *node)
 }
 
 /**
- * @brief 명령 리스트 노드(NODE_SEMICOLON, NODE_AMPERSAND)를 평가한다.
+ * @brief Evaluates a list node (semicolon or ampersand).
  *
- * 리스트의 왼쪽 명령을 먼저 실행한 뒤, 오른쪽 명령을 실행한다.
- * 현재는 & 기호(백그라운드 실행)를 지원하지 않으며, 모든 명령을 동기적으로 처리한다.
+ * Handles sequential and background execution of left and right nodes.
  *
- * @param list_node 명령 리스트를 나타내는 AST 노드
- * @return t_status 마지막 명령 실행 결과 상태 코드
- *
- * @note
- * - 왼쪽 명령은 fork()로 자식 프로세스에서 실행 후 waitpid()로 대기한다.
- * - 오른쪽 명령은 부모 프로세스에서 바로 eval()로 실행한다.
+ * @param node Pointer to the list node to evaluate.
  */
 void	eval_list(t_syntax_node *node)
 {
@@ -105,14 +90,12 @@ void	eval_list(t_syntax_node *node)
 }
 
 /**
- * @brief AND/OR 연산자 노드를 평가한다.
+ * @brief Evaluates an AND/OR node.
  *
- * 왼쪽 명령을 먼저 실행한 뒤, 결과에 따라 오른쪽 명령 실행 여부를 결정한다.
- * - NODE_AND_IF: 왼쪽 명령이 성공(status == 0)하면 오른쪽 명령 실행
- * - NODE_OR_IF:  왼쪽 명령이 실패(status != 0)하면 오른쪽 명령 실행
+ * Evaluates the left node, then the right node based on the last status and
+ * the node type (AND_IF or OR_IF).
  *
- * @param and_or_node AND/OR 연산자를 나타내는 AST 노드
- * @return t_status 마지막으로 실행된 명령의 상태 코드
+ * @param and_or_node Pointer to the AND/OR node to evaluate.
  */
 void	eval_and_or(t_syntax_node *and_or_node)
 {

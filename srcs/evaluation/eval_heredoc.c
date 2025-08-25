@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eval_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 00:57:31 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 09:32:17 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:05:42 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,13 @@
 static void	eval_heredoc_construct(t_syntax_node *node);
 static void	eval_heredoc_command(t_syntax_node *node);
 
+/**
+ * @brief Recursively evaluates heredoc nodes in the syntax tree.
+ *
+ * Traverses the tree and calls the appropriate function for each node type.
+ *
+ * @param node Pointer to the syntax node to evaluate.
+ */
 void	eval_heredoc(t_syntax_node *node)
 {
 	if (!node || node->eval == OFF)
@@ -32,6 +39,13 @@ void	eval_heredoc(t_syntax_node *node)
 		read_heredoc(node);
 }
 
+/**
+ * @brief Evaluates heredoc nodes in binary construct nodes.
+ *
+ * Recursively processes left and right children for heredoc evaluation.
+ *
+ * @param node Pointer to the binary construct node.
+ */
 static void	eval_heredoc_construct(t_syntax_node *node)
 {
 	if (!node || node->eval == OFF)
@@ -42,6 +56,14 @@ static void	eval_heredoc_construct(t_syntax_node *node)
 		eval_heredoc(node->value.b_node.right);
 }
 
+/**
+ * @brief Evaluates heredoc nodes in command nodes.
+ *
+ * Recursively processes child, prefix, and suffix nodes for heredoc
+ * evaluation.
+ *
+ * @param node Pointer to the command node.
+ */
 static void	eval_heredoc_command(t_syntax_node *node)
 {
 	if (!node || node->eval == OFF)

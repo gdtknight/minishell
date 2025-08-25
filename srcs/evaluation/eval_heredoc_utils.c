@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eval_heredoc_utils.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 17:19:13 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 12:09:31 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:05:14 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,14 @@ static void	receive_heredoc(pid_t child_pid, int heredoc_pipe[2]);
 static void	read_input(const char *limiter);
 static void	read_heredoc_pipe(int pipe_fd);
 
+/**
+ * @brief Reads heredoc input for a given syntax node.
+ *
+ * Sets up a pipe and forks a child to collect heredoc input, then stores
+ * the result in the node.
+ *
+ * @param node Pointer to the syntax node for heredoc.
+ */
 void	read_heredoc(t_syntax_node *node)
 {
 	int		heredoc_pipe[2];
@@ -51,6 +59,15 @@ void	read_heredoc(t_syntax_node *node)
 	clear_heredoc_input();
 }
 
+/**
+ * @brief Child process: collects heredoc input and writes to pipe.
+ *
+ * Initializes heredoc signal, reads input until limiter, writes to pipe,
+ * and exits.
+ *
+ * @param heredoc_pipe Pipe file descriptors.
+ * @param node Pointer to the syntax node for heredoc.
+ */
 static void	start_heredoc(int heredoc_pipe[2], t_syntax_node *node)
 {
 	init_heredoc_signal();
@@ -65,6 +82,13 @@ static void	start_heredoc(int heredoc_pipe[2], t_syntax_node *node)
 	exit(EXIT_SUCCESS);
 }
 
+/**
+ * @brief Reads heredoc input from the user until the limiter is reached.
+ *
+ * Appends each line to the heredoc input buffer.
+ *
+ * @param limiter The heredoc delimiter string.
+ */
 static void	read_input(const char *limiter)
 {
 	char	*temp;
@@ -93,6 +117,14 @@ static void	read_input(const char *limiter)
 	}
 }
 
+/**
+ * @brief Parent process: receives heredoc from child and updates shell state.
+ *
+ * Waits for the child, handles signals, and reads heredoc data from pipe.
+ *
+ * @param child_pid PID of the child process.
+ * @param heredoc_pipe Pipe file descriptors.
+ */
 static void	receive_heredoc(pid_t child_pid, int heredoc_pipe[2])
 {
 	int	status;
@@ -117,6 +149,13 @@ static void	receive_heredoc(pid_t child_pid, int heredoc_pipe[2])
 	close(heredoc_pipe[PIPE_READ]);
 }
 
+/**
+ * @brief Reads heredoc data from a pipe and stores it in the heredoc buffer.
+ *
+ * Reads all data from the pipe and appends it to the heredoc input buffer.
+ *
+ * @param pipe_fd File descriptor to read from.
+ */
 static void	read_heredoc_pipe(int pipe_fd)
 {
 	char	*read_;

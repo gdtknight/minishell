@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eval_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:34:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 12:47:05 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:04:06 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,12 @@ static void		eval_command_from_child(t_syntax_node *cmd_node);
 static void		set_cmd_form(t_command *command);
 
 /**
- * @brief (파이프 여부에 따라) 명령 노드를 실행한다.
+ * @brief Evaluates a command node, handling forking and execution.
  *
- * - 파이프 내부(get_shell_data()->in_pipe == TRUE)라면 현재 프로세스에서
- *   즉시 하위 노드를 eval/execute_simple_cmd로 실행하고 exit()로 종료한다.
- * - 파이프 외부라면 fork() 후 자식에서 실행하고, 부모는 waitpid()로 대기한다.
+ * Forks a child process for non-builtin commands, or executes directly for
+ * builtins and compound commands.
  *
- * @param cmd_node 실행할 명령 노드 (NODE_SIMPLE_COMMAND 또는 NODE_COMPOUND_COMMAND)
- * @return t_status waitpid()로 수집한 자식의 상태 값(원시 status)
- *
- * @note
- * - 반환값은 WEXITSTATUS가 아닌 waitpid의 원시 status이다.
- *   호출 측에서 WIFEXITED/WEXITSTATUS로 해석이 필요할 수 있다.
- * - 자식에서는 restore_terminal_settings()를 호출한 뒤 실행한다.
+ * @param cmd_node Pointer to the command syntax node to evaluate.
  */
 void	eval_command(t_syntax_node *cmd_node)
 {
@@ -66,6 +59,14 @@ void	eval_command(t_syntax_node *cmd_node)
 	eval_simple_command(&(cmd_node->value.command));
 }
 
+/**
+ * @brief Evaluates a command node in a child process.
+ *
+ * Handles both compound and simple commands, then clears shell state and
+ * exits.
+ *
+ * @param cmd_node Pointer to the command syntax node to evaluate.
+ */
 static void	eval_command_from_child(t_syntax_node *cmd_node)
 {
 	if (cmd_node->type == NODE_COMPOUND_COMMAND)
@@ -80,6 +81,14 @@ static void	eval_command_from_child(t_syntax_node *cmd_node)
 	exit(get_shell_data()->last_status);
 }
 
+/**
+ * @brief Evaluates a simple command node.
+ *
+ * Sets up the command form, handles I/O redirections, and executes the
+ * command or builtin.
+ *
+ * @param command Pointer to the command structure to evaluate.
+ */
 static void	eval_simple_command(t_command *command)
 {
 	set_cmd_form(command);
@@ -99,6 +108,14 @@ static void	eval_simple_command(t_command *command)
 	execute_command(&(command->form));
 }
 
+/**
+ * @brief Sets up the command form structure for execution.
+ *
+ * Fills in the command, arguments, and environment for the given command
+ * structure.
+ *
+ * @param command Pointer to the command structure to set up.
+ */
 static void	set_cmd_form(t_command *command)
 {
 	command->form.cmd = NULL;

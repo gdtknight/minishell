@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 22:12:37 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 10:23:51 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:09:30 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,12 @@
 #include "execute.h"
 
 /**
- * @brief 빌트인(builtin) 명령어를 실행한다.
+ * @brief Executes a builtin command based on the command form.
  *
- * 전달받은 명령어(cmd_form.cmd)가 등록된 빌트인 명령어 목록에 있는지 확인하고,
- * 일치하는 항목이 있으면 해당 빌트인 함수 포인터를 호출한다.
+ * Searches for the command in the builtin table and calls the corresponding
+ * function if found.
  *
- * @param cmd_form 실행할 명령의 구조체 (명령어 문자열, 인자 배열, 환경 변수 등)
- * @return t_status 빌트인 함수 실행 결과
- * @retval SUCCESS 빌트인 함수가 성공적으로 실행된 경우
- * @retval FAILURE 빌트인 명령어 목록에 해당 명령이 없는 경우
- *
- * @note
- * - builtins[] 배열에 명령어 문자열과 함수 포인터를 등록해 관리한다.
- * - 비교 시 ft_strncmp()로 명령어 문자열이 완전히 일치하는지 확인한다.
- * - 빌트인이 아닌 경우에는 외부 명령 실행 경로로 넘어가야 한다.
+ * @param cmd_form Pointer to the command form structure.
  */
 void	execute_builtin(t_cmd_form *cmd_form)
 {
@@ -62,6 +54,14 @@ void	execute_builtin(t_cmd_form *cmd_form)
 	}
 }
 
+/**
+ * @brief Checks if a command string is a builtin command.
+ *
+ * Compares the command string to the list of supported builtins.
+ *
+ * @param cmd Command string to check.
+ * @return t_boolean TRUE if builtin, FALSE otherwise.
+ */
 t_boolean	is_builtin(char *cmd)
 {
 	static char	*builtins[] = {

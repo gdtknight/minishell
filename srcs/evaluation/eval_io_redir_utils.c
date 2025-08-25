@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eval_io_redir_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 21:21:43 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 14:24:49 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:07:13 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,12 @@ static void				set_heredoc_from_pipe(
 							pid_t child);
 
 /**
- * @brief 표준 입력(STDIN)을 재설정한다.
+ * @brief Sets up stdin redirection from a file or heredoc.
  *
- * - NODE_IO_REDIR_IN: 지정된 파일을 O_RDONLY로 열어 STDIN에 연결
- * - NODE_IO_REDIR_HEREDOC: set_heredoc()으로 처리
+ * Opens the input file or calls set_heredoc for heredoc nodes.
  *
- * @param io_redir_node 입력 리다이렉션 노드
- * @return t_status SUCCESS 또는 ERROR
- *
- * @note
- * - open() 실패 시 errno 메시지를 perror()로 출력하고 ERROR 반환.
- * - dup2() 이후 원본 FD는 닫지 않고 반환(heredoc 제외).
+ * @param io_redir_node Pointer to the I/O redirection node.
+ * @return t_status SUCCESS or FAILURE.
  */
 t_status	set_stdin(t_syntax_node *io_redir_node)
 {
@@ -65,17 +60,13 @@ t_status	set_stdin(t_syntax_node *io_redir_node)
 }
 
 /**
- * @brief heredoc(<<) 입력을 설정한다.
+ * @brief Sets up heredoc redirection for a command node.
  *
- * 파이프를 생성하고, 자식 프로세스에서 heredoc 내용을 작성하여
- * 부모 프로세스의 STDIN으로 연결한다.
+ * Creates a pipe, forks a child to write heredoc data, and sets up the
+ * parent to read from the pipe.
  *
- * @param io_redir_node heredoc 리다이렉션 노드
- * @return t_status 항상 SUCCESS (실패 시 ERROR 반환 가능)
- *
- * @note
- * - heredoc() 함수로 내용 생성 → 파이프 쓰기 → 부모에서 파이프 읽기 FD를 STDIN에 연결
- * - 자식 종료 상태를 get_shell_data()->last_status에 반영
+ * @param io_redir_node Pointer to the heredoc redirection node.
+ * @return t_status SUCCESS.
  */
 t_status	set_heredoc(t_syntax_node *io_redir_node)
 {
@@ -101,6 +92,14 @@ t_status	set_heredoc(t_syntax_node *io_redir_node)
 	return (SUCCESS);
 }
 
+/**
+ * @brief Child process: writes heredoc data to the pipe.
+ *
+ * Writes the heredoc input to the pipe and exits.
+ *
+ * @param cmd Pointer to the command node.
+ * @param io_redir_node Pointer to the heredoc redirection node.
+ */
 static void	set_heredoc_to_pipe(
 				t_syntax_node *cmd,
 				t_syntax_node *io_redir_node)
@@ -116,6 +115,14 @@ static void	set_heredoc_to_pipe(
 	exit(EXIT_SUCCESS);
 }
 
+/**
+ * @brief Parent process: sets up stdin from heredoc pipe and waits for child.
+ *
+ * Duplicates the pipe to stdin and waits for the child process to finish.
+ *
+ * @param cmd Pointer to the command node.
+ * @param child PID of the child process.
+ */
 static void	set_heredoc_from_pipe(t_syntax_node *cmd, pid_t child)
 {
 	int	status;
@@ -127,17 +134,12 @@ static void	set_heredoc_from_pipe(t_syntax_node *cmd, pid_t child)
 }
 
 /**
- * @brief 표준 출력(STDOUT)을 재설정한다.
+ * @brief Sets up stdout redirection to a file.
  *
- * - NODE_IO_REDIR_OUT: 쓰기 전용, 없으면 생성(O_CREAT), 기존 내용 삭제(O_TRUNC)
- * - NODE_IO_REDIR_APPEND: 쓰기 전용, 없으면 생성(O_CREAT), 기존 내용 뒤에 추가(O_APPEND)
+ * Opens the output file (truncate or append) and duplicates it to stdout.
  *
- * @param io_redir_node 출력 리다이렉션 노드
- * @return t_status SUCCESS 또는 ERROR
- *
- * @note
- * - open() 실패 시 errno 메시지를 perror()로 출력하고 ERROR 반환.
- * - 성공 시 dup2()로 STDOUT을 새 FD에 연결하고 원본 FD는 닫는다.
+ * @param io_redir_node Pointer to the I/O redirection node.
+ * @return t_status SUCCESS or FAILURE.
  */
 t_status	set_stdout(t_syntax_node *io_redir_node)
 {

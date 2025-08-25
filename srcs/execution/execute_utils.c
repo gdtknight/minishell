@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 23:04:02 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 03:52:25 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:10:21 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,20 +28,13 @@ static t_boolean	check_path(char *path);
 static void			release_dirs(char ***p_dirs);
 
 /**
- * @brief 실행 가능한 명령어의 전체 경로를 PATH 환경변수에서 찾는다.
+ * @brief Finds the full path of a command using the PATH environment variable.
  *
- * PATH 환경변수에 지정된 디렉토리를 순회하며, cmd와 결합한 경로가
- * 실행 가능(X_OK)인지 확인한다. 실행 가능한 경로를 찾으면 해당 경로를 반환한다.
+ * Searches each directory in PATH for an executable matching the command.
  *
- * @param cmd  실행할 명령어(파일명)
- * @param envp 환경 변수 배열(NULL 종료)
- * @return char* 실행 가능한 전체 경로(동적 할당) 또는 NULL(없을 경우)
- *
- * @note
- * - PATH 변수는 ':'로 구분된 디렉토리 목록을 ft_split()으로 분리하여 탐색.
- * - 첫 번째 실행 가능한 경로를 찾으면 즉시 반환한다.
- * - 반환된 문자열은 호출자가 free()로 해제해야 한다.
- * - dirs 배열은 release_dirs()로 해제한다.
+ * @param cmd Command name to search for.
+ * @param envp Environment variable array.
+ * @return char* Full path to the command, or NULL if not found.
  */
 char	*find_path(char *cmd, char *envp[])
 {
@@ -71,6 +64,14 @@ char	*find_path(char *cmd, char *envp[])
 	return (path_full);
 }
 
+/**
+ * @brief Checks if a path is readable and executable.
+ *
+ * Returns TRUE if the file exists and is executable, FALSE otherwise.
+ *
+ * @param path Path to check.
+ * @return t_boolean TRUE if executable, FALSE otherwise.
+ */
 static t_boolean	check_path(char *path)
 {
 	if (access(path, R_OK) == 0)
@@ -87,6 +88,14 @@ static t_boolean	check_path(char *path)
 	return (FALSE);
 }
 
+/**
+ * @brief Gets the list of directories from the PATH environment variable.
+ *
+ * Splits the PATH variable into an array of directory strings.
+ *
+ * @param envp Environment variable array.
+ * @return char** Array of directory strings.
+ */
 static char	**get_dirs(char *envp[])
 {
 	char	**dirs;
@@ -98,15 +107,11 @@ static char	**get_dirs(char *envp[])
 }
 
 /**
- * @brief find_path()에서 사용한 디렉토리 배열을 해제한다.
+ * @brief Frees the memory allocated for the directory array.
  *
- * ft_split()으로 생성된 디렉토리 배열을 모두 free()한 뒤
- * 포인터를 NULL로 초기화한다.
+ * Releases all memory used by the array of directory strings.
  *
- * @param p_dirs 해제할 디렉토리 배열의 포인터
- *
- * @note
- * - NULL 포인터나 비어 있는 배열에 대해서는 아무 동작도 하지 않는다.
+ * @param p_dirs Pointer to the directory array to free.
  */
 static void	release_dirs(char ***p_dirs)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_node.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:23:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/18 01:45:11 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:11:41 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,12 @@ static void	print_binary_node_type(t_syntax_node *node, int depth);
 static void	print_leaf_node(t_syntax_node *node, int depth);
 
 /**
- * @brief 구문 트리 노드를 깊이 정보와 함께 사람이 읽기 쉬운 형태로 출력한다.
+ * @brief Recursively prints the syntax tree nodes for debugging.
  *
- * 이진 노드(;, &, &&, ||, |, |&)는 print_binary_node_type()로,
- * 명령 노드(NODE_SIMPLE_COMMAND, NODE_CMD_PREFIX, NODE_CMD_SUFFIX)는
- * print_cmd_node()로, 그 외 리프 노드는 print_leaf_node()로 위임한다.
+ * Dispatches to the appropriate print function based on node type.
  *
- * @param node  출력할 노드
- * @param depth 현재 출력 깊이(루트는 0)
+ * @param node Pointer to the syntax node to print.
+ * @param depth Current depth in the tree (for indentation).
  */
 void	print_node(t_syntax_node *node, int depth)
 {
@@ -46,11 +44,12 @@ void	print_node(t_syntax_node *node, int depth)
 }
 
 /**
- * @brief 이진 연산 노드(;, &, &&, ||, |, |&)의 타입을 출력하고 좌/우 자식을 재귀 출력한다.
+ * @brief Prints a binary node and its children.
  *
- * @param node  이진 노드(NODE_SEMICOLON, NODE_AMPERSAND, NODE_AND_IF,
- *              NODE_OR_IF, NODE_PIPELINE, NODE_PIPELINE_ERR)
- * @param depth 현재 출력 깊이
+ * Handles semicolon, ampersand, and, or, and pipeline node types.
+ *
+ * @param node Pointer to the binary node to print.
+ * @param depth Current depth in the tree (for indentation).
  */
 static void	print_binary_node_type(t_syntax_node *node, int depth)
 {
@@ -71,14 +70,12 @@ static void	print_binary_node_type(t_syntax_node *node, int depth)
 }
 
 /**
- * @brief 명령 계열 노드(NODE_SIMPLE_COMMAND, NODE_CMD_PREFIX, NODE_CMD_SUFFIX)를
- *        포맷에 맞춰 출력한다.
+ * @brief Prints a command node and its children.
  *
- * - NODE_SIMPLE_COMMAND: prefix → "cmd - <word>" → suffix 순으로 출력
- * - NODE_CMD_PREFIX / NODE_CMD_SUFFIX: 좌/우 자식을 재귀 출력
+ * Handles simple command, prefix, and suffix node types.
  *
- * @param node  명령 계열 노드
- * @param depth 현재 출력 깊이
+ * @param node Pointer to the command node to print.
+ * @param depth Current depth in the tree (for indentation).
  */
 static void	print_cmd_node(t_syntax_node *node, int depth)
 {
@@ -104,14 +101,12 @@ static void	print_cmd_node(t_syntax_node *node, int depth)
 }
 
 /**
- * @brief 리프 노드(리다이렉션, 단어, 할당)를 한 줄로 출력한다.
+ * @brief Prints a leaf node's information.
  *
- * - NODE_IO_REDIR_*: "io_redir, target - <io_target>"
- * - NODE_ASSIGN_WORD: "assign_word"
- * - NODE_WORD: "word, value - <word>"
+ * Handles I/O redirection, assign_word, and word node types.
  *
- * @param node  리프 노드
- * @param depth 현재 출력 깊이
+ * @param node Pointer to the leaf node to print.
+ * @param depth Current depth in the tree (for indentation).
  */
 static void	print_leaf_node(t_syntax_node *node, int depth)
 {

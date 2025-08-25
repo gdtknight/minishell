@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eval_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 03:30:48 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 14:23:53 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:12:30 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,16 @@
 #include "shell.h"
 #include "eval.h"
 
+/**
+ * @brief Waits for a child process and updates shell status.
+ *
+ * Waits for the given child PID and sets the shell's last_status based on
+ * exit or signal.
+ *
+ * @param child_pid PID of the child process to wait for.
+ * @param status Pointer to the status variable.
+ * @param options Options for waitpid.
+ */
 void	wait_child(pid_t child_pid, int *status, int options)
 {
 	waitpid(child_pid, status, options);
@@ -25,6 +35,15 @@ void	wait_child(pid_t child_pid, int *status, int options)
 		(get_shell_data())->last_status = 128 + WTERMSIG(*status);
 }
 
+/**
+ * @brief Finds the nearest simple command node from an I/O redirection node.
+ *
+ * Traverses up the parent chain to locate the NODE_SIMPLE_COMMAND node.
+ *
+ * @param io_redir_node Pointer to the I/O redirection node.
+ * @return t_syntax_node* Pointer to the found command node, or NULL if
+ * not found.
+ */
 t_syntax_node	*find_cmd_node(t_syntax_node *io_redir_node)
 {
 	t_syntax_node	*cur;

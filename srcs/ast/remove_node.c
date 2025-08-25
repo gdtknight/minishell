@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   remove_node.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:11:42 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 22:11:42 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:11:42 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,11 @@ static void	remove_command_node(t_syntax_node *node);
 static void	remove_binary_node(t_syntax_node *node);
 
 /**
- * @brief 구문 트리 노드를 해제한다.
+ * @brief Recursively frees a syntax node and its children.
  *
- * 노드 타입에 따라 value에 포함된 동적 메모리를 먼저 해제하고,
- * 재귀적으로 하위 노드까지 해제한 뒤 현재 노드를 free 한다.
+ * Determines the node type and calls the appropriate removal function.
  *
- * @param node 해제할 노드 포인터
- *
- * @note
- * - NODE_WORD, NODE_ASSIGN_WORD, NODE_IO_REDIR_* 타입은 문자열 값만 해제한다.
- * - NODE_COMPOUND_COMMAND는 하위 child 노드를 재귀적으로 해제한다.
- * - NODE_SIMPLE_COMMAND는 prefix, suffix, word를 해제한다.
- * - 이진 구조(NODE_SEMICOLON, NODE_AND_IF, NODE_PIPELINE 등)는 left/right 모두 재귀 해제한다.
+ * @param node Pointer to the syntax node to remove.
  */
 void	remove_syntax_node(t_syntax_node *node)
 {
@@ -55,12 +48,11 @@ void	remove_syntax_node(t_syntax_node *node)
 }
 
 /**
- * @brief 문자열 값을 가진 노드의 value를 해제한다.
+ * @brief Frees a leaf node and its associated memory.
  *
- * NODE_WORD, NODE_ASSIGN_WORD, NODE_IO_REDIR_* 타입에서
- * 해당하는 문자열 포인터를 free 한다.
+ * Handles freeing for word, assign_word, and I/O redirection nodes.
  *
- * @param node 문자열 값을 가진 노드 포인터
+ * @param node Pointer to the leaf node to remove.
  */
 static void	remove_leaf_node(t_syntax_node *node)
 {
@@ -87,6 +79,14 @@ static void	remove_leaf_node(t_syntax_node *node)
 	free(node);
 }
 
+/**
+ * @brief Frees a command node and its children.
+ *
+ * Handles both compound and simple command nodes, freeing all associated
+ * memory.
+ *
+ * @param node Pointer to the command node to remove.
+ */
 static void	remove_command_node(t_syntax_node *node)
 {
 	if (node->type == NODE_COMPOUND_COMMAND)
@@ -108,6 +108,13 @@ static void	remove_command_node(t_syntax_node *node)
 	return ;
 }
 
+/**
+ * @brief Frees a binary node and its left/right children.
+ *
+ * Handles nodes with left and right children, freeing all associated memory.
+ *
+ * @param node Pointer to the binary node to remove.
+ */
 static void	remove_binary_node(t_syntax_node *node)
 {
 	remove_syntax_node(node->value.b_node.left);

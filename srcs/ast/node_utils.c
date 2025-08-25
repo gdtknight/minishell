@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   node_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 23:45:14 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 12:11:38 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:11:41 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,12 @@
 static void	initialize_value(t_syntax_node *node);
 
 /**
- * @brief 비어 있는 구문 트리 노드를 생성한다.
+ * @brief Creates and initializes an empty syntax node.
  *
- * t_syntax_node 구조체를 동적 할당하여 반환한다.
- * 메모리 할당에 실패하면 에러를 출력하고 프로그램을 종료한다.
+ * Allocates memory for a new syntax node, sets default values, and
+ * initializes its fields. Exits on allocation failure.
  *
- * @return t_syntax_node* 새로 생성된 노드 포인터
- *
- * @note
- * - 생성된 노드는 type이나 value가 초기화되지 않으므로, 호출자가 반드시 초기화해야 한다.
+ * @return t_syntax_node* Pointer to the newly created node.
  */
 t_syntax_node	*create_empty_node(void)
 {
@@ -47,6 +44,14 @@ t_syntax_node	*create_empty_node(void)
 	return (node);
 }
 
+/**
+ * @brief Initializes the value fields of a syntax node to NULL.
+ *
+ * Sets all union members in the node's value to NULL to ensure a clean
+ * state.
+ *
+ * @param node Pointer to the syntax node to initialize.
+ */
 static void	initialize_value(t_syntax_node *node)
 {
 	node->value.assign_word = NULL;
@@ -55,6 +60,14 @@ static void	initialize_value(t_syntax_node *node)
 	node->value.child = NULL;
 }
 
+/**
+ * @brief Recursively disables evaluation for a syntax node and its children.
+ *
+ * Sets the eval flag to OFF for the node and all relevant child nodes,
+ * depending on the node type.
+ *
+ * @param node Pointer to the syntax node to update.
+ */
 void	turnoff_node_eval(t_syntax_node *node)
 {
 	if (!node)
