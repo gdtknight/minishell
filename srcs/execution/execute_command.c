@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 14:25:06 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:09:51 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/25 22:04:52 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,13 @@
 
 #include "ast.h"
 #include "eval.h"
+#include "libft.h"
 #include "shell.h"
 
 #include "execute.h"
 
 static void	execute_relative_path(t_cmd_form *cmd_form);
+static void	is_a_directory(void);
 static void	execute_absolute_path(t_cmd_form *cmd_form);
 
 /**
@@ -61,8 +63,20 @@ static void	execute_relative_path(t_cmd_form *cmd_form)
 			exit(PERMISSION_DENIED_CODE);
 		}
 		restore_signal();
-		execve(cmd, cmd_form->args, cmd_form->envp);
+		if ((*(cmd + 2) == '\0')
+			&& (execve(cmd, cmd_form->args, cmd_form->envp) == -1))
+			is_a_directory();
 	}
+}
+
+static void	is_a_directory(void)
+{
+	ft_putstr_fd("./", STDERR_FILENO);
+	ft_putendl_fd(": Is a directory", STDERR_FILENO);
+	clear_heredoc_input();
+	clear_shell_input();
+	clear_shell_data();
+	exit(PERMISSION_DENIED_CODE);
 }
 
 /**
