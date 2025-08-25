@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 20:56:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/19 22:01:07 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 15:09:16 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,6 @@
 char		**lst_from_hashmap(t_hash_map *map);
 char		*extract_key(char *envp);
 char		*extract_value(char *envp);
-
-/* --- file_utils.c --- */
-
-char		**match_files_in_dir(const char *pattern);
 
 /* --- find_next_delim.c --- */
 
