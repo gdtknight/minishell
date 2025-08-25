@@ -6,9 +6,17 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:06:19 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 18:05:13 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:28:27 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file shell_data.c
+ * @brief Shell global data management functions.
+ *
+ * This file provides access to a global shell_data structure,
+ * initializes it with environment variables, and clears its resources.
+ */
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -20,16 +28,17 @@
 #include "shell.h"
 
 /**
- * @brief 전역적으로 접근 가능한 shell_data 구조체를 반환
+ * @brief Returns a globally accessible shell_data structure.
  *
- * 프로그램 전체에서 공유되는 t_shell_data 인스턴스를 static으로 유지하며,
- * 해당 구조체의 주소를 반환한다.
+ * Maintains a static t_shell_data instance shared across the program
+ * and returns its address.
  *
- * @return t_shell_data* 전역 shell_data 구조체의 포인터
+ * @return t_shell_data* Pointer to the global shell_data structure.
  *
  * @note
- * - static 변수로 선언되어 한 번 생성 후 프로그램 종료 시까지 유지된다.
- * - 외부에서 직접 전역 변수를 선언하지 않고 안전하게 공유할 수 있는 방식이다.
+ * - The static variable persists for the lifetime of the program.
+ * - Provides a safe way to share global state without exposing a 
+ *   global variable.
  */
 t_shell_data	*get_shell_data(void)
 {
@@ -39,20 +48,24 @@ t_shell_data	*get_shell_data(void)
 }
 
 /**
- * @brief shell_data 구조체 초기화
+ * @brief Initializes the shell_data structure.
  *
- * 환경 변수(envp)를 해시맵에 저장하고, 터미널 속성 백업 및
- * 표준 입출력 FD 백업, 초기 상태 플래그를 설정한다.
+ * Stores environment variables (envp) into a hashmap, backs up terminal
+ * attributes, duplicates standard input/output file descriptors, and
+ * sets initial state flags.
  *
- * @param envp 프로그램 실행 시 전달받은 환경 변수 배열 (NULL 종료)
- * @return t_result COMPLETED(성공)
+ * @param envp Environment variable array passed to the program
+ *             (NULL-terminated).
+ * @return t_result COMPLETED on success.
  *
  * @note
- * - 각 환경 변수는 extract_key()와 extract_value()로 분리 후 put_key_value()로 저장
- * - termios_backup에는 현재 터미널 속성을 저장
- * - last_status는 EXIT_SUCCESS(0)로 초기화
- * - in_pipe 플래그는 FALSE로 초기화
- * - stdin_fd, stdout_fd에는 표준 입출력의 FD를 dup2로 복사하여 저장
+ * - Each environment variable is split into key and value using extract_key() 
+ *   and extract_value(), then stored via put_key_value().
+ * - termios_backup stores the current terminal attributes.
+ * - last_status is initialized to EXIT_SUCCESS (0).
+ * - in_pipe flag is set to FALSE.
+ * - stdin_fd and stdout_fd store duplicated standard input/output
+ *   file descriptors.
  */
 t_result	init_shell_data(char *envp[])
 {
@@ -79,10 +92,14 @@ t_result	init_shell_data(char *envp[])
 }
 
 /**
- * @brief shell_data 내부 자원 해제
+ * @brief Releases resources inside shell_data.
  *
- * shell_data 구조체에 저장된 환경 변수 해시맵을 초기화하여
- * 메모리 누수를 방지한다.
+ * Clears the environment variable hashmap stored in shell_data
+ * to prevent memory leaks.
+ *
+ * @note
+ * - Frees last_arg if it was allocated.
+ * - Clears all entries in envp_map.
  */
 void	clear_shell_data(void)
 {

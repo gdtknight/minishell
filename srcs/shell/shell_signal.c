@@ -6,9 +6,17 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 14:17:35 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 18:08:51 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:29:48 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file shell_signal.c
+ * @brief Signal handling for minishell, pipelines, and heredoc.
+ *
+ * This file provides initialization and restoration functions for
+ * signal handlers used in different contexts of the shell.
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,6 +30,13 @@
 
 #include "shell.h"
 
+/**
+ * @brief Initialize signals for interactive minishell.
+ *
+ * Saves old SIGINT and SIGQUIT actions and sets new handlers.
+ * SIGINT is handled by minishell_sigint_handler.
+ * SIGQUIT is ignored.
+ */
 void	init_minishell_signal(void)
 {
 	struct sigaction	sa;
@@ -35,6 +50,12 @@ void	init_minishell_signal(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
+/**
+ * @brief Initialize signals for pipeline execution.
+ *
+ * Sets SIGPIPE to be handled by pipeline_sigint_handler.
+ * SIGQUIT is ignored.
+ */
 void	init_pipeline_signal(void)
 {
 	struct sigaction	sa;
@@ -46,6 +67,12 @@ void	init_pipeline_signal(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
+/**
+ * @brief Initialize signals for heredoc input.
+ *
+ * Sets SIGINT to be handled by heredoc_sigint_handler.
+ * SIGQUIT is ignored.
+ */
 void	init_heredoc_signal(void)
 {
 	struct sigaction	sa;
@@ -57,6 +84,11 @@ void	init_heredoc_signal(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
+/**
+ * @brief Restore original signal handlers.
+ *
+ * Restores SIGINT and SIGQUIT actions saved in shell_data.
+ */
 void	restore_signal(void)
 {
 	sigaction(SIGINT, &((get_shell_data())->old_int), NULL);

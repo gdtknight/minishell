@@ -6,9 +6,18 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 02:37:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 12:42:22 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:29:38 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file shell_signal_handler.c
+ * @brief Signal handlers for minishell, pipelines, and heredoc.
+ *
+ * This file provides signal handlers for SIGINT (Ctrl-C) in different
+ * contexts of the shell, including interactive mode, pipeline execution,
+ * and heredoc input.
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,20 +26,20 @@
 #include <readline/readline.h>
 
 #include "shell.h"
-#include "shell.h"
 
 /**
- * @brief SIGINT(Ctrl-C) 시그널 핸들러
+ * @brief SIGINT (Ctrl-C) handler for interactive minishell.
  *
- * 사용자가 Ctrl-C를 입력했을 때 현재 입력 줄을 취소하고,
- * 새 줄로 이동하여 프롬프트를 다시 표시한다.
- * 또한 종료 상태값(last_status)을 1로 설정한다.
+ * Cancels the current input line, moves to a new line, and redisplays
+ * the prompt. Sets the shell's last_status to 128 + SIGINT.
  *
- * @param signo 전달된 시그널 번호 (SIGINT)
+ * @param signo Signal number (SIGINT)
  *
  * @note
- * - rl_replace_line(), rl_on_new_line(), rl_redisplay()를 사용해 readline 버퍼를 갱신한다.
- * - 표준 출력(STDOUT)에 개행을 출력해 커서를 다음 줄로 내린다.
+ * - Uses readline functions rl_replace_line(), rl_on_new_line(),
+ *   and rl_redisplay() to update the input buffer.
+ * - Writes a newline to STDERR to move the cursor to the next line.
+ * - If not in heredoc mode, redisplays the prompt.
  */
 void	minishell_sigint_handler(int signo)
 {
@@ -47,6 +56,14 @@ void	minishell_sigint_handler(int signo)
 	}
 }
 
+/**
+ * @brief SIGINT (Ctrl-C) handler for pipeline processes.
+ *
+ * Cleans up shell input, heredoc input, and shell data, then exits
+ * with status 128 + SIGINT.
+ *
+ * @param signo Signal number (SIGINT)
+ */
 void	pipeline_sigint_handler(int signo)
 {
 	(void)signo;
@@ -56,6 +73,15 @@ void	pipeline_sigint_handler(int signo)
 	exit(128 + SIGINT);
 }
 
+/**
+ * @brief SIGINT (Ctrl-C) handler during heredoc input.
+ *
+ * Waits for any child process to terminate. If no child exists, writes
+ * a newline. Then clears shell input, heredoc input, and shell data,
+ * and exits with status 128 + SIGINT.
+ *
+ * @param signo Signal number (SIGINT)
+ */
 void	heredoc_sigint_handler(int signo)
 {
 	int	status;
