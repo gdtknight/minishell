@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:27:10 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 15:25:09 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 15:45:42 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ static char	*tokenize(char *cursor, t_token **token_lst, t_token **new_token)
 		free(last_token->value);
 		free(last_token);
 	}
-	append_token_to_lst(token_lst, *new_token);
+	if (*new_token)
+		append_token_to_lst(token_lst, *new_token);
 	return (cursor);
 }
 
