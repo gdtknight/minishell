@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 20:26:39 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 15:24:27 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 15:44:01 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,7 @@ t_token	*expand_token(t_token *token)
 	exp_token = expand_param(exp_token);
 	split_field(&expand_lst, exp_token);
 	if (!expand_lst)
-	{
-		free(exp_token->value);
-		free(exp_token->qmask);
-		free(exp_token);
 		return (NULL);
-	}
 	ft_lstiter(expand_lst, quote_removal);
 	new_token = new_token_from_exp_token_list(token, expand_lst);
 	ft_lstclear(&expand_lst, remove_exp_token);
