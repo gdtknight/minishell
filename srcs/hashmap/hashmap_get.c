@@ -6,27 +6,31 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 01:24:17 by yoshin            #+#    #+#             */
-/*   Updated: 2025/07/31 02:03:35 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:15:46 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+/**
+ * @file hashmap_get.c
+ * @brief Provides functions to retrieve entries or values from a hash map.
+ */
 
+#include <stdlib.h>
 #include "hashmap.h"
 
 /**
- * @brief 주어진 키에 해당하는 엔트리 조회
+ * @brief Retrieves the hash entry corresponding to a given key.
  *
- * 키를 해싱하여 대응되는 버킷을 찾고, 연결 리스트를 순회하면서
- * 해당 키와 동일한 엔트리를 찾아 반환한다.
+ * The key is hashed to find the corresponding bucket, and the linked list
+ * in that bucket is traversed to find an entry whose key matches the given key.
  *
  * @note
- * - key 문자열은 NULL이 아니어야 한다.
- * - 반환된 엔트리는 해시 맵 내부 메모리이므로 free 하면 안 된다.
+ * - The key string must not be NULL.
+ * - The returned entry points to internal hash map memory and must not be freed by the caller.
  *
- * @param map 조회 대상 해시 맵
- * @param key 조회할 키 문자열
- * @return 키에 해당하는 t_hash_entry 포인터, 없으면 NULL 반환
+ * @param map The hash map to search
+ * @param key The key string to look up
+ * @return t_hash_entry* Pointer to the hash entry, or NULL if not found
  */
 t_hash_entry	*get_entry(t_hash_map *map, const char *key)
 {
@@ -45,19 +49,16 @@ t_hash_entry	*get_entry(t_hash_map *map, const char *key)
 }
 
 /**
- * @brief 주어진 키(key)에 해당하는 값을 조회합니다.
+ * @brief Retrieves the value corresponding to a given key in the hash map.
  *
- * 해시 함수로 버킷(bucket) 인덱스를 계산한 뒤,
- * 해당 버킷에 연결된 엔트리들을 순회하면서 키를 비교하여
- * 일치하는 값(value)을 찾습니다.
+ * Calculates the bucket index using the hash function, then traverses
+ * the linked list in that bucket to find a key that matches.
  *
- * @param map 값을 조회할 대상 해시맵의 포인터
- * @param key 조회할 키 (NULL 아님)
- * @return char* 키에 해당하는 값의 포인터.
- *         키가 존재하지 않으면 NULL 반환.
+ * @param map The hash map to search
+ * @param key The key string to look up (must not be NULL)
+ * @return char* Pointer to the value string if found, NULL if the key does not exist
  *
- * @note 반환되는 값 포인터는 해시맵 내부 메모리를 가리키며,
- *       호출자가 해제(free)하면 안 됩니다.
+ * @note The returned pointer points to internal hash map memory and must not be freed.
  */
 char	*get_value(t_hash_map *map, const char *key)
 {

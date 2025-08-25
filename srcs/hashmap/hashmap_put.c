@@ -6,29 +6,32 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 01:23:22 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/05 16:02:56 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:15:19 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * @file hashmap_put.c
+ * @brief Provides functions to insert or update entries in a hash map.
+ */
+
 #include <stdlib.h>
-
 #include "libft.h"
-
 #include "hashmap.h"
 
 /**
- * @brief 해시 맵에 키-값 쌍 저장
+ * @brief Inserts or updates a key-value pair in the hash map.
  *
- * 주어진 키가 이미 존재하면 해당 엔트리의 값을 새로운 값으로 교체한다.
- * 존재하지 않는 경우 새로운 해시 엔트리를 생성하여 해시 맵에 삽입한다.
+ * If the key already exists in the map, its value is replaced with the new value.
+ * If the key does not exist, a new hash entry is created and added to the map.
  *
  * @note
- * - key와 value는 동적으로 할당된 문자열이어야 한다.
- * - clear_hashmap() 호출 시 key와 value 메모리가 free된다.
+ * - Both `key` and `value` should be dynamically allocated strings.
+ * - Memory for key and value will be freed when `clear_hashmap()` is called.
  *
- * @param map   값을 저장할 해시 맵
- * @param key   삽입 또는 갱신할 키 문자열(동적 할당 필요)
- * @param value 삽입 또는 갱신할 값 문자열(동적 할당 필요)
+ * @param map   Pointer to the hash map
+ * @param key   Key string to insert or update (dynamic allocation required)
+ * @param value Value string to insert or update (dynamic allocation required)
  */
 void	put_key_value(t_hash_map *map, char *key, char *value)
 {
@@ -47,17 +50,17 @@ void	put_key_value(t_hash_map *map, char *key, char *value)
 }
 
 /**
- * @brief 해시 맵에 엔트리 삽입(삽입 전용)
+ * @brief Inserts a hash entry into the hash map (no duplicate check).
  *
- * 동일 키 존재 여부는 검사하지 않으며, 단순히 해당 버킷 끝에 엔트리를 연결한다.
- * 중복 키 검사 및 업데이트는 put_key_value()에서 수행한다.
+ * This function directly appends the given entry to the end of the bucket's linked list.
+ * Duplicate key checking and updating should be done using `put_key_value()`.
  *
  * @note
- * - entry->key와 entry->value는 동적으로 할당된 문자열이어야 한다.
- * - clear_hashmap() 호출 시 key와 value 메모리가 free된다.
+ * - `entry->key` and `entry->value` should be dynamically allocated strings.
+ * - Memory will be freed when `clear_hashmap()` is called.
  *
- * @param map   엔트리를 삽입할 해시 맵
- * @param entry 삽입할 해시 엔트리 포인터
+ * @param map   Pointer to the hash map
+ * @param entry Pointer to the hash entry to insert
  */
 void	put_entry(t_hash_map *map, t_hash_entry *entry)
 {
