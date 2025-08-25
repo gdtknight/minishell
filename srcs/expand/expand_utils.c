@@ -6,13 +6,18 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 06:27:56 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 15:05:57 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 15:51:30 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
 #include "expand.h"
+
+static void	replacement(
+				t_exp_token *exp_token,
+				char *new_value,
+				char *new_qmask);
 
 void	replace_exp(t_exp_token *exp_token, size_t *idx, char **env_pair)
 {
@@ -34,13 +39,23 @@ void	replace_exp(t_exp_token *exp_token, size_t *idx, char **env_pair)
 	ft_memcpy(new_exp_qmask, exp_token->qmask, *idx);
 	ft_memcpy(new_exp_value + *idx, env_pair[VALUE_IDX], len[VALUE_LEN]);
 	ft_memset(new_exp_qmask + *idx, '0', len[VALUE_LEN]);
-	ft_memcpy(new_exp_value + *idx + len[VALUE_LEN], suffix[0], len[SUFFIX_LEN]);
-	ft_memcpy(new_exp_qmask + *idx + len[VALUE_LEN], suffix[1], len[SUFFIX_LEN]);
+	ft_memcpy(new_exp_value + *idx + len[VALUE_LEN], \
+		suffix[0], len[SUFFIX_LEN]);
+	ft_memcpy(new_exp_qmask + *idx + len[VALUE_LEN], \
+		suffix[1], len[SUFFIX_LEN]);
+	replacement(exp_token, new_exp_value, new_exp_qmask);
+	*idx = *idx + (ft_strlen(env_pair[VALUE_IDX]) + 1);
+}
+
+static void	replacement(
+				t_exp_token *exp_token,
+				char *new_value,
+				char *new_qmask)
+{
 	free(exp_token->value);
 	free(exp_token->qmask);
-	exp_token->value = new_exp_value;
-	exp_token->qmask = new_exp_qmask;
-	*idx = *idx + (ft_strlen(env_pair[VALUE_IDX]) + 1);
+	exp_token->value = new_value;
+	exp_token->qmask = new_qmask;
 }
 
 void	quote_removal(void *content)

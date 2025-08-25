@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:29:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 15:24:54 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 15:29:10 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ static void	get_envpair(t_exp_token *exp_token, size_t idx, char ***env_pair)
 	{
 		free(*env_pair);
 		*env_pair = NULL;
-		return;
+		return ;
 	}
 	(*env_pair)[PARAM_IDX] = extract_envparam(&((exp_token->value)[idx + dollar_pos]));
 	if (!(*env_pair)[PARAM_IDX])
 	{
 		free(*env_pair);
-		return;
+		return ;
 	}
 	(*env_pair)[VALUE_IDX] = get_envvalue((*env_pair)[PARAM_IDX]);
 }
@@ -111,7 +111,7 @@ static char	*get_envvalue(const char *env_param)
 			env_value = ft_itoa(get_shell_data()->last_bg_pid);
 	}
 	else if (ft_isdigit(*cur))
-		{
+	{
 		if (*cur == '0')
 			env_value = ft_strdup("minishell");
 		else
@@ -120,7 +120,6 @@ static char	*get_envvalue(const char *env_param)
 	else if ((*cur == '_' && *(cur + 1) == '\0')
 		|| *cur == '*' || *cur == '@')
 	{
-		// env_value = 마지막으로 성공한 명령의 마지막 인수. 파이프 포함한 경우 제외
 		env_value = ft_strdup("");
 	}
 	else
