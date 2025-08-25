@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 23:04:02 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:10:21 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/26 08:14:06 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ char	*find_path(char *cmd, char *envp[])
 
 	dirs = get_dirs(envp);
 	dir = dirs;
-	while (*dir)
+	path_full = NULL;
+	while (dir && *dir)
 	{
 		path_temp = ft_strjoin(*dir++, "/");
 		path_full = ft_strjoin(path_temp, cmd);
@@ -100,6 +101,7 @@ static char	**get_dirs(char *envp[])
 {
 	char	**dirs;
 
+	dirs = NULL;
 	while (*envp)
 		if (ft_strncmp("PATH=", *envp++, 5) == 0)
 			dirs = ft_split((*(envp - 1) + 5), ':');
