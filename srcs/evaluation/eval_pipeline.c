@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 15:45:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 12:44:41 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 19:03:29 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,11 +161,7 @@ static void	wait_pipe(pid_t child_pids[2], int *status)
 	if (child == child_pids[CHILD_LEFT])
 	{
 		if (WIFSIGNALED(*status))
-		{
-			kill(child_pids[CHILD_RIGHT], SIGTERM);
-			(get_shell_data())->last_status = WTERMSIG(*status);
-			return ;
-		}
+			(get_shell_data())->last_status = 128 + WTERMSIG(*status);
 		wait_child(child_pids[CHILD_RIGHT], status, 0);
 		clear_heredoc_input();
 		turnoff_node_eval(get_shell_input()->input_node);
