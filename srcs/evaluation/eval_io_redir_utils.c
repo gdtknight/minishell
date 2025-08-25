@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 21:21:43 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 12:38:42 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 14:24:49 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,9 @@ t_status	set_heredoc(t_syntax_node *io_redir_node)
 	return (SUCCESS);
 }
 
-
-static void	set_heredoc_to_pipe(t_syntax_node *cmd, t_syntax_node *io_redir_node)
+static void	set_heredoc_to_pipe(
+				t_syntax_node *cmd,
+				t_syntax_node *io_redir_node)
 {
 	close((cmd->value.command.heredoc_fds)[PIPE_READ]);
 	ft_putstr_fd(
