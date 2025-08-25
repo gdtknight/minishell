@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/26 07:48:12 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/26 08:44:59 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,10 @@ static void	interactive_mode(void)
 			&& getenv("MINISHELL_PIPE_LEFT") && getenv("MINISHELL_PIPE_RIGHT"))
 			(get_shell_input())->input_line = get_next_line(STDIN_FILENO);
 		else
+		{
+			restore_tty();
 			(get_shell_input())->input_line = readline(PROMPT);
+		}
 		if ((get_shell_input())->input_line == NULL)
 			break ;
 		if ((*(get_shell_input())->input_line) == '\0' \
