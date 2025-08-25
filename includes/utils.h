@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 20:56:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 15:15:32 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 20:39:17 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,6 @@ t_boolean	is_single_quote(char c);
 /* --- ft_multiplejoin.c --- */
 
 char		*ft_multiplejoin(const char *s1, const char *s2, const char *s3);
-
-/* --- wildcard_match.c --- */
-
-t_boolean	wildcard_match(const char *s, const char *p);
 
 /* --- validate_utils.c --- */
 
