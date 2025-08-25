@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 01:24:17 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:15:46 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:26:44 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
  *
  * @note
  * - The key string must not be NULL.
- * - The returned entry points to internal hash map memory and must not be freed by the caller.
+ * - The returned entry points to internal hash map memory and must not be
+ *   freed by the caller.
  *
  * @param map The hash map to search
  * @param key The key string to look up
@@ -56,9 +57,11 @@ t_hash_entry	*get_entry(t_hash_map *map, const char *key)
  *
  * @param map The hash map to search
  * @param key The key string to look up (must not be NULL)
- * @return char* Pointer to the value string if found, NULL if the key does not exist
+ * @return char* Pointer to the value string if found,
+ *               NULL if the key does not exist
  *
- * @note The returned pointer points to internal hash map memory and must not be freed.
+ * @note The returned pointer points to internal hash map memory and must
+ *       not be freed.
  */
 char	*get_value(t_hash_map *map, const char *key)
 {

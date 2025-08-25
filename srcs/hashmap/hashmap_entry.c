@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   hashmap_utils.c                                    :+:      :+:    :+:   */
+/*   hashmap_entry.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 23:05:33 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:14:51 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:25:07 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
  * @file hashmap_entry.c
- * @brief Provides basic hash map entry utilities: creation, counting, lookup, and hashing.
+ * @brief Provides basic hash map entry utilities: creation, counting, lookup,
+ *        and hashing.
  */
 
 #include <stdlib.h>
@@ -27,7 +28,8 @@
  *
  * @param key   The key string for the entry (assumed not NULL)
  * @param value The value string for the entry (assumed not NULL)
- * @return Pointer to the newly created `t_hash_entry`, or NULL if allocation fails
+ * @return Pointer to the newly created `t_hash_entry`,
+ *         or NULL if allocation fails
  */
 t_hash_entry	*create_new_entry(char *key, char *value)
 {

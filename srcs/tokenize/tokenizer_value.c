@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_create_utils.c                               :+:      :+:    :+:   */
+/*   tokenizer_value.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 23:40:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:21:22 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:24:45 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,9 @@ static t_token_type	get_single_char_token_type(char *str)
  */
 void	set_token_value_from_str(t_token *target, char *str)
 {
-	target->value = ft_substr(str, 0, 
-		find_next_delim(str, is_tk_delim, C_BACKSLASH | C_SQUOTE | C_DQUOTE) - str);
+	target->value = ft_substr(str, 0, \
+		find_next_delim(str, is_tk_delim, \
+			C_BACKSLASH | C_SQUOTE | C_DQUOTE) - str);
 }
 
 /**
@@ -168,4 +169,3 @@ static void	set_token_value_from_single_char(t_token *target)
 	if (target->type == TK_RPAREN)
 		target->value = ft_strdup(STR_RPAREN);
 }
-

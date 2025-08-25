@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 01:23:22 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:15:19 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:26:26 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 /**
  * @brief Inserts or updates a key-value pair in the hash map.
  *
- * If the key already exists in the map, its value is replaced with the new value.
+ * If the key already exists in the map, its value is replaced with the
+ * new value.
  * If the key does not exist, a new hash entry is created and added to the map.
  *
  * @note
@@ -52,7 +53,8 @@ void	put_key_value(t_hash_map *map, char *key, char *value)
 /**
  * @brief Inserts a hash entry into the hash map (no duplicate check).
  *
- * This function directly appends the given entry to the end of the bucket's linked list.
+ * This function directly appends the given entry to the end of the bucket's
+ * linked list.
  * Duplicate key checking and updating should be done using `put_key_value()`.
  *
  * @note
