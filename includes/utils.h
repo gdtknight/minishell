@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 20:56:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 15:09:16 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 15:15:32 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@
 
 # include "def.h"
 # include "hashmap.h"
+
+typedef enum e_state_idx
+{
+	IN_SQUOTE = 0,
+	IN_DQUOTE = 1,
+	IN_ESCAPE = 2,
+}	t_state_idx;
 
 /* --- envp_utils.c --- */
 

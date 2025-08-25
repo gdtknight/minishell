@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:29:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 06:19:49 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 15:24:54 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,10 @@
 #include "expand.h"
 
 static void	get_envpair(t_exp_token *exp_token, size_t idx, char ***env_pair);
-static void	replace_exp(t_exp_token *exp_token, size_t *idx, char *env_pair[2]);
 static char	*extract_envparam(char *str);
 static char	*get_envvalue(const char *env_param);
 
-t_exp_token	*expand_param_refactor(t_exp_token *exp_token)
+t_exp_token	*expand_param(t_exp_token *exp_token)
 {
 	size_t	idx;
 	char	**env_pair;
@@ -68,30 +67,6 @@ static void	get_envpair(t_exp_token *exp_token, size_t idx, char ***env_pair)
 		return;
 	}
 	(*env_pair)[VALUE_IDX] = get_envvalue((*env_pair)[PARAM_IDX]);
-}
-
-static void	replace_exp(t_exp_token *exp_token, size_t *idx, char **env_pair)
-{
-	char	*new_exp_value;
-	char	*new_exp_qmask;
-	size_t	new_len;
-	size_t	suffix_len;
-
-	new_len = ft_strlen(exp_token->value) - ft_strlen(env_pair[PARAM_IDX]) + ft_strlen(env_pair[VALUE_IDX]);
-	new_exp_value = (char *) malloc(sizeof(char) * new_len);
-	new_exp_qmask = (char *) malloc(sizeof(char) * new_len);
-	suffix_len = ft_strlen(exp_token->value) - (*idx + ft_strlen(env_pair[PARAM_IDX]));
-	ft_memcpy(new_exp_value, exp_token->value, *idx);
-	ft_memcpy(new_exp_qmask, exp_token->qmask, *idx);
-	ft_memcpy(new_exp_value + *idx, env_pair[VALUE_IDX], ft_strlen(env_pair[VALUE_IDX]));
-	ft_memset(new_exp_qmask + *idx, '0', ft_strlen(env_pair[VALUE_IDX]));
-	ft_memcpy(new_exp_value + *idx + ft_strlen(env_pair[VALUE_IDX]), &(exp_token->value)[*idx + ft_strlen(env_pair[PARAM_IDX])], suffix_len);
-	ft_memcpy(new_exp_qmask + *idx + ft_strlen(env_pair[VALUE_IDX]), &(exp_token->qmask)[*idx + ft_strlen(env_pair[PARAM_IDX])], suffix_len);
-	free(exp_token->value);
-	free(exp_token->qmask);
-	exp_token->value = new_exp_value;
-	exp_token->qmask = new_exp_qmask;
-	*idx = *idx + (ft_strlen(env_pair[VALUE_IDX]) + 1);
 }
 
 static char	*extract_envparam(char *str)

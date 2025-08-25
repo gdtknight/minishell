@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 20:26:39 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 06:29:04 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 15:24:27 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	expand_heredoc_target(t_token **token)
 	free(exp_token);
 }
 
-t_token	*expand_token_refactor(t_token *token)
+t_token	*expand_token(t_token *token)
 {
 	t_list		*expand_lst;
 	t_token		*new_token;
@@ -51,9 +51,9 @@ t_token	*expand_token_refactor(t_token *token)
 	new_token = NULL;
 	expand_lst = NULL;
 	exp_token = create_exp_token(token->value);
-	exp_token = expand_tilde_refactor(exp_token);
-	exp_token = expand_param_refactor(exp_token);
-	split_field_refactor(&expand_lst, exp_token);
+	exp_token = expand_tilde(exp_token);
+	exp_token = expand_param(exp_token);
+	split_field(&expand_lst, exp_token);
 	if (!expand_lst)
 	{
 		free(exp_token->value);

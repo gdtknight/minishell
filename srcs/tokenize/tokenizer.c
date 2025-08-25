@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:27:10 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 14:28:26 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 15:25:09 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static char	*tokenize(char *cursor, t_token **token_lst, t_token **new_token)
 	else if ((*new_token)->type == TK_WORD)
 	{
 		last_token = *new_token;
-		*new_token = expand_token_refactor(last_token);
+		*new_token = expand_token(last_token);
 		free(last_token->value);
 		free(last_token);
 	}
@@ -88,7 +88,7 @@ static t_boolean	check_ambigous(t_token **token_lst, t_token *token)
 	if (!token || !last_token || !is_io_token(last_token)
 		|| (token->type != TK_WORD))
 		return (FALSE);
-	expanded = expand_token_refactor(token);
+	expanded = expand_token(token);
 	if (!expanded)
 		return (FALSE);
 	if (!expanded->next || !(expanded->next->type == TK_WORD))

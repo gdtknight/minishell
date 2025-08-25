@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:56:12 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 06:17:39 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 15:26:13 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include "utils.h"
 #include "expand.h"
 
-void	split_field_refactor(t_list **exp_list, t_exp_token *exp_token)
+void	split_field(t_list **exp_list, t_exp_token *exp_token)
 {
 	t_exp_token	*new_exp_token;
 	int			idx;

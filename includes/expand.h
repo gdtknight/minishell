@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:12:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 06:28:50 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 15:22:16 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,11 @@
 # define PARAM_IDX		0
 # define VALUE_IDX		1
 
-typedef enum e_state_idx
-{
-	IN_SQUOTE = 0,
-	IN_DQUOTE = 1,
-	IN_ESCAPE = 2,
-}	t_state_idx;
+# define EXP_TOKEN_LEN	0
+# define PARAM_LEN		1
+# define VALUE_LEN		2
+# define LEN_SUM		3
+# define SUFFIX_LEN		4
 
 typedef struct s_exp_token
 {
@@ -38,28 +37,39 @@ typedef struct s_exp_token
 	struct s_exp_token	*next;
 }	t_exp_token;
 
-/* --- expand_token_refactor.c --- */
+/* --- expand_param.c --- */
 
-t_token		*expand_token_refactor(t_token *token);
-void		expand_heredoc_target(t_token **token);
+t_exp_token	*expand_param(t_exp_token *exp_token);
 
-/* --- expand_tilde_refactor.c --- */
+/* --- expand_tilde.c --- */
 
-t_exp_token	*expand_tilde_refactor(t_exp_token *exp_token);
+t_exp_token	*expand_tilde(t_exp_token *exp_token);
 char		*extract_tilde_with_username(char *value);
 
-/* --- expand_param_refactor.c --- */
+/* --- expand_tilde_utils.c --- */
 
-t_exp_token	*expand_param_refactor(t_exp_token *exp_token);
+char		*get_homedir(char *username);
+t_boolean	check_homedir(char *username);
+char		*get_home_prefix(void);
 
-/* --- split_field_refactor.c --- */
+/* --- expand_token.c --- */
 
-void		split_field_refactor(t_list **exp_list, t_exp_token *exp_token);
+void		expand_heredoc_target(t_token **token);
+t_token		*expand_token(t_token *token);
 
 /* --- expand_token_create.c --- */
 
 t_exp_token	*create_empty_exp_token(void);
 t_exp_token	*create_exp_token(char *value);
+
+/* --- expand_utils.c --- */
+
+void		replace_exp(
+				t_exp_token *exp_token,
+				size_t *idx,
+				char **env_pair);
+void		quote_removal(void *content);
+void		remove_exp_token(void *content);
 
 /* --- masking_utils.c --- */
 
@@ -70,8 +80,10 @@ char		*expand_mask(
 				char *before,
 				char *after);
 
-/* --- expand_utils.c --- */
-void		quote_removal(void *content);
-void		remove_exp_token(void *content);
+/* --- split_field.c --- */
+
+void		split_field(
+				t_list **exp_list,
+				t_exp_token *exp_token);
 
 #endif

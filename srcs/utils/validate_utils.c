@@ -6,12 +6,11 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/24 01:33:49 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/24 01:33:49 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 15:15:36 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "def.h"
-#include "expand_refactor.h"
 #include "utils.h"
 
 t_boolean	is_valid_pair(char *input)
