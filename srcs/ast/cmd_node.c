@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 21:15:05 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:11:37 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/26 02:02:08 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,18 @@ t_syntax_node	*simple_command(t_token **tk_lst)
 		return (NULL);
 	simple_command_node = create_empty_node();
 	simple_command_node->type = NODE_SIMPLE_COMMAND;
+	simple_command_node->value.command.form.cmd = NULL;
+	simple_command_node->value.command.form.args = NULL;
+	simple_command_node->value.command.form.envp = NULL;
 	simple_command_node->value.command.heredoc_fds[PIPE_READ] = -1;
 	simple_command_node->value.command.heredoc_fds[PIPE_WRITE] = -1;
 	simple_command_node->value.command.prefix = cmd_prefix(tk_lst);
 	if (simple_command_node->value.command.prefix)
 		simple_command_node->value.command.prefix->parent = simple_command_node;
-	simple_command_node->value.command.word = ft_strdup((*tk_lst)->value);
-	(*tk_lst) = (*tk_lst)->next;
+	simple_command_node->value.command.cmd_word = word(tk_lst);
 	simple_command_node->value.command.suffix = cmd_suffix(tk_lst);
 	if (simple_command_node->value.command.suffix)
 		simple_command_node->value.command.suffix->parent = simple_command_node;
-	simple_command_node->value.command.form.cmd = NULL;
-	simple_command_node->value.command.form.args = NULL;
-	simple_command_node->value.command.form.envp = NULL;
 	return (simple_command_node);
 }
 

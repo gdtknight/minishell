@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:19:50 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/20 17:49:22 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/26 01:26:44 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_command
 {
 	int						heredoc_fds[2];
 	struct s_syntax_node	*prefix;
-	char					*word;
+	struct s_syntax_node	*cmd_word;
 	struct s_syntax_node	*suffix;
 	t_cmd_form				form;
 }	t_command;

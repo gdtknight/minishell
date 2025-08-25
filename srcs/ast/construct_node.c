@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 16:01:20 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:11:39 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/26 01:48:56 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ t_syntax_node	*and_or(t_token **tk_lst)
 		else
 			and_or_node->type = NODE_OR_IF;
 		and_or_node->value.b_node.left = temp;
+		and_or_node->value.b_node.left->parent = and_or_node;
 		(*tk_lst) = (*tk_lst)->next;
 		and_or_node->value.b_node.right = pipeline(tk_lst);
-		and_or_node->value.b_node.left->parent = and_or_node;
 		if (and_or_node->value.b_node.right)
 			and_or_node->value.b_node.right->parent = and_or_node;
 	}

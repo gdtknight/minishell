@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 16:23:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:11:41 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/26 01:52:54 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	print_node(t_syntax_node *node, int depth)
 		|| node->type == NODE_PIPELINE_ERR)
 		print_binary_node_type(node, depth);
 	else if (node->type == NODE_SIMPLE_COMMAND
+		|| node->type == NODE_COMPOUND_COMMAND
 		|| node->type == NODE_CMD_PREFIX
 		|| node->type == NODE_CMD_SUFFIX)
 		print_cmd_node(node, depth);
@@ -82,9 +83,14 @@ static void	print_cmd_node(t_syntax_node *node, int depth)
 	if (node->type == NODE_SIMPLE_COMMAND)
 	{
 		printf("[%02d] type - %s\n", depth, "simple_command");
-		print_node(node->value.command.prefix, depth);
-		printf("cmd - %s\n", node->value.command.word);
-		print_node(node->value.command.suffix, depth);
+		print_node(node->value.command.prefix, depth + 1);
+		print_node(node->value.command.cmd_word, depth + 1);
+		print_node(node->value.command.suffix, depth + 1);
+	}
+	else if (node->type == NODE_COMPOUND_COMMAND)
+	{
+		printf("[%02d] type - %s\n", depth, "compound_command");
+		print_node(node->value.child, depth + 1);
 	}
 	else if (node->type == NODE_CMD_PREFIX)
 	{

@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:34:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:04:06 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/26 02:11:36 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	eval_command(t_syntax_node *cmd_node)
 		return ;
 	if ((!(get_shell_data())->in_pipe)
 		&& !((cmd_node->type == NODE_SIMPLE_COMMAND)
-			&& is_builtin(cmd_node->value.command.word)))
+			&& is_builtin(cmd_node->value.command.cmd_word->value.word)))
 	{
 		pid = fork();
 		if (pid == 0)
@@ -98,9 +98,10 @@ static void	eval_simple_command(t_command *command)
 		(get_shell_data())->last_status = EXIT_FAILURE;
 		return ;
 	}
-	if (get_shell_input()->input_node->eval == OFF)
+	if (get_shell_input()->input_node->eval == OFF
+		|| !(command->cmd_word))
 		return ;
-	if (is_builtin(command->word))
+	if (is_builtin(command->cmd_word->value.word))
 	{
 		execute_builtin(&(command->form));
 		return ;
@@ -122,7 +123,16 @@ static void	set_cmd_form(t_command *command)
 	command->form.args = NULL;
 	command->form.envp = NULL;
 	command->form.args = get_args_from_suffix(command->suffix);
-	command->form.cmd = ft_strdup(command->word);
-	(command->form.args)[0] = ft_strdup((char *)(command->word));
 	command->form.envp = lst_from_hashmap(&(get_shell_data()->envp_map));
+	if (command->cmd_word)
+	{
+		command->form.cmd = ft_strdup(command->cmd_word->value.word);
+		(command->form.args)[0] = \
+			ft_strdup((char *)(command->cmd_word->value.word));
+	}
+	else
+	{
+		command->form.cmd = ft_strdup("");
+		(command->form.args)[0] = ft_strdup("");
+	}
 }

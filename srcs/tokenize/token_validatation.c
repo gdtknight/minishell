@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_validate_utils.c                             :+:      :+:    :+:   */
+/*   token_validatation.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 21:02:50 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:10:19 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/26 01:30:36 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,8 +135,13 @@ static t_boolean	is_valid_token(t_token *token, t_boolean *in_parenthesis)
 		else
 			*in_parenthesis = TRUE;
 	}
-	if (token->type == TK_RPAREN && !*in_parenthesis)
-		return (FALSE);
+	if (token->type == TK_RPAREN)
+	{
+		if (!*in_parenthesis)
+			return (FALSE);
+		else
+			*in_parenthesis = FALSE;
+	}
 	if (is_io_token(token) && !is_word_token(token->next))
 		return (FALSE);
 	return (TRUE);

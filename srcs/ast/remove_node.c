@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 22:11:42 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:11:42 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/26 01:27:53 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,9 @@ static void	remove_command_node(t_syntax_node *node)
 	}
 	remove_syntax_node(node->value.command.prefix);
 	remove_syntax_node(node->value.command.suffix);
-	if (node->value.command.word)
-		free(node->value.command.word);
-	node->value.command.word = NULL;
+	if (node->value.command.cmd_word)
+		remove_syntax_node(node->value.command.cmd_word);
+	node->value.command.cmd_word = NULL;
 	node->value.command.prefix = NULL;
 	node->value.command.suffix = NULL;
 	clear_cmd_form(&(node->value.command.form));
