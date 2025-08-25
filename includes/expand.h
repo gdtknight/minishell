@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:12:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 15:22:16 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 10:40:10 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ typedef struct s_exp_token
 {
 	char				*value;
 	char				*qmask;
-	struct s_exp_token	*prev;
-	struct s_exp_token	*next;
 }	t_exp_token;
 
 /* --- expand_param.c --- */

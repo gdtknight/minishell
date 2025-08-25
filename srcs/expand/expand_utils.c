@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 06:27:56 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 15:51:30 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 11:13:02 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void	replace_exp(t_exp_token *exp_token, size_t *idx, char **env_pair)
 	len[SUFFIX_LEN] = len[EXP_TOKEN_LEN] - (*idx + len[PARAM_LEN]);
 	suffix[0] = &(exp_token->value)[*idx + len[PARAM_LEN]];
 	suffix[1] = &(exp_token->qmask)[*idx + len[PARAM_LEN]];
-	new_exp_value = (char *) malloc(sizeof(char) * len[LEN_SUM]);
-	new_exp_qmask = (char *) malloc(sizeof(char) * len[LEN_SUM]);
+	new_exp_value = (char *) ft_calloc(sizeof(char), len[LEN_SUM]);
+	new_exp_qmask = (char *) ft_calloc(sizeof(char), len[LEN_SUM]);
 	ft_memcpy(new_exp_value, exp_token->value, *idx);
 	ft_memcpy(new_exp_qmask, exp_token->qmask, *idx);
 	ft_memcpy(new_exp_value + *idx, env_pair[VALUE_IDX], len[VALUE_LEN]);

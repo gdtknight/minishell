@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:24:32 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 06:17:06 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 10:17:10 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*masking_token(const char *value)
 
 	if (!value)
 		return (NULL);
-	masking = malloc(sizeof(char) * (ft_strlen(value) + 1));
+	masking = ft_calloc(sizeof(char),(ft_strlen(value) + 1));
 	if (!masking)
 		return (NULL);
 	state[IN_SQUOTE] = FALSE;

@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 21:44:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/13 18:34:16 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/25 10:21:40 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+
+#include "libft.h"
 
 #include "tokenizer.h"
 
@@ -33,7 +35,7 @@ t_token	*create_empty_token(void)
 {
 	t_token	*token;
 
-	token = (t_token *) malloc(sizeof(t_token));
+	token = (t_token *) ft_calloc(sizeof(t_token), 1);
 	if (errno == ENOMEM)
 	{
 		perror(strerror(errno));

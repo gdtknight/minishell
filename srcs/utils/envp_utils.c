@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 00:49:34 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/19 22:09:01 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 10:30:37 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	**lst_from_hashmap(t_hash_map *map)
 	int				table_idx;
 	int				list_idx;
 
-	list = (char **) malloc(sizeof(char *) * (count_entry(map) + 1));
+	list = (char **) ft_calloc(sizeof(char *), (count_entry(map) + 1));
 	if (!list)
 		return (NULL);
 	table_idx = -1;
