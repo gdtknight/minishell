@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:29:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:32:40 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 23:00:02 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,21 @@ t_exp_token	*expand_param(t_exp_token *exp_token)
 	char	**env_pair;
 
 	env_pair = NULL;
-	get_envpair(exp_token, 0, &env_pair);
+	idx = 0;
+	get_envpair(exp_token, idx, &env_pair);
 	while (env_pair)
 	{
 		idx = find_next_delim_pos(
 				(exp_token->value),
 				is_dollar_sign,
-				C_BACKSLASH | C_SQUOTE);
+				C_BACKSLASH | C_SQUOTE | C_DQUOTE);
 		replace_exp(exp_token, &idx, env_pair);
 		free(env_pair[0]);
 		free(env_pair[1]);
 		free(env_pair);
-		get_envpair(exp_token, 0, &env_pair);
+		if (ft_strlen(exp_token->value) <= idx)
+			break ;
+		get_envpair(exp_token, idx, &env_pair);
 	}
 	return (exp_token);
 }
@@ -88,7 +91,7 @@ static void	get_envpair(t_exp_token *exp_token, size_t idx, char ***env_pair)
 	dollar_pos = find_next_delim_pos(
 			&((exp_token->value)[idx]),
 			is_dollar_sign,
-			C_BACKSLASH | C_SQUOTE);
+			C_BACKSLASH | C_SQUOTE | C_DQUOTE);
 	if ((idx + dollar_pos) == ft_strlen(exp_token->value))
 	{
 		free(*env_pair);
