@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 14:25:06 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/21 10:09:43 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 07:15:39 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	execute_command(t_cmd_form *cmd_form)
 	if (!cmd_form)
 		return ;
 	cmd = cmd_form->cmd;
+	if (!cmd)
+		return ;
 	if (*cmd == '.' && *(cmd + 1) == '/')
 	{
 		if (access(cmd, R_OK) != 0)
