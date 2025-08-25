@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:09 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/22 16:49:36 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/25 21:53:16 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,12 @@ t_status	cd_fail(t_cd_err err, char *old_pwd)
 	if (err == CD_TOO_MANY_ARGS)
 	{
 		get_shell_data()->last_status = 2;
-		printf("bash: cd: too many arguments\n");
+		printf("cd: too many arguments\n");
 	}
 	else
 		get_shell_data()->last_status = 1;
 	if (err == CD_HOME_NOT_SET)
-		printf("bash: cd: HOME not set\n");
+		printf("cd: HOME not set\n");
 	if (err == CD_OLDPWD_NOT_SET)
 		printf("cd: OLDPWD not set\n");
 	if (err == CD_EACCES)

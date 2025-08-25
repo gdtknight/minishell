@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/22 16:47:17 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/25 21:53:41 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_status	check_and_set_enp(char *envp, t_hash_map *map)
 	}
 	else
 	{
-		printf("bash: export: `%s': not a valid identifier\n", key);
+		printf("export: `%s': not a valid identifier\n", key);
 		status = ERROR;
 	}
 	free (key);
