@@ -6,16 +6,24 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:27:10 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 07:12:59 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:11:26 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/**
+ * @file tokenizer.c
+ * @brief Tokenizes input lines into a linked list of t_token structures.
+ *
+ * Provides functions to convert a command line string into tokens,
+ * handle expansions (variables, heredoc targets), and detect ambiguous
+ * redirections.
+ */
 
 #include <stdlib.h>
 #include <unistd.h>
 
 #include "def.h"
 #include "libft.h"
-
 #include "expand.h"
 #include "tokenizer.h"
 
@@ -23,11 +31,19 @@ static char			*tokenize(
 						char *cursor,
 						t_token **token_lst,
 						t_token **new_token);
+static t_boolean	check_ambigous(t_token **token_lst, t_token *token);
 
-static t_boolean	check_ambigous(
-						t_token **token_lst,
-						t_token *token);
-
+/**
+ * @brief Tokenize an input line into a linked list of tokens.
+ *
+ * Iterates through the input line, generating tokens for each segment,
+ * performing expansions for word tokens and heredoc targets, and
+ * appending them to a token list.
+ *
+ * @param line Input command line string.
+ * @return t_token* Head of the resulting token list (terminated with TK_EOF).
+ *                  Returns NULL if tokenization or ambiguous redirection fails.
+ */
 t_token	*tokenize_input(char *line)
 {
 	t_token	*token_lst;
@@ -52,6 +68,18 @@ t_token	*tokenize_input(char *line)
 	return (token_lst);
 }
 
+/**
+ * @brief Tokenize a single segment of the input line.
+ *
+ * Creates a new token, performs expansions if needed, checks for
+ * ambiguous redirections, and appends the token to the token list.
+ *
+ * @param cursor Current position in the input line.
+ * @param token_lst Pointer to the head of the token list.
+ * @param new_token Pointer to store the newly created token.
+ * @return char* Updated cursor position after consuming the token.
+ *               Returns NULL on failure (e.g., ambiguous redirect).
+ */
 static char	*tokenize(char *cursor, t_token **token_lst, t_token **new_token)
 {
 	t_token	*last_token;
@@ -80,6 +108,19 @@ static char	*tokenize(char *cursor, t_token **token_lst, t_token **new_token)
 	return (cursor);
 }
 
+/**
+ * @brief Check for ambiguous redirection after expansion.
+ *
+ * If the last token is an IO redirection, this function expands the
+ * current word token and verifies that it does not result in
+ * multiple targets (ambiguous redirect).
+ *
+ * @param token_lst Pointer to the head of the token list.
+ * @param token Current token to check.
+ * @return t_boolean TRUE if ambiguous, FALSE otherwise.
+ *
+ * @note Prints an error message to STDERR if an ambiguous redirect is detected.
+ */
 static t_boolean	check_ambigous(t_token **token_lst, t_token *token)
 {
 	t_token	*last_token;

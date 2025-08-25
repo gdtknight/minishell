@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 23:40:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/17 23:12:51 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:03:59 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,16 +96,13 @@ static t_token_type	get_single_char_token_type(char *str)
 }
 
 /**
- * @brief TK_WORD 타입 토큰의 value를 원본 문자열에서 추출해 설정한다.
+ * @brief Set the token value for a TK_WORD token from the original string.
  *
- * 인용부호, 이스케이프, 구분자 처리 정책에 따라 일반 단어 토큰의
- * 실제 문자열 값을 추출(extract_normal_word)하여 target->value에 저장한다.
+ * This function extracts the substring up to the next delimiter (considering
+ * escape sequences, quotes, and separators) and stores it as the token value.
  *
- * @param target 값이 설정될 토큰 포인터 (type == TK_WORD 여야 함)
- * @param str    원본 문자열(현재 커서)
- *
- * @note extract_normal_word()가 동적할당한 문자열을 target->value로 소유한다.
- *       이후 메모리 해제는 토큰 해제 시 호출자 책임이다.
+ * @param target Token whose value will be set (must be TK_WORD).
+ * @param str    Pointer to the input string at the current position.
  */
 void	set_token_value_from_str(t_token *target, char *str)
 {
@@ -115,15 +112,13 @@ void	set_token_value_from_str(t_token *target, char *str)
 }
 
 /**
- * @brief 비-WORD 연산자 타입 토큰의 value를 타입 상수 문자열로 설정한다.
+ * @brief Set the token value for non-WORD tokens based on their type.
  *
- * AND_IF, OR_IF, HEREDOC, APPEND 등 멀티문자 연산자는 대응하는 STR_* 상수로,
- * 그 외 단일문자 메타문자는 내부 set_token_value_from_single_char()로 설정한다.
+ * Multi-character operators (&&, ||, <<, >>) are set to their corresponding
+ * string constants. Single-character operators are delegated to 
+ * set_token_value_from_single_char().
  *
- * @param target 값이 설정될 토큰 포인터 (type은 TK_WORD가 아니어야 함)
- *
- * @note 내부적으로 ft_strdup()으로 복제하여 target->value에 저장한다.
- *       메모리 해제는 토큰 해제 시 호출자 책임이다.
+ * @param target Token whose value will be set (must NOT be TK_WORD).
  */
 void	set_token_value_from_type(t_token *target)
 {
@@ -141,10 +136,19 @@ void	set_token_value_from_type(t_token *target)
 		|| target->type == TK_REDIR_IN
 		|| target->type == TK_REDIR_OUT
 		|| target->type == TK_LPAREN
-		|| target->type == TK_RPAREN)
+		|| target->type == TK_RPAREN
+		|| target->type == TK_NEWLINE)
 		set_token_value_from_single_char(target);
 }
 
+/**
+ * @brief Set the token value for single-character operators.
+ *
+ * This function duplicates the constant string corresponding to the token type:
+ * ';', '&', '|', '\n', '<', '>', '(', ')'.
+ *
+ * @param target Token whose value will be set.
+ */
 static void	set_token_value_from_single_char(t_token *target)
 {
 	if (target->type == TK_SEMICOLON)
