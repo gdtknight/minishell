@@ -6,16 +6,18 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:56:12 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:40:45 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 21:42:19 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /**
  * @file split_field.c
- * @brief Split an expanded token into separate words using IFS (field separators).
+ * @brief Split an expanded token into separate words using IFS
+ *        (field separators).
  *
- * This module handles field splitting for expanded tokens after tilde and parameter
- * expansions. It respects quoting and escape sequences to avoid splitting inside quotes.
+ * This module handles field splitting for expanded tokens after tilde and
+ * parameter expansions.
+ * It respects quoting and escape sequences to avoid splitting inside quotes.
  */
 
 #include <stdlib.h>
