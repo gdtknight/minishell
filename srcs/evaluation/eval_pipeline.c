@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 15:45:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:08:06 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/25 22:28:39 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ static void	start_child(
 				int pipe_fds[2],
 				int left_or_right)
 {
+	init_pipeline_signal();
 	if (left_or_right == CHILD_LEFT)
 	{
 		setup_pipe(child_pids, pipe_fds);
-		init_pipeline_signal();
 		eval(pipeline_node->value.b_node.left);
 		clear_heredoc_input();
 		clear_shell_input();
@@ -98,7 +98,6 @@ static void	start_child(
 	else
 	{
 		setup_pipe(child_pids, pipe_fds);
-		init_pipeline_signal();
 		eval(pipeline_node->value.b_node.right);
 		clear_heredoc_input();
 		clear_shell_input();
@@ -153,7 +152,13 @@ static void	wait_pipe(pid_t child_pids[2], int *status)
 	if (child == child_pids[CHILD_LEFT])
 	{
 		if (WIFSIGNALED(*status))
+		{
 			(get_shell_data())->last_status = 128 + WTERMSIG(*status);
+			waitpid(child_pids[CHILD_RIGHT], status, 0);
+			clear_heredoc_input();
+			turnoff_node_eval(get_shell_input()->input_node);
+			return ;
+		}
 		wait_child(child_pids[CHILD_RIGHT], status, 0);
 		clear_heredoc_input();
 		turnoff_node_eval(get_shell_input()->input_node);

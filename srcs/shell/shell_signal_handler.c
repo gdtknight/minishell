@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 02:37:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:29:38 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/25 23:05:02 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ void	minishell_sigint_handler(int signo)
 	(get_shell_data())->last_status = 128 + SIGINT;
 	rl_replace_line("", 0);
 	write(STDERR_FILENO, "\n", 1);
-	if (!(get_shell_data())->in_heredoc)
+	if (!(get_shell_data())->in_heredoc
+		&& !(get_shell_data())->in_pipe)
 	{
 		rl_on_new_line();
 		rl_redisplay();
