@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:09 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/26 11:02:21 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/26 23:32:59 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 #include <string.h>
 #include <errno.h>
 
+#include "libft.h"
 #include "def.h"
-
 #include "hashmap.h"
 #include "shell.h"
 #include "builtin.h"
@@ -142,7 +142,7 @@ t_status	builtin_cd(char **argc)
 	char		*cwd;
 
 	envp_map = &get_shell_data()->envp_map;
-	old_pwd = get_value(envp_map, "PWD");
+	old_pwd = ft_strdup(get_value(envp_map, "PWD"));
 	new_pwd = route_set(argc[1], old_pwd, envp_map);
 	if (count_argc(argc) > 2 || !new_pwd || chdir(new_pwd) != 0)
 		return (cd_fail(check_error(argc), old_pwd));
