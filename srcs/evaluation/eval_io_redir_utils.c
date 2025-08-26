@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 21:21:43 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:07:13 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/26 13:05:35 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ t_status	set_stdin(t_syntax_node *io_redir_node)
 		if (infile_fd == -1)
 		{
 			perror(io_redir_node->value.io_target);
-			return (FAILURE);
+			return (ERROR);
 		}
 		close(STDIN_FILENO);
 		dup2(infile_fd, STDIN_FILENO);
