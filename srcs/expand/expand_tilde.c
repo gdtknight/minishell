@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 17:15:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:33:49 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/26 09:05:35 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,12 @@
 #include <unistd.h>
 
 #include "expand.h"
+#include "hashmap.h"
+#include "shell.h"
 
 /* Internal helper to perform tilde expansion */
 static char	*get_tilde_expansion(char *value);
+static char	*get_tilde_home(void);
 
 /**
  * @brief Expand the tilde in a token's value.
@@ -105,7 +108,7 @@ static char	*get_tilde_expansion(char *value)
 	char	*home;
 
 	if (value[1] == '\0')
-		return (ft_strdup(getenv("HOME")));
+		return (get_tilde_home());
 	if (value[1] == '+' && value[2] == '\0')
 		return (ft_strdup(getenv("PWD")));
 	if (value[1] == '-' && value[2] == '\0')
@@ -122,4 +125,14 @@ static char	*get_tilde_expansion(char *value)
 		return (NULL);
 	}
 	return (home);
+}
+
+static char	*get_tilde_home(void)
+{
+	if (contains_key(&((get_shell_data())->envp_map), \
+		"HOME"))
+		return (ft_strdup(get_value(&((get_shell_data())->envp_map), \
+			"HOME")));
+	else
+		return (ft_strdup(getenv("HOME")));
 }
