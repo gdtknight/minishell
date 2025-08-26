@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_utils.c                                      :+:      :+:    :+:   */
+/*   token_printer.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 21:24:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:08:54 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/26 10:56:34 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,11 @@ static void	print_single_char_token(t_token *token)
 	if (match(token, TK_BLANK))
 		printf("type - %s, value - %s\n", STR_BLANK, (char *)(token->value));
 	if (match(token, TK_SEMICOLON))
-		printf("type - %s, value - %s\n", STR_SEMICOLON, (char *)(token->value));
+		printf("type - %s, value - %s\n", \
+			STR_SEMICOLON, (char *)(token->value));
 	if (match(token, TK_AMPERSAND))
-		printf("type - %s, value - %s\n", STR_AMPERSAND, (char *)(token->value));
+		printf("type - %s, value - %s\n", \
+			STR_AMPERSAND, (char *)(token->value));
 	if (match(token, TK_PIPE))
 		printf("type - %s, value - %s\n", STR_PIPE, (char *)(token->value));
 	if (match(token, TK_LPAREN))
@@ -114,7 +116,8 @@ static void	print_redir_token(t_token *token)
 	if (match(token, TK_REDIR_IN))
 		printf("type - %s, value - %s\n", STR_REDIR_IN, (char *)(token->value));
 	if (match(token, TK_REDIR_OUT))
-		printf("type - %s, value - %s\n", STR_REDIR_OUT, (char *)(token->value));
+		printf("type - %s, value - %s\n", \
+			STR_REDIR_OUT, (char *)(token->value));
 	if (match(token, TK_REDIR_HEREDOC))
 		printf("type - %s, value - %s\n", \
 			STR_REDIR_HEREDOC, (char *)(token->value));
