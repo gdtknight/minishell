@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/26 08:44:59 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/26 11:00:46 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 
 static void	interactive_mode(void);
 static void	process_input(char *input);
+static void	pipe_left_child(void);
 
 /**
  * @brief Main entry point of the minishell.
@@ -78,18 +79,16 @@ static void	interactive_mode(void)
 {
 	while (!(get_shell_data()->is_exit))
 	{
-		if (isatty(STDIN_FILENO)
-			&& getenv("MINISHELL_PIPE_LEFT") && getenv("MINISHELL_PIPE_RIGHT"))
-			continue ;
+		if (getenv("MINISHELL_PIPE_LEFT") && getenv("MINISHELL_PIPE_RIGHT"))
+		{
+			if (isatty(STDIN_FILENO))
+				continue ;
+			else
+				(get_shell_input())->input_line = get_next_line(STDIN_FILENO);
+		}
 		else if (isatty(STDIN_FILENO) && getenv("MINISHELL_PIPE_LEFT")
 			&& !getenv("MINISHELL_PIPE_RIGHT"))
-		{
-			ft_putstr_fd(PROMPT, STDERR_FILENO);
-			(get_shell_input())->input_line = get_next_line(STDIN_FILENO);
-		}
-		else if (!isatty(STDIN_FILENO)
-			&& getenv("MINISHELL_PIPE_LEFT") && getenv("MINISHELL_PIPE_RIGHT"))
-			(get_shell_input())->input_line = get_next_line(STDIN_FILENO);
+			pipe_left_child();
 		else
 		{
 			restore_tty();
@@ -103,6 +102,12 @@ static void	interactive_mode(void)
 			continue ;
 		process_input((get_shell_input())->input_line);
 	}
+}
+
+static void	pipe_left_child(void)
+{
+	ft_putstr_fd(PROMPT, STDERR_FILENO);
+	(get_shell_input())->input_line = get_next_line(STDIN_FILENO);
 }
 
 /**

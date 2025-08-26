@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 17:19:13 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/26 00:51:31 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/26 10:55:38 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 static void	start_heredoc(int heredoc_pipe[2], t_syntax_node *node);
 static void	receive_heredoc(pid_t child_pid, int heredoc_pipe[2]);
-static void	read_input(const char *limiter);
+static void	read_input(const char *limiter, int heredoc_pipe[2]);
 static void	read_heredoc_pipe(int pipe_fd);
 
 /**
@@ -73,8 +73,7 @@ static void	start_heredoc(int heredoc_pipe[2], t_syntax_node *node)
 	init_heredoc_signal();
 	clear_heredoc_input();
 	close(heredoc_pipe[PIPE_READ]);
-	read_input(node->value.io_target);
-	ft_putstr_fd((*(get_heredoc_input())), heredoc_pipe[PIPE_WRITE]);
+	read_input(node->value.io_target, heredoc_pipe);
 	close(heredoc_pipe[PIPE_WRITE]);
 	clear_heredoc_input();
 	clear_shell_input();
@@ -89,32 +88,32 @@ static void	start_heredoc(int heredoc_pipe[2], t_syntax_node *node)
  *
  * @param limiter The heredoc delimiter string.
  */
-static void	read_input(const char *limiter)
+static void	read_input(const char *limiter, int heredoc_pipe[2])
 {
-	char	*temp;
-	char	*line;
+	char	*input[3];
 
-	line = NULL;
-	temp = NULL;
+	input[0] = NULL;
+	input[1] = NULL;
+	input[2] = NULL;
 	if (!limiter)
 		return ;
 	restore_tty();
 	while (TRUE)
 	{
-		line = readline("heredoc> ");
-		if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
+		input[1] = readline("heredoc> ");
+		if (!input[1]
+			|| ft_strncmp(input[1], limiter, ft_strlen(limiter) + 1) == 0)
 			break ;
-		temp = *(get_heredoc_input());
-		if (!temp)
-		{
-			*(get_heredoc_input()) = ft_strjoin(line, "\n");
-			free(line);
-			continue ;
-		}
-		*(get_heredoc_input()) = ft_multiplejoin(temp, line, "\n");
-		free(temp);
-		free(line);
+		input[2] = input[0];
+		if (input[2])
+			input[0] = ft_multiplejoin(input[2], input[1], "\n");
+		else
+			input[0] = ft_strjoin(input[1], "\n");
+		free(input[1]);
+		free(input[2]);
 	}
+	ft_putstr_fd(input[0], heredoc_pipe[PIPE_WRITE]);
+	free(input[0]);
 }
 
 /**
