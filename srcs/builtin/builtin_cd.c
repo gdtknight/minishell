@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
+/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:09 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/25 22:11:55 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/26 09:23:19 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,12 +142,12 @@ t_status	builtin_cd(char **argc)
 	char		*cwd;
 
 	envp_map = &get_shell_data()->envp_map;
-	old_pwd = getcwd(NULL, 0);
+	old_pwd = get_value(envp_map, "PWD");
+//	old_pwd = getcwd(NULL, 0);
 	new_pwd = route_set(argc[1], old_pwd, envp_map);
 	if (count_argc(argc) > 2 || !new_pwd || chdir(new_pwd) != 0)
 		return (cd_fail(check_error(argc), old_pwd));
-	if (old_pwd)
-		put_key_value(envp_map, "OLDPWD", old_pwd);
+	put_key_value(envp_map, "OLDPWD", old_pwd);
 	cwd = getcwd(NULL, 0);
 	if (cwd)
 		put_key_value(envp_map, "PWD", cwd);
