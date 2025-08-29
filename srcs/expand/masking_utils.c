@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 15:24:32 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:41:06 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 03:49:15 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,10 @@ static void	check_char(t_boolean *state, char *masking, char c)
 	if (state[IN_ESCAPE])
 		state[IN_ESCAPE] = FALSE;
 	else if (c == '\\' && !state[IN_SQUOTE])
+	{
 		state[IN_ESCAPE] = TRUE;
+		*masking = MASK_QUOTED;
+	}
 	else if (c == '\'' && !state[IN_DQUOTE])
 	{
 		state[IN_SQUOTE] = !state[IN_SQUOTE];

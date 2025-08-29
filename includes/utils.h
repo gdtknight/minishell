@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 20:56:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 21:07:25 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 03:53:15 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ size_t		find_next_delim_pos(
 				char *str,
 				t_boolean (*predicate)(char),
 				char mask);
+size_t		find_expand_delim_pos(char *str);
 
 /* --- find_next_delim_utils.c --- */
 

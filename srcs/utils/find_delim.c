@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 02:00:47 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 22:09:12 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 03:56:35 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include "flag.h"
 
 static t_boolean	update_flag(char c, char *flag, char mask);
+static t_boolean	check_delim(t_boolean *flag, char c, size_t *pos);
 
 /**
  * @brief Find the next delimiter character in a string.
@@ -133,4 +134,42 @@ static t_boolean	update_flag(char c, char *flag, char mask)
 	else
 		*flag &= ~C_BACKSLASH;
 	return (*flag != old_flag);
+}
+
+size_t	find_expand_delim_pos(char *str)
+{
+	size_t		pos;
+	char		*cur;
+	t_boolean	flag[3];
+
+	cur = str;
+	flag[0] = FALSE;
+	flag[1] = FALSE;
+	flag[2] = FALSE;
+	pos = 0;
+	while (cur[pos])
+	{
+		if (check_delim(flag, cur[pos], &pos))
+			return (pos);
+	}
+	return (pos);
+}
+
+static t_boolean	check_delim(t_boolean *flag, char c, size_t *pos)
+{
+	if (!flag[0] && c == '\\')
+	{
+		flag[0] = TRUE;
+		(*pos)++;
+		return (FALSE);
+	}
+	if (!flag[0] && !flag[1] && c == '\'')
+		flag[2] = !flag[2];
+	if (!flag[0] && !flag[2] && c == '\"')
+		flag[1] = !flag[1];
+	if (!flag[0] && !flag[2] && c == '$')
+		return (TRUE);
+	flag[0] = FALSE;
+	(*pos)++;
+	return (FALSE);
 }
