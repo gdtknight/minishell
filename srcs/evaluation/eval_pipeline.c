@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 15:45:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/26 07:53:24 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 15:45:05 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,19 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <fcntl.h>
-#include <signal.h>
 
 #include "def.h"
 
 #include "ast.h"
-#include "hashmap.h"
 #include "shell.h"
 #include "eval.h"
 
 static void	start_child(
 				t_syntax_node *pipeline_node,
-				pid_t child_pids[2],
 				int pipe_fds[2],
 				int left_or_right);
-static void	setup_pipe(pid_t child_pids[2], int pipe_fds[2]);
-static void	wait_pipe(pid_t child_pids[2], int *status);
+static void	setup_pipe(int pipe_fds[2], int pipe_no);
+static void	wait_pipe(pid_t child_pids[2]);
 
 /**
  * @brief Evaluates a pipeline node by forking and setting up pipes.
@@ -43,31 +40,27 @@ static void	wait_pipe(pid_t child_pids[2], int *status);
  */
 void	eval_pipeline(t_syntax_node	*pipeline_node)
 {
-	t_status	status;
-	int			pipe_fds[2];
-	pid_t		child_pids[2];
+	int		pipe_fds[2];
+	pid_t	child_pids[2];
 
 	if (!pipeline_node || pipeline_node->eval == OFF)
 		return ;
-	get_shell_data()->in_pipe = TRUE;
-	child_pids[CHILD_LEFT] = INT_MAX;
-	child_pids[CHILD_RIGHT] = INT_MAX;
 	if (pipe(pipe_fds) == -1)
 	{
 		perror("eval_pipeline");
 		get_shell_data()->last_status = EXIT_FAILURE;
 		return ;
 	}
-	put_key_value(&((get_shell_data())->envp_map), "MINISHELL_PIPE_LEFT", "1");
+	(get_shell_data())->in_pipe = TRUE;
 	child_pids[CHILD_LEFT] = fork();
 	if (child_pids[CHILD_LEFT] == 0)
-		start_child(pipeline_node, child_pids, pipe_fds, CHILD_LEFT);
-	put_key_value(&((get_shell_data())->envp_map), "MINISHELL_PIPE_RIGHT", "1");
+		start_child(pipeline_node, pipe_fds, CHILD_LEFT);
 	child_pids[CHILD_RIGHT] = fork();
 	if (child_pids[CHILD_RIGHT] == 0)
-		start_child(pipeline_node, child_pids, pipe_fds, CHILD_RIGHT);
-	setup_pipe(child_pids, pipe_fds);
-	wait_pipe(child_pids, &status);
+		start_child(pipeline_node, pipe_fds, CHILD_RIGHT);
+	setup_pipe(pipe_fds, -1);
+	wait_pipe(child_pids);
+	(get_shell_data())->in_pipe = FALSE;
 }
 
 /**
@@ -83,28 +76,23 @@ void	eval_pipeline(t_syntax_node	*pipeline_node)
  */
 static void	start_child(
 				t_syntax_node *pipeline_node,
-				pid_t child_pids[2],
 				int pipe_fds[2],
 				int left_or_right)
 {
 	if (left_or_right == CHILD_LEFT)
 	{
-		setup_pipe(child_pids, pipe_fds);
+		setup_pipe(pipe_fds, left_or_right);
 		eval(pipeline_node->value.b_node.left);
-		clear_heredoc_input();
-		clear_shell_input();
-		clear_shell_data();
-		exit(get_shell_data()->last_status);
 	}
 	else
 	{
-		setup_pipe(child_pids, pipe_fds);
+		setup_pipe(pipe_fds, left_or_right);
 		eval(pipeline_node->value.b_node.right);
-		clear_heredoc_input();
-		clear_shell_input();
-		clear_shell_data();
-		exit(get_shell_data()->last_status);
 	}
+	clear_heredoc_input();
+	clear_shell_input();
+	clear_shell_data();
+	exit(get_shell_data()->last_status);
 }
 
 /**
@@ -115,9 +103,9 @@ static void	start_child(
  * @param child_pids Array of child PIDs.
  * @param pipe_fds Pipe file descriptors.
  */
-static void	setup_pipe(pid_t child_pids[2], int pipe_fds[2])
+static void	setup_pipe(int pipe_fds[2], int pipe_no)
 {
-	if (child_pids[CHILD_RIGHT] == 0)
+	if (pipe_no == CHILD_RIGHT)
 	{
 		close(STDIN_FILENO);
 		close(pipe_fds[PIPE_WRITE]);
@@ -125,7 +113,7 @@ static void	setup_pipe(pid_t child_pids[2], int pipe_fds[2])
 		close(pipe_fds[PIPE_READ]);
 		return ;
 	}
-	if (child_pids[CHILD_LEFT] == 0)
+	if (pipe_no == CHILD_LEFT)
 	{
 		close(STDOUT_FILENO);
 		close(pipe_fds[PIPE_READ]);
@@ -145,20 +133,20 @@ static void	setup_pipe(pid_t child_pids[2], int pipe_fds[2])
  * @param child_pids Array of child PIDs.
  * @param status Pointer to the status variable.
  */
-static void	wait_pipe(pid_t child_pids[2], int *status)
+static void	wait_pipe(pid_t child_pids[2])
 {
-	t_hash_map	*envp_map;
+	int	status;
 
-	envp_map = &((get_shell_data())->envp_map);
-	waitpid(child_pids[CHILD_LEFT], status, 0);
-	waitpid(child_pids[CHILD_RIGHT], status, 0);
-	if (WIFEXITED(*status))
-		get_shell_data()->last_status = WEXITSTATUS(*status);
-	if (WIFSIGNALED(*status))
-		get_shell_data()->last_status = WTERMSIG(*status);
+	waitpid(child_pids[CHILD_LEFT], &status, 0);
+	if (WIFEXITED(status))
+		get_shell_data()->last_status = WEXITSTATUS(status);
+	if (WIFSIGNALED(status))
+		get_shell_data()->last_status = WTERMSIG(status);
+	waitpid(child_pids[CHILD_RIGHT], &status, 0);
+	if (WIFEXITED(status))
+		get_shell_data()->last_status = WEXITSTATUS(status);
+	if (WIFSIGNALED(status))
+		get_shell_data()->last_status = WTERMSIG(status);
 	clear_heredoc_input();
 	turnoff_node_eval(get_shell_input()->input_node);
-	get_shell_data()->in_pipe = FALSE;
-	remove_entry(envp_map, get_entry(envp_map, "MINISHELL_PIPE_LEFT"));
-	remove_entry(envp_map, get_entry(envp_map, "MINISHELL_PIPE_RIGHT"));
 }
