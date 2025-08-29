@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 22:18:39 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/29 18:22:32 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/30 06:04:34 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,16 @@ t_status	builtin_echo(char **args)
 	int	print_idx;
 	int	i;
 
+	get_shell_data()->last_status = 0;
 	if (!args[1])
 	{
-		get_shell_data()->last_status = 0;
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		return (SUCCESS);
 	}
 	print_idx = check_option(args);
 	i = print_idx;
+	if (!args[i])
+		return (SUCCESS);
 	ft_putstr_fd(args[i++], STDOUT_FILENO);
 	while (args[i])
 	{
@@ -71,6 +73,5 @@ t_status	builtin_echo(char **args)
 	}
 	if (print_idx == 1)
 		ft_putstr_fd("\n", STDOUT_FILENO);
-	get_shell_data()->last_status = 0;
 	return (SUCCESS);
 }
