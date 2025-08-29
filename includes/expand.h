@@ -39,6 +39,10 @@ typedef struct s_exp_token
 
 t_exp_token	*expand_param(t_exp_token *exp_token);
 
+/* --- expand_param_utils.c --- */
+
+size_t		find_expand_delim_pos(char *str);
+
 /* --- expand_tilde.c --- */
 
 t_exp_token	*expand_tilde(t_exp_token *exp_token);
