@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 22:12:37 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/28 23:13:27 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 21:55:39 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "libft.h"
 
 #include "def.h"
+#include "shell.h"
 #include "builtin.h"
 #include "execute.h"
 
@@ -49,6 +50,7 @@ void	execute_builtin(t_cmd_form *cmd_form)
 				cmd_form->cmd, ft_strlen(builtins[idx].cmd_str) + 1) == 0)
 		{
 			(builtins[idx].cmd)(cmd_form->args);
+			restore_tty();
 			return ;
 		}
 	}
