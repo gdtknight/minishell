@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:09 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/29 17:59:16 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/30 03:10:29 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,6 @@
 #include "hashmap.h"
 #include "shell.h"
 #include "builtin.h"
-
-/**
- * @brief Count the number of arguments in a NULL-terminated string array.
- *
- * @param argc The argument array.
- * @return The number of arguments.
- */
-int	count_argc(char **argc)
-{
-	int	i;
-
-	i = 0;
-	while (argc[i])
-		i++;
-	return (i);
-}
 
 /**
  * @brief Check for errors in cd arguments and set error type.
@@ -140,21 +124,21 @@ t_status	builtin_cd(char **argc)
 	t_hash_map	*envp_map;
 	char		*old_pwd;
 	char		*new_pwd;
-	char		*cwd;
 
 	envp_map = &get_shell_data()->envp_map;
 	old_pwd = ft_strdup(get_value(envp_map, "PWD"));
 	new_pwd = route_set(argc[1], old_pwd, envp_map);
-	if (count_argc(argc) > 2 || !new_pwd || chdir(new_pwd) != 0)
+	if (count_argc(argc) > 2 || !new_pwd)
 		return (cd_fail(check_error(argc), old_pwd));
+	if (chdir(new_pwd) != 0)
+	{
+		ft_putstr_fd("cd: ", STDERR_FILENO);
+		perror(new_pwd);
+		free(old_pwd);
+		return (FAILURE);
+	}
 	put_key_value(envp_map, "OLDPWD", old_pwd);
-	cwd = getcwd(NULL, 0);
-	if (cwd)
-		put_key_value(envp_map, "PWD", cwd);
-	else
-		put_key_value(envp_map, "PWD", ".");
-	if (cwd)
-		free (cwd);
+	update_pwd();
 	if (old_pwd)
 		free (old_pwd);
 	get_shell_data()->last_status = 0;
