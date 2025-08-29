@@ -6,11 +6,10 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:44:13 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/29 18:04:43 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/30 03:59:04 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include <unistd.h>
 
 #include "libft.h"

@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 02:37:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 23:34:40 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 03:15:47 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 #include <sys/wait.h>
 #include <readline/readline.h>
 
-#include "libft.h"
 #include "shell.h"
 
 /**
