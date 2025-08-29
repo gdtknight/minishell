@@ -6,16 +6,18 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/22 16:49:56 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/29 18:22:56 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <unistd.h>
 
 #include "def.h"
 #include "hashmap.h"
 #include "builtin.h"
 #include "shell.h"
+#include "libft.h"
 
 /**
  * @brief Implementation of the builtin env command.
@@ -38,7 +40,10 @@ t_status	builtin_env(char **argc)
 		current = map.table[i];
 		while (current)
 		{
-			printf("%s=%s\n", current->key, current->value);
+			ft_putstr_fd(current->key, STDOUT_FILENO);
+			ft_putstr_fd("=", STDOUT_FILENO);
+			ft_putstr_fd(current->value, STDOUT_FILENO);
+			ft_putstr_fd("\n", STDOUT_FILENO);
 			current = current->next;
 		}
 		i++;

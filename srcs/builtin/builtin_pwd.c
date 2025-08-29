@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_pwd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 18:35:10 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/22 16:48:45 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/29 18:50:57 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "def.h"
 #include "builtin.h"
 #include "shell.h"
+#include "libft.h"
 
 /**
  * @brief Implementation of the builtin pwd command.
@@ -33,7 +34,7 @@ t_status	builtin_pwd(char **args)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 		return (ERROR);
-	printf("%s\n", cwd);
+	ft_putendl_fd(cwd, STDOUT_FILENO);
 	free(cwd);
 	get_shell_data()->last_status = 0;
 	return (SUCCESS);

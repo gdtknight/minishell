@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 22:18:39 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/22 16:47:37 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/29 18:22:32 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 #include "builtin.h"
 #include "shell.h"
+#include "libft.h"
 
 /**
  * @brief Checks for the -n option(s) in echo arguments.
@@ -56,19 +57,20 @@ t_status	builtin_echo(char **args)
 	if (!args[1])
 	{
 		get_shell_data()->last_status = 0;
-		printf("\n");
+		ft_putstr_fd("\n", STDOUT_FILENO);
 		return (SUCCESS);
 	}
 	print_idx = check_option(args);
 	i = print_idx;
-	printf("%s", args[i++]);
+	ft_putstr_fd(args[i++], STDOUT_FILENO);
 	while (args[i])
 	{
-		printf(" %s", args[i]);
+		ft_putstr_fd(" ", STDOUT_FILENO);
+		ft_putstr_fd(args[i], STDOUT_FILENO);
 		i++;
 	}
 	if (print_idx == 1)
-		printf("\n");
+		ft_putstr_fd("\n", STDOUT_FILENO);
 	get_shell_data()->last_status = 0;
 	return (SUCCESS);
 }

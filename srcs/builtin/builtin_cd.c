@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:09 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/26 23:32:59 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 17:59:16 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,11 @@ t_status	cd_fail(t_cd_err err, char *old_pwd)
 {
 	get_shell_data()->last_status = 1;
 	if (err == CD_TOO_MANY_ARGS)
-		printf("cd: too many arguments\n");
+		ft_putstr_fd("cd: too many arguments\n", STDERR_FILENO);
 	if (err == CD_HOME_NOT_SET)
-		printf("cd: HOME not set\n");
+		ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
 	if (err == CD_OLDPWD_NOT_SET)
-		printf("cd: OLDPWD not set\n");
+		ft_putstr_fd("cd: OLDPWD not set\n", STDERR_FILENO);
 	if (err == CD_EACCES)
 		perror("cd");
 	if (err == CD_ENOENT)
@@ -118,7 +118,8 @@ char	*route_set(char *path, char *old_pwd, t_hash_map *map)
 		if (get_value(map, "OLDPWD"))
 		{
 			new_pwd = get_value(map, "OLDPWD");
-			printf ("%s\n", new_pwd);
+			ft_putstr_fd (new_pwd, STDOUT_FILENO);
+			ft_putstr_fd ("\n", STDOUT_FILENO);
 		}
 		else
 			new_pwd = NULL;

@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
+/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/25 21:53:41 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/29 18:19:29 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #include "hashmap.h"
 #include "def.h"
@@ -19,6 +20,21 @@
 #include "builtin.h"
 #include "shell.h"
 #include "utils.h"
+
+/**
+ * @brief Prints an error message for invalid export identifiers.
+ *
+ * Outputs an error message to standard error indicating that the given key
+ * is not a valid identifier for the export builtin.
+ *
+ * @param key The invalid identifier string.
+ */
+static void	print_error(char *key)
+{
+	ft_putstr_fd("export: `", STDERR_FILENO);
+	ft_putstr_fd(key, STDERR_FILENO);
+	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+}
 
 /**
  * @brief Checks if the given name is a valid environment variable identifier.
@@ -70,7 +86,7 @@ t_status	check_and_set_enp(char *envp, t_hash_map *map)
 	}
 	else
 	{
-		printf("export: `%s': not a valid identifier\n", key);
+		print_error(key);
 		status = ERROR;
 	}
 	free (key);
