@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:29:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 07:14:47 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 08:05:31 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,6 @@
 #include <unistd.h>
 
 #include "libft.h"
-#include "flag.h"
-#include "utils.h"
-#include "shell.h"
 #include "expand.h"
 
 /* Function prototypes for internal helpers */
