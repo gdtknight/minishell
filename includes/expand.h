@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:12:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 07:34:30 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 08:00:51 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,12 @@ char		*get_envvalue(const char *env_param);
 char		*get_special_value(char c);
 
 /* --- expand_heredoc.c --- */
+
 void		expand_heredoc_input(char **str);
+
+/* --- expand_heredoc_utils.c --- */
+
+char		*extract_heredoc_envparam(char *str);
 
 /* --- expand_param.c --- */
 

@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 07:50:32 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 07:51:05 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 08:02:50 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,11 @@ static void	get_heredoc_envpair(char *str, size_t idx, char ***env_pair)
 		*env_pair = NULL;
 		return ;
 	}
-	(*env_pair)[PARAM_IDX] = extract_envparam(&(str[idx + dollar_pos]));
+	(*env_pair)[PARAM_IDX] = extract_heredoc_envparam(&(str[idx + dollar_pos]));
 	if (!(*env_pair)[PARAM_IDX])
 	{
 		free(*env_pair);
+		*env_pair = NULL;
 		return ;
 	}
 	(*env_pair)[VALUE_IDX] = get_envvalue((*env_pair)[PARAM_IDX]);
