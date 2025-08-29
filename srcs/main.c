@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/28 23:12:36 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 15:36:16 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,6 @@ int	main(int argc, char *argv[], char *envp[])
 {
 	(void)argv;
 	init_minishell_signal();
-	clear_heredoc_input();
-	clear_shell_input();
-	clear_shell_data();
 	if (!init_shell_data(envp))
 		exit(errno);
 	if (argc == 1)
