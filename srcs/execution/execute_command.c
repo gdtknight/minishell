@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 14:25:06 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 22:04:52 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/28 16:23:24 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@ static void	execute_relative_path(t_cmd_form *cmd_form)
 	cmd = cmd_form->cmd;
 	if (*cmd == '.' && *(cmd + 1) == '/')
 	{
+		if ((*(cmd + 2) == '\0')
+			&& (execve(cmd, cmd_form->args, cmd_form->envp) == -1))
+			is_a_directory();
 		if (access(cmd, R_OK) != 0)
 		{
 			perror(cmd);
@@ -62,10 +65,6 @@ static void	execute_relative_path(t_cmd_form *cmd_form)
 			perror(cmd);
 			exit(PERMISSION_DENIED_CODE);
 		}
-		restore_signal();
-		if ((*(cmd + 2) == '\0')
-			&& (execve(cmd, cmd_form->args, cmd_form->envp) == -1))
-			is_a_directory();
 	}
 }
 
