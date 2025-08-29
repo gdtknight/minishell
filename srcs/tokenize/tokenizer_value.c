@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 23:40:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/26 09:33:41 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/28 17:05:18 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_token_type	get_token_type(char *str)
 		return (TK_AND_IF);
 	if (ft_strncmp(str, STR_OR_IF, ft_strlen(STR_OR_IF)) == 0)
 		return (TK_OR_IF);
-	if (*str == ' ' || *str == '\t')
+	if (*str == ' ' || *str == '\t' || *str < 32 || *str > 126)
 		return (TK_BLANK);
 	if (*str == ';' || *str == '&' || *str == '|' || *str == '\n'
 		|| *str == '<' || *str == '>' || *str == '(' || *str == ')')
