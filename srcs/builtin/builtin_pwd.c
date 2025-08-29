@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 18:35:10 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/29 18:50:57 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/30 02:44:15 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ t_status	builtin_pwd(char **args)
 	(void) args;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		return (ERROR);
+	{
+		perror("pwd");
+		return (FAILURE);
+	}
 	ft_putendl_fd(cwd, STDOUT_FILENO);
 	free(cwd);
 	get_shell_data()->last_status = 0;
