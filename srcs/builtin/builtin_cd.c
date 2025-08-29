@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:09 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/30 03:10:29 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 03:34:32 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,8 @@ char	*route_set(char *path, char *old_pwd, t_hash_map *map)
 		if (get_value(map, "OLDPWD"))
 		{
 			new_pwd = get_value(map, "OLDPWD");
-			ft_putstr_fd (new_pwd, STDOUT_FILENO);
-			ft_putstr_fd ("\n", STDOUT_FILENO);
+			if (access(new_pwd, F_OK) == 0)
+				ft_putendl_fd (new_pwd, STDOUT_FILENO);
 		}
 		else
 			new_pwd = NULL;
