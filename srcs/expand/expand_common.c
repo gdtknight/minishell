@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 07:14:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 07:14:38 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 07:19:45 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ char	*extract_envparam(char *str)
 	if (ft_isdigit(*cur) || *cur == '*' || *cur == '@' || *cur == '?'
 		|| *cur == '$' || *cur == '!' || (*cur == '_' && *(cur + 1) == '\0'))
 		env_param = ft_substr(str, 0, 2);
+	else if (*cur == '\"' || *cur == '\'')
+		env_param = ft_strdup("$");
 	else if (ft_isalpha(*cur) || *cur == '_')
 	{
 		while (ft_isalnum(*cur) || *cur == '_')
