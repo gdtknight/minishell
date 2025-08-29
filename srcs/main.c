@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 15:36:16 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 19:41:01 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ static void	read_shell_input(void)
 {
 	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
 	{
-		rl_replace_line("", 0);
 		(get_shell_input())->input_line = readline(PROMPT);
 	}
 	else if (isatty(STDIN_FILENO) && !isatty(STDOUT_FILENO))
