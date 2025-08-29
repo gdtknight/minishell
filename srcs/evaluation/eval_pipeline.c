@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 15:45:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 20:22:21 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 20:36:40 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ static void	setup_pipe(int pipe_fds[2], int pipe_no)
  */
 static void	wait_pipe(pid_t child_pids[2])
 {
-	int status;
+	int	status;
 
 	waitpid(child_pids[CHILD_LEFT], &status, 0);
 	waitpid(child_pids[CHILD_RIGHT], &status, 0);
