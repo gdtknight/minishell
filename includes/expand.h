@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 00:12:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 10:40:10 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 07:14:06 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@ typedef struct s_exp_token
 	char				*value;
 	char				*qmask;
 }	t_exp_token;
+
+/* --- expand_common.c --- */
+
+char		*extract_envparam(char *str);
+char		*get_envvalue(const char *env_param);
+char		*get_special_value(char c);
 
 /* --- expand_param.c --- */
 
