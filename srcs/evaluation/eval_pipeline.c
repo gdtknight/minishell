@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 15:45:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 20:36:40 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 23:31:19 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ static void	start_child(
 		setup_pipe(pipe_fds, left_or_right);
 		eval(pipeline_node->value.b_node.right);
 	}
-	clear_heredoc_input();
 	clear_shell_input();
 	clear_shell_data();
 	exit(get_shell_data()->last_status);
@@ -151,6 +150,5 @@ static void	wait_pipe(pid_t child_pids[2])
 		else if (WTERMSIG(status) == SIGINT && !((get_shell_data())->is_child))
 			ft_putendl_fd("", STDERR_FILENO);
 	}
-	clear_heredoc_input();
 	turnoff_node_eval(get_shell_input()->input_node);
 }

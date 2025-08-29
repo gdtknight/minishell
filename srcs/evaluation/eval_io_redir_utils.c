@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 21:21:43 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/26 13:05:35 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 23:30:49 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ static void	set_heredoc_to_pipe(
 	close((cmd->value.command.heredoc_fds)[PIPE_WRITE]);
 	clear_shell_input();
 	clear_shell_data();
-	clear_heredoc_input();
 	exit(EXIT_SUCCESS);
 }
 

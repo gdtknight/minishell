@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:06:19 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 20:19:35 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 22:24:27 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ t_result	init_shell_data(char *envp[])
 	(get_shell_data())->is_child = FALSE;
 	(get_shell_data())->in_heredoc = FALSE;
 	(get_shell_data())->last_bg_pid = -1;
-	(get_shell_data())->last_arg = NULL;
 	return (COMPLETED);
 }
 
@@ -104,8 +103,5 @@ t_result	init_shell_data(char *envp[])
  */
 void	clear_shell_data(void)
 {
-	if (get_shell_data()->last_arg)
-		free(get_shell_data()->last_arg);
-	get_shell_data()->last_arg = NULL;
 	clear_hashmap(&((get_shell_data())->envp_map));
 }

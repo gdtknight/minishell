@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 14:25:06 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 22:00:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 23:31:59 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ static void	is_a_directory(void)
 {
 	ft_putstr_fd("./", STDERR_FILENO);
 	ft_putendl_fd(": Is a directory", STDERR_FILENO);
-	clear_heredoc_input();
 	clear_shell_input();
 	clear_shell_data();
 	exit(PERMISSION_DENIED_CODE);
@@ -96,7 +95,6 @@ static void	execute_relative_path(t_cmd_form *cmd_form)
 		restore_signal();
 		execve(path, cmd_form->args, cmd_form->envp);
 	}
-	clear_heredoc_input();
 	clear_shell_input();
 	clear_shell_data();
 	exit(COMMAND_NOT_FOUND_CODE);

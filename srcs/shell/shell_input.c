@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 18:04:29 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:27:38 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 23:29:41 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,33 +70,4 @@ void	clear_shell_input(void)
 void	turnoff_input_node_eval(void)
 {
 	turnoff_node_eval((get_shell_input())->input_node);
-}
-
-/**
- * @brief Returns a pointer to the heredoc input string.
- *
- * Maintains a static char* for heredoc input and returns its address.
- *
- * @return char** Pointer to the heredoc input string pointer.
- */
-char	**get_heredoc_input(void)
-{
-	static char	*heredoc_input;
-
-	return (&heredoc_input);
-}
-
-/**
- * @brief Clears the heredoc input.
- *
- * Frees the allocated heredoc input string and sets the pointer to NULL.
- */
-void	clear_heredoc_input(void)
-{
-	char	**heredoc_input;
-
-	heredoc_input = get_heredoc_input();
-	if (*heredoc_input)
-		free(*heredoc_input);
-	*get_heredoc_input() = NULL;
 }

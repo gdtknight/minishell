@@ -124,7 +124,6 @@ static void	process_input(char *input)
 	(get_shell_input())->input_node = parse_input(&input_token);
 	eval_heredoc((get_shell_input())->input_node);
 	eval((get_shell_input())->input_node);
-	clear_heredoc_input();
 	clear_shell_input();
 }
 

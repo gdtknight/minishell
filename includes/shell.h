@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:03:33 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 20:19:19 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 23:29:28 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,9 @@
 
 typedef struct s_shell_data
 {
-	struct sigaction	old_int;
-	struct sigaction	old_quit;
-	struct termios		termios_backup;
 	t_hash_map			envp_map;
 	int					last_status;
 	pid_t				last_bg_pid;
-	char				*last_arg;
 	t_boolean			has_child;
 	t_boolean			is_child;
 	t_boolean			in_heredoc;
@@ -56,9 +52,6 @@ t_shell_input	*get_shell_input(void);
 void			clear_shell_input(void);
 
 void			turnoff_input_node_eval(void);
-
-char			**get_heredoc_input(void);
-void			clear_heredoc_input(void);
 
 /* --- shell_signal.c --- */
 

@@ -58,7 +58,6 @@ void	read_heredoc(t_syntax_node *node)
 	temp = node->value.io_target;
 	node->value.io_target = ft_strdup(*get_heredoc_input());
 	free(temp);
-	clear_heredoc_input();
 }
 
 /**
@@ -73,11 +72,9 @@ void	read_heredoc(t_syntax_node *node)
 static void	start_heredoc(int heredoc_pipe[2], t_syntax_node *node)
 {
 	init_heredoc_signal();
-	clear_heredoc_input();
 	close(heredoc_pipe[PIPE_READ]);
 	read_input(node->value.io_target, heredoc_pipe);
 	close(heredoc_pipe[PIPE_WRITE]);
-	clear_heredoc_input();
 	clear_shell_input();
 	clear_shell_data();
 	exit(EXIT_SUCCESS);
@@ -144,7 +141,6 @@ static void	receive_heredoc(pid_t child_pid, int heredoc_pipe[2])
 	}
 	if (WIFEXITED(status))
 	{
-		clear_heredoc_input();
 		read_heredoc_pipe(heredoc_pipe[PIPE_READ]);
 		close(heredoc_pipe[PIPE_READ]);
 		(get_shell_data())->last_status = WEXITSTATUS(status);

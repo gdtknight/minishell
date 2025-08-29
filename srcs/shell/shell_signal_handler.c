@@ -46,7 +46,6 @@ void	minishell_sigint_handler(int signo)
 {
 	(void)signo;
 	turnoff_input_node_eval();
-	clear_heredoc_input();
 	(get_shell_data())->last_status = 128 + SIGINT;
 	if (!((get_shell_data())->in_heredoc)
 		&& !((get_shell_data())->has_child))
