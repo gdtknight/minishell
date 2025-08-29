@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 20:56:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 05:17:24 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 07:04:20 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 # define INIT_CAPACITY	(16)
 # define LLONG_MAX_LEN	(21)
-
-# include <stdlib.h>
 
 # include "def.h"
 # include "hashmap.h"
@@ -28,25 +26,7 @@ typedef enum e_state_idx
 	IN_ESCAPE = 2,
 }	t_state_idx;
 
-/* --- envp_utils.c --- */
-
-char		**lst_from_hashmap(t_hash_map *map);
-char		*extract_key(char *envp);
-char		*extract_value(char *envp);
-
-/* --- find_next_delim.c --- */
-
-char		*find_next_delim(
-				char *str,
-				t_boolean (*predicate)(char),
-				char mask);
-size_t		find_next_delim_pos(
-				char *str,
-				t_boolean (*predicate)(char),
-				char mask);
-size_t		find_expand_delim_pos(char *str);
-
-/* --- find_next_delim_utils.c --- */
+/* --- char_utils.c --- */
 
 t_boolean	is_ifs(char c);
 t_boolean	is_dollar_sign(char c);
@@ -54,15 +34,22 @@ t_boolean	is_tk_delim(char c);
 t_boolean	is_single_quote(char c);
 t_boolean	is_space(int c);
 
-/* --- ft_multiplejoin.c --- */
+/* --- env_utils.c --- */
 
-char		*ft_multiplejoin(const char *s1, const char *s2, const char *s3);
-
-/* --- validate_utils.c --- */
-
-t_boolean	is_valid_pair(char *input);
+char		**lst_from_hashmap(t_hash_map *map);
+char		*extract_key(char *envp);
+char		*extract_value(char *envp);
 
 /* --- ft_lltoa.c --- */
 
 char		*ft_lltoa(long long n);
+
+/* --- ft_multiplejoin.c --- */
+
+char		*ft_multiplejoin(const char *s1, const char *s2, const char *s3);
+
+/* --- pair_validator.c --- */
+
+t_boolean	is_valid_pair(char *input);
+
 #endif

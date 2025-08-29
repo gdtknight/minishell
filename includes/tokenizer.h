@@ -6,12 +6,14 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:25:28 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/26 09:22:40 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 06:39:02 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
+
+# include <stdlib.h>
 
 # include "def.h"
 
@@ -88,13 +90,20 @@ t_boolean		is_io_token(t_token *token);
 t_boolean		is_op_token(t_token *token);
 t_boolean		is_word_token(t_token *token);
 
-/* ---  token_word.c --- */
-
-char			*extract_quoted(char *str);
-
 /* --- tokenizer.c --- */
 
 t_token			*tokenize_input(char *line);
+
+/* --- tokenizer_utils.c --- */
+
+char		*find_next_delim(
+				char *str,
+				t_boolean (*predicate)(char),
+				char mask);
+size_t		find_next_delim_pos(
+				char *str,
+				t_boolean (*predicate)(char),
+				char mask);
 
 /* --- tokenizer_value.c --- */
 
