@@ -6,14 +6,15 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 20:56:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 03:53:15 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 05:17:24 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
 
-# define INIT_CAPACITY (16)
+# define INIT_CAPACITY	(16)
+# define LLONG_MAX_LEN	(21)
 
 # include <stdlib.h>
 
@@ -61,4 +62,7 @@ char		*ft_multiplejoin(const char *s1, const char *s2, const char *s3);
 
 t_boolean	is_valid_pair(char *input);
 
+/* --- ft_lltoa.c --- */
+
+char		*ft_lltoa(long long n);
 #endif
