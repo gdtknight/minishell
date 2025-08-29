@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 17:19:13 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 20:10:08 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 23:44:42 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <readline/readline.h>
 #include <unistd.h>
 
+#include "ast.h"
+#include "get_next_line_bonus.h"
 #include "libft.h"
 
 #include "shell.h"
@@ -24,9 +26,12 @@
 #include "eval.h"
 
 static void	start_heredoc(int heredoc_pipe[2], t_syntax_node *node);
-static void	receive_heredoc(pid_t child_pid, int heredoc_pipe[2]);
+static void	receive_heredoc(
+				pid_t child_pid,
+				int heredoc_pipe[2],
+				t_syntax_node *node);
 static void	read_input(const char *limiter, int heredoc_pipe[2]);
-static void	read_heredoc_pipe(int pipe_fd);
+static void	read_heredoc_pipe(int pipe_fd, t_syntax_node *node);
 
 /**
  * @brief Reads heredoc input for a given syntax node.
@@ -40,7 +45,6 @@ void	read_heredoc(t_syntax_node *node)
 {
 	int		heredoc_pipe[2];
 	pid_t	child_pid;
-	char	*temp;
 
 	if (!node)
 		return ;
@@ -53,11 +57,8 @@ void	read_heredoc(t_syntax_node *node)
 	get_shell_data()->has_child = TRUE;
 	if (child_pid == 0)
 		start_heredoc(heredoc_pipe, node);
-	receive_heredoc(child_pid, heredoc_pipe);
+	receive_heredoc(child_pid, heredoc_pipe, node);
 	get_shell_data()->has_child = FALSE;
-	temp = node->value.io_target;
-	node->value.io_target = ft_strdup(*get_heredoc_input());
-	free(temp);
 }
 
 /**
@@ -89,30 +90,24 @@ static void	start_heredoc(int heredoc_pipe[2], t_syntax_node *node)
  */
 static void	read_input(const char *limiter, int heredoc_pipe[2])
 {
-	char	*input[3];
+	char	*input;
 
-	input[0] = NULL;
-	input[1] = NULL;
-	input[2] = NULL;
+	input = NULL;
 	if (!limiter)
 		return ;
 	restore_tty();
 	while (TRUE)
 	{
-		input[1] = readline("heredoc> ");
-		if (!input[1]
-			|| ft_strncmp(input[1], limiter, ft_strlen(limiter) + 1) == 0)
-			break ;
-		input[2] = input[0];
-		if (input[2])
-			input[0] = ft_multiplejoin(input[2], input[1], "\n");
-		else
-			input[0] = ft_strjoin(input[1], "\n");
-		free(input[1]);
-		free(input[2]);
+		input = readline("heredoc> ");
+		if (ft_strncmp(input, limiter, ft_strlen(limiter) + 1) == 0)
+		{
+			free(input);
+			return ;
+		}
+		ft_putstr_fd(input, heredoc_pipe[PIPE_WRITE]);
+		free(input);
+		ft_putstr_fd("\n", heredoc_pipe[PIPE_WRITE]);
 	}
-	ft_putstr_fd(input[0], heredoc_pipe[PIPE_WRITE]);
-	free(input[0]);
 }
 
 /**
@@ -123,29 +118,22 @@ static void	read_input(const char *limiter, int heredoc_pipe[2])
  * @param child_pid PID of the child process.
  * @param heredoc_pipe Pipe file descriptors.
  */
-static void	receive_heredoc(pid_t child_pid, int heredoc_pipe[2])
+static void	receive_heredoc(
+				pid_t child_pid,
+				int heredoc_pipe[2],
+				t_syntax_node *node)
 {
 	int	status;
 
 	status = 0;
-	(get_shell_data())->in_heredoc = TRUE;
 	close(heredoc_pipe[PIPE_WRITE]);
 	waitpid(child_pid, &status, 0);
-	if (WIFSIGNALED(status))
-	{
-		close(heredoc_pipe[PIPE_READ]);
-		(get_shell_data())->last_status = 128 + SIGINT;
-		if (WTERMSIG(status) == SIGINT)
-			ft_putendl_fd("", STDERR_FILENO);
-		turnoff_input_node_eval();
-	}
 	if (WIFEXITED(status))
 	{
-		read_heredoc_pipe(heredoc_pipe[PIPE_READ]);
-		close(heredoc_pipe[PIPE_READ]);
 		(get_shell_data())->last_status = WEXITSTATUS(status);
+		read_heredoc_pipe(heredoc_pipe[PIPE_READ], node);
+		close(heredoc_pipe[PIPE_READ]);
 	}
-	(get_shell_data())->in_heredoc = FALSE;
 }
 
 /**
@@ -155,25 +143,25 @@ static void	receive_heredoc(pid_t child_pid, int heredoc_pipe[2])
  *
  * @param pipe_fd File descriptor to read from.
  */
-static void	read_heredoc_pipe(int pipe_fd)
+static void	read_heredoc_pipe(int pipe_fd, t_syntax_node *node)
 {
 	char	*read_;
 	char	*temp;
-	int		read_byte;
-	char	buf[256];
 
-	read_ = NULL;
-	buf[0] = '\0';
-	read_byte = read(pipe_fd, buf, 255);
-	buf[read_byte] = '\0';
-	while (read_byte > 0)
+	free(node->value.io_target);
+	node->value.io_target = NULL;
+	read_ = get_next_line(pipe_fd);
+	while (read_)
 	{
-		read_ = ft_substr(buf, 0, read_byte);
-		temp = *(get_heredoc_input());
-		*(get_heredoc_input()) = ft_strjoin(temp, read_);
-		free(temp);
+		temp = node->value.io_target;
+		if (temp)
+		{
+			node->value.io_target = ft_strjoin(temp, read_);
+			free(temp);
+		}
+		else
+			node->value.io_target = ft_strdup(read_);
 		free(read_);
-		read_byte = read(pipe_fd, buf, 255);
-		buf[read_byte] = '\0';
+		read_ = get_next_line(pipe_fd);
 	}
 }
