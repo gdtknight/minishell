@@ -6,10 +6,11 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 11:05:47 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/26 06:44:23 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/28 17:00:38 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "get_next_line_bonus.h"
 
 char	*get_next_line(int fd)
@@ -113,7 +114,7 @@ char	*read_buffer(t_buffer *buffer)
 		return (NULL);
 	if (gnl_strnchr(&((buffer->buffer)[buffer->sidx]), '\n', len) != (-1))
 		len = gnl_strnchr(&((buffer->buffer)[buffer->sidx]), '\n', len) + 1;
-	content = (char *) malloc(sizeof(char) * (len + 1));
+	content = (char *) ft_calloc(sizeof(char), (len + 1));
 	if (!content)
 	{
 		buffer->eidx = buffer->sidx;
