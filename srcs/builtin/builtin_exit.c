@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:44:13 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/30 05:20:19 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 06:34:20 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,12 @@ static t_builtin_exit	check_args(char **args)
 		return (NO_ARGC);
 	while (args[i])
 	{
+		if (i > 1)
+			return (TOO_MANY_ARGC);
 		if (!check_arg(args[i]))
 			return (WRONG_ARGC);
 		i++;
 	}
-	if (i > 2)
-		return (TOO_MANY_ARGC);
 	return (WITH_ARGC);
 }
 
