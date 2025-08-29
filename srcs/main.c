@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/26 11:00:46 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/28 23:12:36 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@
 #include "eval.h"
 
 static void	interactive_mode(void);
+static void	read_shell_input(void);
 static void	process_input(char *input);
-static void	pipe_left_child(void);
 
 /**
  * @brief Main entry point of the minishell.
@@ -79,35 +79,21 @@ static void	interactive_mode(void)
 {
 	while (!(get_shell_data()->is_exit))
 	{
-		if (getenv("MINISHELL_PIPE_LEFT") && getenv("MINISHELL_PIPE_RIGHT"))
-		{
-			if (isatty(STDIN_FILENO))
-				continue ;
-			else
-				(get_shell_input())->input_line = get_next_line(STDIN_FILENO);
-		}
-		else if (isatty(STDIN_FILENO) && getenv("MINISHELL_PIPE_LEFT")
-			&& !getenv("MINISHELL_PIPE_RIGHT"))
-			pipe_left_child();
-		else
-		{
-			restore_tty();
-			(get_shell_input())->input_line = readline(PROMPT);
-		}
+		read_shell_input();
 		if ((get_shell_input())->input_line == NULL)
 			break ;
-		if ((*(get_shell_input())->input_line) == '\0' \
-			|| ft_strncmp((get_shell_input())->input_line, "", \
+		if (ft_strncmp((get_shell_input())->input_line, "", \
 				ft_strlen("") + 1) == 0)
 			continue ;
+		if (ft_strncmp((get_shell_input())->input_line, "\n", \
+				ft_strlen("\n") + 1) == 0)
+		{
+			ft_putendl_fd("\n", STDOUT_FILENO);
+			clear_shell_input();
+			continue ;
+		}
 		process_input((get_shell_input())->input_line);
 	}
-}
-
-static void	pipe_left_child(void)
-{
-	ft_putstr_fd(PROMPT, STDERR_FILENO);
-	(get_shell_input())->input_line = get_next_line(STDIN_FILENO);
 }
 
 /**
@@ -143,4 +129,22 @@ static void	process_input(char *input)
 	eval((get_shell_input())->input_node);
 	clear_heredoc_input();
 	clear_shell_input();
+}
+
+static void	read_shell_input(void)
+{
+	if (isatty(STDIN_FILENO) && isatty(STDOUT_FILENO))
+	{
+		rl_replace_line("", 0);
+		(get_shell_input())->input_line = readline(PROMPT);
+	}
+	else if (isatty(STDIN_FILENO) && !isatty(STDOUT_FILENO))
+	{
+		ft_putstr_fd(PROMPT, STDERR_FILENO);
+		(get_shell_input())->input_line = get_next_line(STDIN_FILENO);
+	}
+	else
+	{
+		(get_shell_input())->input_line = get_next_line(STDIN_FILENO);
+	}
 }
