@@ -6,11 +6,12 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 04:30:45 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 05:20:05 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 07:21:20 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <limits.h>
+#include <stdlib.h>
 
 #include "libft.h"
 #include "def.h"
