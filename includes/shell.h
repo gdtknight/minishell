@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:03:33 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 23:29:28 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 00:46:59 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@
 
 typedef struct s_shell_data
 {
-	t_hash_map			envp_map;
-	int					last_status;
-	pid_t				last_bg_pid;
-	t_boolean			has_child;
-	t_boolean			is_child;
-	t_boolean			in_heredoc;
-	t_boolean			is_exit;
+	t_hash_map	envp_map;
+	int			last_status;
+	pid_t		last_bg_pid;
+	t_boolean	has_child;
+	t_boolean	is_child;
+	t_boolean	is_exit;
+	t_boolean	is_redir;
 }	t_shell_data;
 
 typedef struct s_shell_input

@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 21:21:43 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 23:30:49 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 00:48:46 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ t_status	set_stdin(t_syntax_node *io_redir_node)
 
 	if (!io_redir_node || io_redir_node->eval == OFF)
 		return (SUCCESS);
+	(get_shell_data())->is_redir = TRUE;
 	if (io_redir_node->type == NODE_IO_REDIR_IN)
 	{
 		infile_fd = open(io_redir_node->value.io_target, O_RDONLY);
@@ -75,7 +76,6 @@ t_status	set_heredoc(t_syntax_node *io_redir_node)
 
 	if (!io_redir_node || io_redir_node->eval == OFF)
 		return (SUCCESS);
-	(get_shell_data())->in_heredoc = TRUE;
 	cmd = find_cmd_node(io_redir_node);
 	if (!cmd)
 		return (SUCCESS);
@@ -88,7 +88,6 @@ t_status	set_heredoc(t_syntax_node *io_redir_node)
 	if (child == 0)
 		set_heredoc_to_pipe(cmd, io_redir_node);
 	set_heredoc_from_pipe(cmd, child);
-	(get_shell_data())->in_heredoc = FALSE;
 	return (SUCCESS);
 }
 
@@ -146,6 +145,7 @@ t_status	set_stdout(t_syntax_node *io_redir_node)
 
 	if (!io_redir_node || io_redir_node->eval == OFF)
 		return (SUCCESS);
+	(get_shell_data())->is_redir = TRUE;
 	if (io_redir_node->type == NODE_IO_REDIR_OUT)
 	{
 		outfile_fd = open(io_redir_node->value.io_target, \

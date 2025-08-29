@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:06:19 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 22:24:27 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 00:47:31 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_result	init_shell_data(char *envp[])
 	(get_shell_data())->last_status = EXIT_SUCCESS;
 	(get_shell_data())->has_child = FALSE;
 	(get_shell_data())->is_child = FALSE;
-	(get_shell_data())->in_heredoc = FALSE;
+	(get_shell_data())->is_redir = FALSE;
 	(get_shell_data())->last_bg_pid = -1;
 	return (COMPLETED);
 }

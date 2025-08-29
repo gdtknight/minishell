@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:34:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 23:31:33 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 00:50:05 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,11 @@ static void	eval_simple_command(t_command *command)
 	if (is_builtin(command->cmd_word->value.word))
 	{
 		execute_builtin(&(command->form));
+		if ((get_shell_data())->is_redir)
+		{
+			restore_tty();
+			(get_shell_data())->is_redir = FALSE;
+		}
 		return ;
 	}
 	execute_command(&(command->form));
