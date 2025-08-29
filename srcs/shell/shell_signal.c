@@ -51,23 +51,6 @@ void	init_minishell_signal(void)
 }
 
 /**
- * @brief Initialize signals for pipeline execution.
- *
- * Sets SIGPIPE to be handled by pipeline_sigint_handler.
- * SIGQUIT is ignored.
- */
-void	init_pipeline_signal(void)
-{
-	struct sigaction	sa;
-
-	sa.sa_handler = pipeline_sigint_handler;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGPIPE, &sa, NULL);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-/**
  * @brief Initialize signals for heredoc input.
  *
  * Sets SIGINT to be handled by heredoc_sigint_handler.
@@ -75,12 +58,7 @@ void	init_pipeline_signal(void)
  */
 void	init_heredoc_signal(void)
 {
-	struct sigaction	sa;
-
-	sa.sa_handler = heredoc_sigint_handler;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
+	restore_signal();
 	signal(SIGQUIT, SIG_IGN);
 }
 
@@ -91,6 +69,6 @@ void	init_heredoc_signal(void)
  */
 void	restore_signal(void)
 {
-	sigaction(SIGINT, &((get_shell_data())->old_int), NULL);
-	sigaction(SIGQUIT, &((get_shell_data())->old_quit), NULL);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }

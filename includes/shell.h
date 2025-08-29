@@ -62,7 +62,6 @@ void			clear_heredoc_input(void);
 /* --- shell_signal.c --- */
 
 void			init_minishell_signal(void);
-void			init_pipeline_signal(void);
 void			init_heredoc_signal(void);
 void			restore_signal(void);
 
@@ -70,7 +69,6 @@ void			restore_signal(void);
 
 void			minishell_sigint_handler(int signo);
 void			heredoc_sigint_handler(int signo);
-void			pipeline_sigint_handler(int signo);
 
 /* --- shell_terminal.c --- */
 
