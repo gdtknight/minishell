@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 06:27:56 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:41:20 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 06:27:31 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	replace_exp(t_exp_token *exp_token, size_t *idx, char **env_pair)
 	ft_memcpy(new_exp_qmask + *idx + len[VALUE_LEN], \
 		suffix[1], len[SUFFIX_LEN]);
 	replacement(exp_token, new_exp_value, new_exp_qmask);
-	*idx = *idx + (ft_strlen(env_pair[VALUE_IDX]) + 1);
+	*idx = *idx + ft_strlen(env_pair[VALUE_IDX]);
 }
 
 /**
