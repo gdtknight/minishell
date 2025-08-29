@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 06:33:51 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:36:11 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 01:42:54 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
  * for tilde expansions in shell input.
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -39,7 +40,6 @@ char	*get_homedir(char *username)
 
 	home_prefix = get_home_prefix();
 	home_dir = ft_strjoin(home_prefix, username);
-	free(username);
 	free(home_prefix);
 	return (home_dir);
 }
@@ -60,7 +60,7 @@ t_boolean	check_homedir(char *username)
 	result = FALSE;
 	home_prefix = get_home_prefix();
 	home_dir = ft_strjoin(home_prefix, username);
-	if (access(home_dir, R_OK) == 0)
+	if (access(home_dir, F_OK) == 0)
 		result = TRUE;
 	free(home_dir);
 	free(home_prefix);

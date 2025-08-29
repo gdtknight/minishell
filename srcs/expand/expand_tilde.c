@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 17:15:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/26 09:05:35 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 01:32:26 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 /* Internal helper to perform tilde expansion */
 static char	*get_tilde_expansion(char *value);
 static char	*get_tilde_home(void);
+static char	*get_path_with_home(char *value);
 
 /**
  * @brief Expand the tilde in a token's value.
@@ -109,6 +110,8 @@ static char	*get_tilde_expansion(char *value)
 
 	if (value[1] == '\0')
 		return (get_tilde_home());
+	if (value[1] == '/')
+		return (get_path_with_home(value));
 	if (value[1] == '+' && value[2] == '\0')
 		return (ft_strdup(getenv("PWD")));
 	if (value[1] == '-' && value[2] == '\0')
@@ -119,12 +122,19 @@ static char	*get_tilde_expansion(char *value)
 	if (!user)
 		return (NULL);
 	home = get_homedir(user + 1);
-	if (!home)
-	{
-		free(user);
-		return (NULL);
-	}
+	free(user);
 	return (home);
+}
+
+static char	*get_path_with_home(char *value)
+{
+	char	*home;
+	char	*path_with_home;
+
+	home = get_tilde_home();
+	path_with_home = ft_strjoin(home, &value[1]);
+	free(home);
+	return (path_with_home);
 }
 
 static char	*get_tilde_home(void)
