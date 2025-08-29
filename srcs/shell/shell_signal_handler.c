@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 02:37:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 20:11:05 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 23:34:40 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,20 @@ void	minishell_sigint_handler(int signo)
 	(void)signo;
 	turnoff_input_node_eval();
 	(get_shell_data())->last_status = 128 + SIGINT;
-	if (!((get_shell_data())->in_heredoc)
-		&& !((get_shell_data())->has_child))
+	if (!((get_shell_data())->has_child))
 	{
 		write(STDERR_FILENO, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}
+}
+
+void	heredoc_sigint_handler(int signo)
+{
+	(void)signo;
+	clear_shell_input();
+	clear_shell_data();
+	write(STDERR_FILENO, "\n", 1);
+	exit(128 + SIGINT);
 }

@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 14:17:35 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:29:48 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 23:22:24 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ void	init_minishell_signal(void)
 {
 	struct sigaction	sa;
 
-	sigaction(SIGINT, NULL, &(get_shell_data()->old_int));
-	sigaction(SIGQUIT, NULL, &(get_shell_data()->old_quit));
 	sa.sa_handler = minishell_sigint_handler;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART;
@@ -58,7 +56,12 @@ void	init_minishell_signal(void)
  */
 void	init_heredoc_signal(void)
 {
-	restore_signal();
+	struct sigaction	sa;
+
+	sa.sa_handler = heredoc_sigint_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &sa, NULL);
 	signal(SIGQUIT, SIG_IGN);
 }
 
