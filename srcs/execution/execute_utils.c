@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 23:04:02 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/26 08:14:06 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/28 23:10:02 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@
 #include "libft.h"
 
 #include "def.h"
-#include "eval.h"
-
 #include "execute.h"
 
 static char			**get_dirs(char *envp[]);
