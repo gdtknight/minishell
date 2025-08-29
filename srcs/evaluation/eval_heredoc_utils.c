@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 17:19:13 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 03:15:39 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 07:35:01 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <unistd.h>
 
 #include "ast.h"
+#include "expand.h"
 #include "get_next_line_bonus.h"
 #include "libft.h"
 
@@ -103,6 +104,7 @@ static void	read_input(const char *limiter, int heredoc_pipe[2])
 			free(input);
 			return ;
 		}
+		expand_heredoc_input(&input);
 		ft_putstr_fd(input, heredoc_pipe[PIPE_WRITE]);
 		free(input);
 		ft_putstr_fd("\n", heredoc_pipe[PIPE_WRITE]);
