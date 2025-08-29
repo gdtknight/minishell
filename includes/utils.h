@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 20:56:21 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 20:39:17 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 21:07:25 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ t_boolean	is_ifs(char c);
 t_boolean	is_dollar_sign(char c);
 t_boolean	is_tk_delim(char c);
 t_boolean	is_single_quote(char c);
+t_boolean	is_space(int c);
 
 /* --- ft_multiplejoin.c --- */
 

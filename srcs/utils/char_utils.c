@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 20:46:34 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/28 16:47:14 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 21:12:23 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,12 @@ t_boolean	is_tk_delim(char c)
 t_boolean	is_single_quote(char c)
 {
 	return (c == '\'');
+}
+
+t_boolean	is_space(int c)
+{
+	if (c == ' ' || c == '\f'
+		|| c == '\v' || c == '\t' || c == '\r')
+		return (TRUE);
+	return (FALSE);
 }
