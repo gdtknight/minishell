@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 17:19:29 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/30 03:01:32 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 04:48:30 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,7 @@ t_status	builtin_exit(char **args);
 
 int			count_argc(char **argc);
 void		update_pwd(void);
+
+t_boolean	check_arg(char *arg);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 19:44:13 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/30 03:59:04 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 05:20:19 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,10 @@ static int	ft_isspace(int c)
  * @param flag_args Pointer to flag for argument validity.
  * @return The converted long long value.
  */
-static long long	ft_atoll(const char *nptr, t_builtin_exit *flag_args)
+static long long	ft_atoll(const char *nptr)
 {
-	int			flag;
-	long long	result;
-	long long	temp;
+	int					flag;
+	unsigned long long	result;
 
 	flag = 1;
 	result = 0;
@@ -56,11 +55,9 @@ static long long	ft_atoll(const char *nptr, t_builtin_exit *flag_args)
 			flag = -1;
 	while (ft_isdigit(*nptr))
 	{
-		temp = result;
 		result *= 10;
-		result += (*nptr++) - '0';
-		if (temp > result)
-			*flag_args = WRONG_ARGC;
+		result += (*nptr) - '0';
+		nptr++;
 	}
 	return ((result) * (flag));
 }
@@ -75,20 +72,14 @@ static long long	ft_atoll(const char *nptr, t_builtin_exit *flag_args)
 static t_builtin_exit	check_args(char **args)
 {
 	int	i;
-	int	j;
 
 	i = 1;
 	if (!args[i])
 		return (NO_ARGC);
 	while (args[i])
 	{
-		j = 0;
-		while (args[i][j])
-		{
-			if (!ft_isdigit(args[i][j]))
-				return (WRONG_ARGC);
-			j++;
-		}
+		if (!check_arg(args[i]))
+			return (WRONG_ARGC);
 		i++;
 	}
 	if (i > 2)
@@ -110,7 +101,9 @@ static void	handle_flag(
 {
 	get_shell_data()->is_exit = TRUE;
 	if (flag_args == WITH_ARGC)
-		get_shell_data()->last_status = (int)((exit_code) % 256);
+	{
+		get_shell_data()->last_status = (exit_code & 0xFF);
+	}
 	if (flag_args == WRONG_ARGC)
 	{
 		ft_putstr_fd("exit: ", STDERR_FILENO);
@@ -139,7 +132,7 @@ t_status	builtin_exit(char **args)
 
 	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	flag_args = check_args(args);
-	exit_code = ft_atoll(args[1], &flag_args);
+	exit_code = ft_atoll(args[1]);
 	handle_flag(flag_args, args, exit_code);
 	return (SUCCESS);
 }
