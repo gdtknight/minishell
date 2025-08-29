@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 17:19:13 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/26 10:55:38 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 20:10:08 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,11 @@ void	read_heredoc(t_syntax_node *node)
 		exit(EXIT_FAILURE);
 	}
 	child_pid = fork();
+	get_shell_data()->has_child = TRUE;
 	if (child_pid == 0)
 		start_heredoc(heredoc_pipe, node);
 	receive_heredoc(child_pid, heredoc_pipe);
+	get_shell_data()->has_child = FALSE;
 	temp = node->value.io_target;
 	node->value.io_target = ft_strdup(*get_heredoc_input());
 	free(temp);
@@ -136,6 +138,9 @@ static void	receive_heredoc(pid_t child_pid, int heredoc_pipe[2])
 	{
 		close(heredoc_pipe[PIPE_READ]);
 		(get_shell_data())->last_status = 128 + SIGINT;
+		if (WTERMSIG(status) == SIGINT)
+			ft_putendl_fd("", STDERR_FILENO);
+		turnoff_input_node_eval();
 	}
 	if (WIFEXITED(status))
 	{

@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 15:45:27 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 15:45:05 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 20:22:21 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include "def.h"
 
 #include "ast.h"
+#include "libft.h"
 #include "shell.h"
 #include "eval.h"
 
@@ -51,7 +52,7 @@ void	eval_pipeline(t_syntax_node	*pipeline_node)
 		get_shell_data()->last_status = EXIT_FAILURE;
 		return ;
 	}
-	(get_shell_data())->in_pipe = TRUE;
+	(get_shell_data())->has_child = TRUE;
 	child_pids[CHILD_LEFT] = fork();
 	if (child_pids[CHILD_LEFT] == 0)
 		start_child(pipeline_node, pipe_fds, CHILD_LEFT);
@@ -60,7 +61,7 @@ void	eval_pipeline(t_syntax_node	*pipeline_node)
 		start_child(pipeline_node, pipe_fds, CHILD_RIGHT);
 	setup_pipe(pipe_fds, -1);
 	wait_pipe(child_pids);
-	(get_shell_data())->in_pipe = FALSE;
+	(get_shell_data())->has_child = FALSE;
 }
 
 /**
@@ -79,6 +80,7 @@ static void	start_child(
 				int pipe_fds[2],
 				int left_or_right)
 {
+	(get_shell_data())->is_child = TRUE;
 	if (left_or_right == CHILD_LEFT)
 	{
 		setup_pipe(pipe_fds, left_or_right);
@@ -135,18 +137,20 @@ static void	setup_pipe(int pipe_fds[2], int pipe_no)
  */
 static void	wait_pipe(pid_t child_pids[2])
 {
-	int	status;
+	int status;
 
 	waitpid(child_pids[CHILD_LEFT], &status, 0);
-	if (WIFEXITED(status))
-		get_shell_data()->last_status = WEXITSTATUS(status);
-	if (WIFSIGNALED(status))
-		get_shell_data()->last_status = WTERMSIG(status);
 	waitpid(child_pids[CHILD_RIGHT], &status, 0);
 	if (WIFEXITED(status))
 		get_shell_data()->last_status = WEXITSTATUS(status);
 	if (WIFSIGNALED(status))
+	{
 		get_shell_data()->last_status = WTERMSIG(status);
+		if (WTERMSIG(status) == SIGQUIT && !((get_shell_data())->is_child))
+			ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
+		else if (WTERMSIG(status) == SIGINT && !((get_shell_data())->is_child))
+			ft_putendl_fd("", STDERR_FILENO);
+	}
 	clear_heredoc_input();
 	turnoff_node_eval(get_shell_input()->input_node);
 }

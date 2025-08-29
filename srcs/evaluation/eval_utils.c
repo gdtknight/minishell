@@ -6,11 +6,13 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 03:30:48 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 21:12:30 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/29 20:22:46 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/wait.h>
+
+#include "libft.h"
 
 #include "ast.h"
 #include "shell.h"
@@ -28,11 +30,19 @@
  */
 void	wait_child(pid_t child_pid, int *status, int options)
 {
+	get_shell_data()->has_child = TRUE;
 	waitpid(child_pid, status, options);
 	if (WIFEXITED(*status))
 		(get_shell_data())->last_status = WEXITSTATUS(*status);
 	if (WIFSIGNALED(*status))
+	{
 		(get_shell_data())->last_status = 128 + WTERMSIG(*status);
+		if (WTERMSIG(*status) == SIGQUIT)
+			ft_putendl_fd("Quit (core dumped)", STDERR_FILENO);
+		else if (WTERMSIG(*status) == SIGINT)
+			ft_putendl_fd("", STDERR_FILENO);
+	}
+	get_shell_data()->has_child = FALSE;
 }
 
 /**

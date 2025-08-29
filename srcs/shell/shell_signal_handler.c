@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/20 02:37:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 23:05:02 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 20:11:05 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include <sys/wait.h>
 #include <readline/readline.h>
 
+#include "libft.h"
 #include "shell.h"
 
 /**
@@ -47,11 +48,11 @@ void	minishell_sigint_handler(int signo)
 	turnoff_input_node_eval();
 	clear_heredoc_input();
 	(get_shell_data())->last_status = 128 + SIGINT;
-	rl_replace_line("", 0);
-	write(STDERR_FILENO, "\n", 1);
-	if (!(get_shell_data())->in_heredoc
-		&& !(get_shell_data())->in_pipe)
+	if (!((get_shell_data())->in_heredoc)
+		&& !((get_shell_data())->has_child))
 	{
+		write(STDERR_FILENO, "\n", 1);
+		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}

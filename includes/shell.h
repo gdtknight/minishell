@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 19:03:33 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 20:41:00 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 20:19:19 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ typedef struct s_shell_data
 	int					last_status;
 	pid_t				last_bg_pid;
 	char				*last_arg;
-	t_boolean			in_pipe;
+	t_boolean			has_child;
+	t_boolean			is_child;
 	t_boolean			in_heredoc;
 	t_boolean			is_exit;
 }	t_shell_data;

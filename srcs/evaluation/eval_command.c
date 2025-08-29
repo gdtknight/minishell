@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:34:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/26 02:11:36 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 20:01:42 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	eval_command(t_syntax_node *cmd_node)
 
 	if (!cmd_node || cmd_node->eval == OFF)
 		return ;
-	if ((!(get_shell_data())->in_pipe)
+	if ((!(get_shell_data())->has_child)
 		&& !((cmd_node->type == NODE_SIMPLE_COMMAND)
 			&& is_builtin(cmd_node->value.command.cmd_word->value.word)))
 	{
