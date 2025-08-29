@@ -1,12 +1,12 @@
- /* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
-//*                                                        :::      ::::::::   */
+/*                                                        :::      ::::::::   */
 /*   expand_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/30 06:08:25 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 07:48:51 by yoshin           ###   ########.fr       */
+/*   Created: 2025/08/30 07:50:32 by yoshin            #+#    #+#             */
+/*   Updated: 2025/08/30 07:51:05 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,16 @@
 
 #include "expand.h"
 
-static void			get_heredoc_envpair(char *str, size_t idx, char ***env_pair);
+static void			get_heredoc_envpair(
+						char *str,
+						size_t idx,
+						char ***env_pair);
 static size_t		find_heredoc_delim_pos(char *str);
 static t_boolean	check_heredoc_delim(t_boolean *flag, char *c, size_t *pos);
-static void			replace_heredoc_exp(char **str, size_t *idx, char **env_pair);
+static void			replace_heredoc_exp(
+						char **str,
+						size_t *idx,
+						char **env_pair);
 
 void	expand_heredoc_input(char **str)
 {

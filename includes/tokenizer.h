@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 12:25:28 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 06:39:02 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 07:51:20 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,14 @@ t_token			*tokenize_input(char *line);
 
 /* --- tokenizer_utils.c --- */
 
-char		*find_next_delim(
-				char *str,
-				t_boolean (*predicate)(char),
-				char mask);
-size_t		find_next_delim_pos(
-				char *str,
-				t_boolean (*predicate)(char),
-				char mask);
+char			*find_next_delim(
+					char *str,
+					t_boolean (*predicate)(char),
+					char mask);
+size_t			find_next_delim_pos(
+					char *str,
+					t_boolean (*predicate)(char),
+					char mask);
 
 /* --- tokenizer_value.c --- */
 
