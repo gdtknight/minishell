@@ -19,6 +19,7 @@
  * token delimiters, quotes, or special symbols used in the shell.
  */
 
+#include "def.h"
 #include "utils.h"
 
 /**
@@ -84,6 +85,8 @@ t_boolean	is_tk_delim(char c)
 		if (c == tk_delims[idx++])
 			return (TRUE);
 	}
+	if (is_space(c) || (c < 32 || c > 126))
+		return (TRUE);
 	return (FALSE);
 }
 
