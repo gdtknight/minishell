@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/22 16:29:55 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 23:00:02 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 22:10:37 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_exp_token	*expand_param(t_exp_token *exp_token)
 		idx = find_next_delim_pos(
 				(exp_token->value),
 				is_dollar_sign,
-				C_BACKSLASH | C_SQUOTE | C_DQUOTE);
+				C_BACKSLASH | C_SQUOTE);
 		replace_exp(exp_token, &idx, env_pair);
 		free(env_pair[0]);
 		free(env_pair[1]);
@@ -91,7 +91,7 @@ static void	get_envpair(t_exp_token *exp_token, size_t idx, char ***env_pair)
 	dollar_pos = find_next_delim_pos(
 			&((exp_token->value)[idx]),
 			is_dollar_sign,
-			C_BACKSLASH | C_SQUOTE | C_DQUOTE);
+			C_BACKSLASH | C_SQUOTE);
 	if ((idx + dollar_pos) == ft_strlen(exp_token->value))
 	{
 		free(*env_pair);

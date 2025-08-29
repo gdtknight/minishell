@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/02 02:00:47 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 22:57:05 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 22:09:12 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*find_next_delim(char *str, t_boolean (*predicate)(char), char mask)
 			str++;
 			continue ;
 		}
-		if ((flag & C_SQUOTE) == 0 && predicate(*str))
+		if ((flag & mask) == 0 && predicate(*str))
 			return (str);
 		str++;
 	}
@@ -96,7 +96,7 @@ size_t	find_next_delim_pos(char *str, t_boolean (*predicate)(char), char mask)
 			idx++;
 			continue ;
 		}
-		if ((flag & C_SQUOTE) == 0 && predicate(str[idx]))
+		if ((flag & mask) == 0 && predicate(str[idx]))
 			return (idx);
 		idx++;
 	}
