@@ -6,16 +6,16 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 06:08:25 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 07:39:07 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 07:48:51 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
 #include <stdlib.h>
 
-#include "expand.h"
-
-#include "debug.h"
 #include "libft.h"
+
+#include "expand.h"
 
 static void			get_heredoc_envpair(char *str, size_t idx, char ***env_pair);
 static size_t		find_heredoc_delim_pos(char *str);
@@ -75,7 +75,6 @@ static void	get_heredoc_envpair(char *str, size_t idx, char ***env_pair)
 		return ;
 	}
 	(*env_pair)[VALUE_IDX] = get_envvalue((*env_pair)[PARAM_IDX]);
-	 debug("[get_heredoc_envpair] param: %s, value: %s", (*env_pair)[PARAM_IDX], (*env_pair)[VALUE_IDX]);
 }
 
 static size_t	find_heredoc_delim_pos(char *str)
@@ -104,10 +103,7 @@ static t_boolean	check_heredoc_delim(t_boolean *flag, char *c, size_t *pos)
 		return (FALSE);
 	}
 	if (!flag[0] && *c == '$' && *(c + 1) != '\0')
-	{
-		debug("[check_heredoc_delim] find ! - %s", c);
 		return (TRUE);
-	}
 	flag[0] = FALSE;
 	(*pos)++;
 	return (FALSE);

@@ -6,13 +6,11 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/30 06:35:39 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 06:35:56 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 07:48:02 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "expand.h"
-
-#include "debug.h"
 
 static t_boolean	check_delim(t_boolean *flag, char *c, size_t *pos);
 
@@ -48,10 +46,7 @@ static t_boolean	check_delim(t_boolean *flag, char *c, size_t *pos)
 	if (!flag[0] && !flag[2] && *c == '\"')
 		flag[1] = !flag[1];
 	if (!flag[0] && !flag[2] && *c == '$' && *(c + 1) != '\0')
-	{
-		debug("[check_delim] find ! - %s", c);
 		return (TRUE);
-	}
 	flag[0] = FALSE;
 	(*pos)++;
 	return (FALSE);
