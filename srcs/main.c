@@ -6,7 +6,7 @@
 /*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 19:41:01 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 00:51:50 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,10 @@ static void	interactive_mode(void)
 			break ;
 		if (ft_strncmp((get_shell_input())->input_line, "", \
 				ft_strlen("") + 1) == 0)
+		{
+			clear_shell_input();
 			continue ;
+		}
 		if (ft_strncmp((get_shell_input())->input_line, "\n", \
 				ft_strlen("\n") + 1) == 0)
 		{
@@ -90,6 +93,7 @@ static void	interactive_mode(void)
 			continue ;
 		}
 		process_input((get_shell_input())->input_line);
+		clear_shell_input();
 	}
 }
 
@@ -124,7 +128,6 @@ static void	process_input(char *input)
 	(get_shell_input())->input_node = parse_input(&input_token);
 	eval_heredoc((get_shell_input())->input_node);
 	eval((get_shell_input())->input_node);
-	clear_shell_input();
 }
 
 static void	read_shell_input(void)
@@ -141,5 +144,7 @@ static void	read_shell_input(void)
 	else
 	{
 		(get_shell_input())->input_line = get_next_line(STDIN_FILENO);
+		if (!((get_shell_input())->input_line))
+			exit(EXIT_SUCCESS);
 	}
 }
