@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 14:25:06 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/29 18:54:41 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/29 22:00:00 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 
 #include "execute.h"
 
-static void	execute_relative_path(t_cmd_form *cmd_form);
-static void	is_a_directory(void);
 static void	execute_absolute_path(t_cmd_form *cmd_form);
+static void	is_a_directory(void);
+static void	execute_relative_path(t_cmd_form *cmd_form);
 
 /**
  * @brief Executes a command using the command form structure.
@@ -36,16 +36,17 @@ void	execute_command(t_cmd_form *cmd_form)
 {
 	if (!cmd_form || !(cmd_form->cmd))
 		return ;
-	execute_relative_path(cmd_form);
 	execute_absolute_path(cmd_form);
+	execute_relative_path(cmd_form);
 }
 
-static void	execute_relative_path(t_cmd_form *cmd_form)
+static void	execute_absolute_path(t_cmd_form *cmd_form)
 {
 	char	*cmd;
 
 	cmd = cmd_form->cmd;
-	if (*cmd == '.' && *(cmd + 1) == '/')
+	if ((*cmd == '.' && *(cmd + 1) == '/')
+		|| *cmd == '/')
 	{
 		if (*(cmd + 2) == '\0')
 			is_a_directory();
@@ -81,7 +82,7 @@ static void	is_a_directory(void)
  *
  * @param cmd_form Pointer to the command form structure.
  */
-static void	execute_absolute_path(t_cmd_form *cmd_form)
+static void	execute_relative_path(t_cmd_form *cmd_form)
 {
 	char		*path;
 
