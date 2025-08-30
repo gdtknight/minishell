@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:10:09 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/30 06:35:14 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/30 06:57:30 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ t_status	builtin_cd(char **argc)
 		return (cd_fail(check_error(argc), old_pwd));
 	if (chdir(new_pwd) != 0)
 	{
+		get_shell_data()->last_status = 1;
 		ft_putstr_fd("cd: ", STDERR_FILENO);
 		perror(new_pwd);
 		free(old_pwd);
