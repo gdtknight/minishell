@@ -6,7 +6,7 @@
 #    By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/25 18:16:41 by yoshin            #+#    #+#              #
-#    Updated: 2025/08/02 18:09:11 by yoshin           ###   ########.fr        #
+#    Updated: 2025/08/30 10:29:13 by yoshin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,14 +52,82 @@ TEST_BUILD_DIR		=	$(TEST_DIR)/build
 BUILD_DIR			=	build
 BIN_DIR				=	bin
 
-SRCS				:=	$(shell find ./$(SRC_DIR) -name '*.c')
+# SRCS				:=	$(shell find ./$(SRC_DIR) -name '*.c')
+SRCS				:=	./srcs/hashmap/hashmap_put.c \
+						./srcs/hashmap/hashmap_utils.c \
+						./srcs/hashmap/hashmap_entry.c \
+						./srcs/hashmap/hashmap_get.c \
+						./srcs/utils/ft_multiplejoin.c \
+						./srcs/utils/pair_validator.c \
+						./srcs/utils/env_utils.c \
+						./srcs/utils/get_next_line_utils_bonus.c \
+						./srcs/utils/char_utils.c \
+						./srcs/utils/get_next_line_bonus.c \
+						./srcs/utils/ft_lltoa.c \
+						./srcs/evaluation/eval_pipeline.c \
+						./srcs/evaluation/eval_heredoc.c \
+						./srcs/evaluation/eval_heredoc_utils.c \
+						./srcs/evaluation/eval_prefix_assign.c \
+						./srcs/evaluation/eval.c \
+						./srcs/evaluation/eval_utils.c \
+						./srcs/evaluation/eval_io_redir_utils.c \
+						./srcs/evaluation/eval_io_redir.c \
+						./srcs/evaluation/eval_command.c \
+						./srcs/evaluation/eval_command_utils.c \
+						./srcs/builtin/builtin_cd.c \
+						./srcs/builtin/builtin_exit.c \
+						./srcs/builtin/builtin_cd_utils.c \
+						./srcs/builtin/builtin_export.c \
+						./srcs/builtin/builtin_exit_utils.c \
+						./srcs/builtin/builtin_echo.c \
+						./srcs/builtin/builtin_env.c \
+						./srcs/builtin/builtin_unset.c \
+						./srcs/builtin/builtin_pwd.c \
+						./srcs/expand/expand_token.c \
+						./srcs/expand/split_field.c \
+						./srcs/expand/expand_tilde_utils.c \
+						./srcs/expand/expand_tilde.c \
+						./srcs/expand/expand_utils.c \
+						./srcs/expand/expand_heredoc.c \
+						./srcs/expand/expand_param.c \
+						./srcs/expand/expand_param_utils.c \
+						./srcs/expand/expand_common.c \
+						./srcs/expand/expand_heredoc_utils.c \
+						./srcs/expand/expand_token_create.c \
+						./srcs/expand/masking_utils.c \
+						./srcs/tokenize/token_list.c \
+						./srcs/tokenize/token_printer.c \
+						./srcs/tokenize/token_validatation.c \
+						./srcs/tokenize/tokenizer.c \
+						./srcs/tokenize/tokenizer_value.c \
+						./srcs/tokenize/tokenizer_utils.c \
+						./srcs/tokenize/token_factory.c \
+						./srcs/ast/print_node.c \
+						./srcs/ast/cmd_node.c \
+						./srcs/ast/io_redir_node.c \
+						./srcs/ast/node_utils.c \
+						./srcs/ast/parse_input.c \
+						./srcs/ast/word_node.c \
+						./srcs/ast/remove_node.c \
+						./srcs/ast/construct_node.c \
+						./srcs/execution/execute_utils.c \
+						./srcs/execution/execute_command.c \
+						./srcs/execution/execute_builtin.c \
+						./srcs/shell/shell_signal.c \
+						./srcs/shell/shell_data.c \
+						./srcs/shell/tty_restore.c \
+						./srcs/shell/shell_signal_handler.c \
+						./srcs/shell/shell_input.c \
+						./srcs/main.c
+
+
 # OBJS 				:=	$(patsubst ./$(SRC_DIR)/%.c, ./$(BUILD_DIR)/%.c.o, $(addprefix ./$(SRC_DIR)/, $(SRCS)))
 OBJS 				:=	$(patsubst ./$(SRC_DIR)/%.c, ./$(BUILD_DIR)/%.c.o, $(SRCS))
 
-TEST_SRCS			:=	$(shell find ./$(TEST_DIR) -name '*.c')
-TEST_OBJS			:=	$(patsubst ./$(TEST_DIR)/%.c, ./$(TEST_BUILD_DIR)/%.c.o, $(TEST_SRCS))
-TEST_TARGET_OBJS	:=	$(patsubst ./$(TEST_DIR)/**/%_test.c, ./$(BUILD_DIR)/**/*.c.o, $(TEST_SRCS))
-TEST_BINS			:=	$(patsubst ./$(TEST_DIR)/%.c, ./$(TEST_BIN_DIR)/%, $(TEST_SRCS))
+# TEST_SRCS			:=	$(shell find ./$(TEST_DIR) -name '*.c')
+# TEST_OBJS			:=	$(patsubst ./$(TEST_DIR)/%.c, ./$(TEST_BUILD_DIR)/%.c.o, $(TEST_SRCS))
+# TEST_TARGET_OBJS	:=	$(patsubst ./$(TEST_DIR)/**/%_test.c, ./$(BUILD_DIR)/**/*.c.o, $(TEST_SRCS))
+# TEST_BINS			:=	$(patsubst ./$(TEST_DIR)/%.c, ./$(TEST_BIN_DIR)/%, $(TEST_SRCS))
 
 LIB_NAMES			=	ft
 LIBS				=	$(addprefix lib, $(LIB_NAMES))
