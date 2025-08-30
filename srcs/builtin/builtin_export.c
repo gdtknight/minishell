@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/30 09:43:29 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/30 09:50:51 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ void	add_key_value(t_hash_map *map, char *key, char *value)
  *
  * @param key The invalid identifier string.
  */
-static void	print_error(char *key)
+static void	print_error(char *envp)
 {
 	ft_putstr_fd("export: `", STDERR_FILENO);
-	ft_putstr_fd(key, STDERR_FILENO);
+	ft_putstr_fd(envp, STDERR_FILENO);
 	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
 }
 
@@ -110,7 +110,7 @@ t_status	check_and_set_enp(char *envp, t_hash_map *map)
 		add_key_value(map, key, value);
 	else
 	{
-		print_error(key);
+		print_error(envp);
 		status = ERROR;
 	}
 	free (key);
