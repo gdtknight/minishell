@@ -6,7 +6,7 @@
 /*   By: yoshin <yoshin@student.42gyeongsan.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 14:14:25 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/25 02:23:27 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 08:43:55 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,10 @@ t_status		set_heredoc(t_syntax_node *io_redir_node);
 /* --- eval_pipeline.c --- */
 
 void			eval_pipeline(t_syntax_node	*pipeline_node);
+
+/* --- eval_prefix_assign.c --- */
+
+void			append_prefix_assign(char ***envp, t_syntax_node *node);
 
 /* --- eval_utils.c --- */
 

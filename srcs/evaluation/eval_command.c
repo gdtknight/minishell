@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 21:34:00 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 00:50:05 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 08:29:39 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ static void	set_cmd_form(t_command *command)
 	command->form.envp = NULL;
 	command->form.args = get_args_from_suffix(command->suffix);
 	command->form.envp = lst_from_hashmap(&(get_shell_data()->envp_map));
+	append_prefix_assign(&command->form.envp, command->prefix);
 	if (command->cmd_word)
 	{
 		command->form.cmd = ft_strdup(command->cmd_word->value.word);
