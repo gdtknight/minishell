@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/29 18:19:29 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/30 09:10:10 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,27 @@
 #include "builtin.h"
 #include "shell.h"
 #include "utils.h"
+
+void	add_key_value(t_hash_map *map, char *key, char *value)
+{
+	t_hash_entry	*entry;
+	char			*new_name;
+	char			*temp;
+
+	new_name = ft_substr(key, 0, ft_strlen(key) - 1);
+	entry = get_entry(map, new_name);
+	if (entry)
+	{
+		temp = ft_strjoin(entry->value, value);
+		free (entry->value);
+		entry->value = temp;
+		free(new_name);
+		return ;
+	}
+	entry = create_new_entry(new_name, value);
+	put_entry(map, entry);
+	free(new_name);
+}
 
 /**
  * @brief Prints an error message for invalid export identifiers.
@@ -42,20 +63,29 @@ static void	print_error(char *key)
  * @param name The name string to check.
  * @return TRUE if valid, FALSE otherwise.
  */
-t_boolean	name_checker(char *name)
+t_builtin_export	name_checker(char *name)
 {
-	int	i;
+	int					i;
+	t_builtin_export	status;
 
+	status = NAME_VALID;
 	if (!ft_isalpha(name[0]) && name[0] != '_')
-		return (FALSE);
-	i = 1;
-	while (name[i])
+		status = NAME_INVALID;
+	if (name[1])
 	{
-		if (!ft_isalnum(name[i]) && name[i] != '_')
-			return (FALSE);
-		i++;
+		i = 1;
+		while ((i < (int)ft_strlen(name) - 1) && status == 1)
+		{
+			if (!ft_isalnum(name[i]) && name[i] != '_')
+				status = NAME_INVALID;
+			i++;
+		}
+		if (name[i] != '+' && name[i] != '_' && !ft_isalnum(name[i]))
+			status = NAME_VALID;
+		if (name[i] == '+' && status == 1)
+			status = NAME_APPEND;
 	}
-	return (TRUE);
+	return (status);
 }
 
 /**
@@ -74,16 +104,10 @@ t_status	check_and_set_enp(char *envp, t_hash_map *map)
 	status = SUCCESS;
 	key = extract_key(envp);
 	value = extract_value(envp);
-	if (name_checker(key))
-	{
-		if (ft_strnchr(envp, '=', ft_strlen(envp)) == -1)
-		{
-			free (key);
-			free (value);
-			return (status);
-		}
+	if (name_checker(key) == NAME_VALID)
 		put_key_value(map, key, value);
-	}
+	else if (name_checker(key) == NAME_APPEND)
+		add_key_value(map, key, value);
 	else
 	{
 		print_error(key);

@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 17:19:29 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/30 04:48:30 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 09:09:56 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,13 @@ typedef enum e_builtin_exit
 	TOO_MANY_ARGC = 2,
 	WRONG_ARGC = 3
 }	t_builtin_exit;
+
+typedef enum e_builtin_export
+{
+	NAME_INVALID = 0,
+	NAME_VALID = 1,
+	NAME_APPEND = 2,
+}	t_builtin_export;
 
 t_status	builtin_cd(char **args);
 t_status	builtin_export(char **args);
