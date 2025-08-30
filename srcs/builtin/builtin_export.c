@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 22:13:12 by jyoo              #+#    #+#             */
-/*   Updated: 2025/08/30 09:10:10 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/30 09:43:29 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,14 @@ t_builtin_export	name_checker(char *name)
 	if (name[1])
 	{
 		i = 1;
-		while ((i < (int)ft_strlen(name) - 1) && status == 1)
+		while ((i < (int)ft_strlen(name) - 1) && status == NAME_VALID)
 		{
 			if (!ft_isalnum(name[i]) && name[i] != '_')
 				status = NAME_INVALID;
 			i++;
 		}
 		if (name[i] != '+' && name[i] != '_' && !ft_isalnum(name[i]))
-			status = NAME_VALID;
+			status = NAME_INVALID;
 		if (name[i] == '+' && status == 1)
 			status = NAME_APPEND;
 	}
