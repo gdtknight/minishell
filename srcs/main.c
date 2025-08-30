@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jyoo <jyoo@student.42gyeongsan.kr>         +#+  +:+       +#+        */
+/*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 00:51:50 by yoshin           ###   ########.fr       */
+/*   Updated: 2025/08/30 06:44:54 by jyoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,11 @@ int	main(int argc, char *argv[], char *envp[])
 		exit(errno);
 	if (argc == 1)
 		interactive_mode();
+	else
+	{
+		get_shell_data()->last_status = 1;
+		ft_putendl_fd("minishell: arguments are not supported", STDERR_FILENO);
+	}
 	restore_signal();
 	clear_shell_data();
 	exit(get_shell_data()->last_status);
