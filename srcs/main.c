@@ -6,7 +6,7 @@
 /*   By: jyoo < jyoo@student.42gyeongsan.kr >       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 10:46:09 by yoshin            #+#    #+#             */
-/*   Updated: 2025/08/30 06:44:54 by jyoo             ###   ########.fr       */
+/*   Updated: 2025/08/30 10:17:45 by yoshin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 #include "utils.h"
 #include "eval.h"
 
+static void	single_command(char *argv);
 static void	interactive_mode(void);
 static void	read_shell_input(void);
 static void	process_input(char *input);
@@ -58,6 +59,12 @@ int	main(int argc, char *argv[], char *envp[])
 	init_minishell_signal();
 	if (!init_shell_data(envp))
 		exit(errno);
+	if (argc == 3 && strcmp(argv[1], "-c") == 0)
+	{
+		single_command(argv[2]);
+		clear_shell_data();
+		exit(get_shell_data()->last_status);
+	}
 	if (argc == 1)
 		interactive_mode();
 	else
@@ -68,6 +75,30 @@ int	main(int argc, char *argv[], char *envp[])
 	restore_signal();
 	clear_shell_data();
 	exit(get_shell_data()->last_status);
+}
+
+static void	single_command(char *argv)
+{
+	t_token	*input_token;
+
+	if (!is_valid_pair(argv))
+	{
+		ft_putstr_fd("Invalid input\n", STDERR_FILENO);
+		(get_shell_data())->last_status = EXIT_FAILURE;
+		return ;
+	}
+	(get_shell_input())->input_token = tokenize_input(argv);
+	if (!is_valid_sequence((get_shell_input())->input_token))
+	{
+		ft_putstr_fd("Invalid input\n", STDERR_FILENO);
+		(get_shell_data())->last_status = EXIT_FAILURE;
+		return ;
+	}
+	input_token = (get_shell_input())->input_token;
+	(get_shell_input())->input_node = parse_input(&input_token);
+	eval_heredoc((get_shell_input())->input_node);
+	eval((get_shell_input())->input_node);
+	clear_shell_input();
 }
 
 /**
